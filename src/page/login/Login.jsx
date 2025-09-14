@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { userStore } from '../../state/state'
 
-export default function Login({ setCurrentUser }) {
+export default function Login() {
 
   const [unique, setUnique] = useState("")
   const navigate = useNavigate()
+  const setCurrentUser = userStore((state) => state.setCurrentUser)
 
   const handleLogin = async () => {
     try {
@@ -17,8 +19,8 @@ export default function Login({ setCurrentUser }) {
       const string = JSON.stringify(data)
       
       if(res.ok) {
-        setCurrentUser(data)
         alert(`Login Sukes : ${string}`)
+        setCurrentUser(data)
         navigate("/")
       } else {
         alert(data.message || "login gagal")

@@ -6,10 +6,11 @@ import FLPage from './page/fl/FLPage'
 import Login from './page/login/Login'
 import AdminPage from './page/admin/AdminPage'
 import PmtPage from './page/pmt/PmtPage'
+import { userStore } from './state/state'
 
 export default function App() {
 
-  const [currentUser, setCurrentUser] = useState(null)
+  const {currentUser} = userStore()
 
   return (
     <>
@@ -19,16 +20,12 @@ export default function App() {
           path='/'
           element={
             currentUser ? (
-             (() => {
+              (() => {
                 switch(currentUser.role) {
-                  case "admin" :
-                  return <AdminPage/>
-                  case "fl" :
-                  return <FLPage/>
-                  case "pmt" :
-                  return <PmtPage/>
-                  default :
-                  return <Navigate to="/login"/>
+                  case "admin": return <AdminPage/>
+                  case "fl": return <FLPage/>
+                  case "pmt": return <PmtPage/>
+                  default: return <Navigate to="/login"/>
                 }
               })()
             ) : (
@@ -36,7 +33,7 @@ export default function App() {
             )
           }
         />
-        <Route path='/login' element={<Login setCurrentUser={setCurrentUser}/>}/>
+        <Route path='/login' element={<Login/>}/>
       </Routes>
     </Router>
     </>
