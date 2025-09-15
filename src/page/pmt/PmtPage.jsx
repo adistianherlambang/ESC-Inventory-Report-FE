@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { userStore } from '../../state/state'
 
+//Component
+import BrandButton from '../../components/brandButton/brandButton'
+
 export default function PmtPage() {
   const { currentUser } = userStore()
   const [pmtData, setPmtData] = useState([])
