@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import BrandButton from '../../components/brandButton/brandButton'
 import { userStore } from '../../state/state'
+import axios from 'axios'
 
 import styles from "./style.module.css"
 
@@ -12,8 +13,8 @@ export default function AdminPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch('http://localhost:3000/product/getall')
-        const data = await res.json()
+        const res = await axios("'http://localhost:3000/product/getall'")
+        const data = res.data
         setProduct(data)
         
       } catch (err) {

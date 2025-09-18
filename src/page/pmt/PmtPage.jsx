@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { userStore } from '../../state/state'
+import axios from 'axios'
 
 //Component
 import BrandButton from '../../components/brandButton/brandButton'
@@ -13,19 +14,14 @@ export default function PmtPage() {
 
   const fetchPmtByName = async (name) => {
     try {
-      const res = await fetch(`http://localhost:3000/pmt/get/${name}`)
-      const data = await res.json()
+      const res = await axios.get(`http://localhost:3000/pmt/get/${name}`)
+      const data = res.data
       console.log("fetch berhasil:", data)
 
-      if (res.ok) {
-        if (Array.isArray(data)) {
-          setPmtData(data) // kalau backend return find
-        } else {
-          setPmtData([data]) // kalau backend return findOne
-        }
-      } else {
+      if (data.length === 0) {
         setError(data.message || "data gaada")
       }
+      setPmtData(data)
     } catch (err) {
       console.error(`server error ${err}`)
       setError("Server error, coba lagi")
@@ -52,7 +48,7 @@ export default function PmtPage() {
             <ul>
               {item.report.map((r) => (
                 <li key={r._id}>
-                  {r.product} ({r.capacity}) - Rp{r.price.amount} [{r.price.paymentType}]
+                  {r.product} ({r.capacity}) - Rp{r.price.amount} [{r.price.paymentType}]\n {r.createdAt}
                 </li>
               ))}
             </ul>
