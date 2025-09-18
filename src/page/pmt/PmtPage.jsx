@@ -9,6 +9,8 @@ export default function PmtPage() {
   const [pmtData, setPmtData] = useState([])
   const [error, setError] = useState(null)
 
+  const logout = userStore((state) => state.logout)
+
   const fetchPmtByName = async (name) => {
     try {
       const res = await fetch(`http://localhost:3000/pmt/get/${name}`)
@@ -40,6 +42,7 @@ export default function PmtPage() {
   return (
     <div>
       <h2>PmtPage</h2>
+      <button onClick={logout}>Logout</button>
       {error && <p style={{color: "red"}}>{error}</p>}
       {pmtData.length === 0 && <p>Tidak ada data</p>}
       <ul>

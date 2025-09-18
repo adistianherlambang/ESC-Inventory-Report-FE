@@ -1,10 +1,13 @@
 import React, {useState, useEffect} from 'react'
 import BrandButton from '../../components/brandButton/brandButton'
+import { userStore } from '../../state/state'
 
+import styles from "./style.module.css"
 
 export default function AdminPage() {
 
   const [product, setProduct] = useState([])
+  const logout = userStore((state) => state.logout)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,16 +27,17 @@ export default function AdminPage() {
   return (
     <div>
       <p>Admin Page</p>
-      <BrandButton label="Samsung" onClick/>
-      <BrandButton label="Xiaomi" onClick/>
-      <BrandButton label="Vivo" onClick/>
-      <BrandButton label="Oppo" onClick/>
-      <BrandButton label="Realme" onClick/>
-      <BrandButton label="Tecno" onClick/>
-      <BrandButton label="Infinix" onClick/>
-      <BrandButton label="Itel" onClick/>
-      <BrandButton label="Iphone" onClick/>
-      <BrandButton label="Nokia" onClick/>
+      <button onClick={logout}>Logout</button>
+      <BrandButton label="Samsung"/>
+      {/* <BrandButton label="Xiaomi"/>
+      <BrandButton label="Vivo"/>
+      <BrandButton label="Oppo"/>
+      <BrandButton label="Realme"/>
+      <BrandButton label="Tecno"/>
+      <BrandButton label="Infinix"/>
+      <BrandButton label="Itel"/>
+      <BrandButton label="Iphone"/>
+      <BrandButton label="Nokia"/> */}
       {product && product.map((item, index) => (
         <div key={item._id}>
           <p>{item.brand} - {item.product} {item.IMEI.join(", ")} ==== {item.IMEI.length}</p>

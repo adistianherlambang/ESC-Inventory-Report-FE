@@ -1,0 +1,58 @@
+body {
+  font-family: SFProBold;
+}
+
+.container {
+  box-sizing: border-box;
+  all: unset;
+  margin: 0;
+  padding: 36px;
+  display: flex;
+  max-width: 100%;
+  gap: 15rem;
+  flex-direction: column;
+}
+
+.top {
+  font-size: 1rem;
+}
+
+.title {
+  font-size: 32px;
+  line-height: 1.2;
+}
+
+.span {
+  color: #BDBDBD
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.input {
+  padding: 12px;
+  text-align: center;
+  background-color: #F6F6F6;
+  border: solid black 1px;
+  color: black;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.button {
+  background-color: #773FF9;
+  padding: 12px;
+  font-family: SFProBold;
+  font-size: 1rem;
+}
+
+.text {
+  font-family: SFProRegular;
+  font-size: 12px;
+  color: #BDBDBD;
+  line-height: 1;
+}
