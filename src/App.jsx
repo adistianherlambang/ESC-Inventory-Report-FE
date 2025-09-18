@@ -6,6 +6,9 @@ import FLPage from './page/fl/FLPage'
 import Login from './page/login/Login'
 import AdminPage from './page/admin/AdminPage'
 import PmtPage from './page/pmt/PmtPage'
+import BrandPage from './page/admin/BrandPage'
+
+//state
 import { userStore } from './state/state'
 
 export default function App() {
@@ -34,6 +37,7 @@ export default function App() {
           }
         />
         <Route path='/login' element={<Login/>}/>
+        <Route path='/brand/:label' element={<BrandPage/>}/>
       </Routes>
     </Router>
     </>
