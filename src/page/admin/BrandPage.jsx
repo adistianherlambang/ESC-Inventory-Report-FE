@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import axios from "axios"
 
 export default function BrandPage() {
@@ -13,7 +13,7 @@ export default function BrandPage() {
         const res = await axios.get(
           `http://localhost:3000/product/getbybrand?brand=${label.toLowerCase()}`
         )
-        setProduct(res.data) // axios taruh hasil di res.data
+        setProduct(res.data)
       } catch (err) {
         console.error(err.message)
       }

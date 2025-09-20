@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import { userStore } from '../../state/state'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 //Component
-import BrandButton from '../../components/brandButton/brandButton'
+import Loader from '../../components/item/loader/Loader'
+
+import styles from "./style.module.css"
 
 export default function PmtPage() {
   const { currentUser } = userStore()
   const [pmtData, setPmtData] = useState([])
   const [error, setError] = useState(null)
 
+  const navigate = useNavigate()
+
   const logout = userStore((state) => state.logout)
+  const now = new Date()
+  const date = now.toISOString().split("T")[0]
 
   const fetchPmtByName = async (name) => {
     try {
@@ -28,6 +35,17 @@ export default function PmtPage() {
     }
   }
 
+  const filterByDate = () => {
+    const filtered = pmtData
+      .map((item) => ({
+        ...item,
+        report: item.report.filter((r) => r.createdAt === date),
+      }))
+      .filter((item) => item.report.length > 0)
+
+    setPmtData(filtered)
+  }
+
   useEffect(() => {
     console.log("Current user in PmtPage:", currentUser)
     if (currentUser?.name) {
@@ -36,9 +54,11 @@ export default function PmtPage() {
   }, [currentUser?.name])
 
   return (
-    <div>
+    <div className={styles.container}>
       <h2>PmtPage</h2>
       <button onClick={logout}>Logout</button>
+      <Loader/>
+      {date}
       {error && <p style={{color: "red"}}>{error}</p>}
       {pmtData.length === 0 && <p>Tidak ada data</p>}
       <ul>

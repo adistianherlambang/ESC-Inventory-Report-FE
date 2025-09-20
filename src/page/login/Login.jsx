@@ -1,14 +1,23 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { userStore } from '../../state/state'
 
 import styles from "./style.module.css"
+import { useStore } from 'zustand'
 
 export default function Login() {
 
   const [unique, setUnique] = useState("")
   const navigate = useNavigate()
   const setCurrentUser = userStore((state) => state.setCurrentUser)
+  const user = userStore((state) => state.currentUser)
+
+  useEffect(() => {
+    if (user) {
+      navigate("/", { replace: true })
+    }
+    console.log(user)
+  }, [])
 
   const handleLogin = async (e) => {
     e.preventDefault();
