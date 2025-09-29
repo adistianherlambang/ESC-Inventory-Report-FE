@@ -7,14 +7,21 @@ const getUserFromSession = () => {
 
 const userStore = create((set) => ({
   currentUser: getUserFromSession(),
+  brand: getUserFromSession()?.brand || null,
+
   setCurrentUser: (user) => {
     sessionStorage.setItem("user", JSON.stringify(user))
-    set({currentUser: user})
+    set({
+      currentUser: user,
+      brand: user.brand || null,   // simpan brand juga
+    })
   },
-  cleanUser: () => set({currentUser: null}),
+
+  cleanUser: () => set({currentUser: null, brand: null}),
+
   logout: () => {
     sessionStorage.removeItem("user")
-    set({currentUser: null})
+    set({currentUser: null, brand: null})
   }
 }))
 

@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom'
 
 //Component
 import Loader from '../../components/item/loader/Loader'
+import Empty from '../../components/item/Empty/Empty'
+import { ActivityIcon } from '../../components/Icon/Icon'
 
 import styles from "./style.module.css"
 
@@ -12,6 +14,7 @@ export default function PmtPage() {
   const { currentUser } = userStore()
   const [pmtData, setPmtData] = useState([])
   const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(true)
 
   const navigate = useNavigate()
 
@@ -32,6 +35,8 @@ export default function PmtPage() {
     } catch (err) {
       console.error(`server error ${err}`)
       setError("Server error, coba lagi")
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -57,24 +62,34 @@ export default function PmtPage() {
     <div className={styles.container}>
       <h2>PmtPage</h2>
       <button onClick={logout}>Logout</button>
-      <Loader/>
+
       {date}
-      {error && <p style={{color: "red"}}>{error}</p>}
-      {pmtData.length === 0 && <p>Tidak ada data</p>}
-      <ul>
+      {loading && <Loader/>}
+      {pmtData.length === 0 && <Empty/>}
+      <Loader/>
+      <div className={styles.activityContainer}>
+        <div>
+          <div>
+            <p>Activity</p>
+            <ActivityIcon/>
+          </div>
+          <p>30/08/2025</p>
+        </div>
         {pmtData.map((item) => (
-          <li key={item._id}>
-            <strong>{item.name}</strong>
-            <ul>
-              {item.report.map((r) => (
-                <li key={r._id}>
-                  {r.product} ({r.capacity}) - Rp{r.price.amount} [{r.price.paymentType}]\n {r.createdAt}
-                </li>
-              ))}
-            </ul>
-          </li>
+          <div key={item._id}>
+            {item.report.map((r) => (
+              <div key={r._id}>
+                <p>{r.product}</p>
+                <div>
+                  <p>{r.capacity}</p>
+                </div>
+                <p>Rp {r.price.amount}</p>
+                <p>{r.price.paymentType}</p>
+              </div>
+            ))}
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   )
 }

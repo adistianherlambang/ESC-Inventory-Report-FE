@@ -1,7 +1,8 @@
 .container {
   padding: 1rem;
-  height: 100px;
-  background-color: #B0B0B0;
+  height: 4rem;
+  background-color: #e6e6e6;
+  border: solid black 2px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -9,11 +10,11 @@
 }
 
 .loader {
-  width: 3rem;
-  height: 3rem;
+  width: 2rem;
+  height: 2rem;
   display: flex;
   color: #ffffff;
-  --c:#0000 calc(100% - 20px),currentColor calc(100% - 19px) 98%,#0000;
+  --c:#0000 calc(100% - 10px),currentColor calc(100% - 19px) 98%,#0000;
   background:
     radial-gradient(farthest-side at left,var(--c)) right /50% 100%,
     radial-gradient(farthest-side at top ,var(--c)) bottom/100% 50%;
@@ -24,6 +25,7 @@
   content:"";
   width:50%;
   height: 50%;
+  color: #773FF9;
   background:radial-gradient(farthest-side at bottom right,var(--c));
   animation: l18-1 .5s infinite linear;
 }
