@@ -15,6 +15,7 @@ export default function PmtPage() {
   const [pmtData, setPmtData] = useState([])
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [dateFiltered, setDateFiltered] = useState([])
 
   const navigate = useNavigate()
 
@@ -32,6 +33,7 @@ export default function PmtPage() {
         setError(data.message || "data gaada")
       }
       setPmtData(data)
+
     } catch (err) {
       console.error(`server error ${err}`)
       setError("Server error, coba lagi")
@@ -40,15 +42,13 @@ export default function PmtPage() {
     }
   }
 
-  const filterByDate = () => {
-    const filtered = pmtData
-      .map((item) => ({
-        ...item,
-        report: item.report.filter((r) => r.createdAt === date),
-      }))
-      .filter((item) => item.report.length > 0)
-
-    setPmtData(filtered)
+  const formatRupiah = (value) => {
+    if(typeof value !== "number") return value
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+    }).format(value)
   }
 
   useEffect(() => {
@@ -57,6 +57,18 @@ export default function PmtPage() {
       fetchPmtByName(currentUser.name)
     }
   }, [currentUser?.name])
+
+  useEffect(() => {
+    if (pmtData.length > 0) {
+      const filtered = pmtData
+        .map((item) => ({
+          ...item,
+          report: item.report.filter((r) => r.createdAt === date),
+        }))
+        .filter((item) => item.report.length > 0)
+      setDateFiltered(filtered)
+    }
+  }, [pmtData, date])
 
   return (
     <div className={styles.container}>
@@ -75,15 +87,27 @@ export default function PmtPage() {
           </div>
           <p>30/08/2025</p>
         </div>
-        {pmtData.map((item) => (
+        {/* {pmtData.map((item) => (
           <div key={item._id}>
             {item.report.map((r) => (
-              <div key={r._id}>
+              <div style={{border: "solid red 1px"}} key={r._id}>
                 <p>{r.product}</p>
                 <div>
                   <p>{r.capacity}</p>
                 </div>
-                <p>Rp {r.price.amount}</p>
+                <p>Rp {formatRupiah(r.price.amount)}</p>
+                <p>{r.price.paymentType}</p>
+              </div>
+            ))}
+          </div>
+        ))} */}
+        {dateFiltered.map((item) => (
+          <div key={item._id}>
+            {item.report.map((r) => (
+              <div key={r._id}>
+                <p>{r.product}</p>
+                <p>{r.capacity}</p>
+                <p>Rp {formatRupiah(r.price.amount)}</p>
                 <p>{r.price.paymentType}</p>
               </div>
             ))}
