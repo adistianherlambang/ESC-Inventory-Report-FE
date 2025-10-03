@@ -3,17 +3,22 @@ import { userStore } from '../../state/state'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
+import { collection, query, where, getDocs, limit } from "firebase/firestore"
+import { db } from '../../../firebase'
+
 //Component
 import Loader from '../../components/item/loader/Loader'
 import Empty from '../../components/item/Empty/Empty'
 import { ActivityIcon } from '../../components/Icon/Icon'
 
+
 import styles from "./style.module.css"
+import { useStore } from 'zustand'
 
 export default function PmtPage() {
   const { currentUser } = userStore()
   const [pmtData, setPmtData] = useState([])
-  const [error, setError] = useState(null)
+  const [error, setError] = useState(false)
   const [loading, setLoading] = useState(true)
   const [dateFiltered, setDateFiltered] = useState([])
 
@@ -23,24 +28,24 @@ export default function PmtPage() {
   const now = new Date()
   const date = now.toISOString().split("T")[0]
 
-  const fetchPmtByName = async (name) => {
-    try {
-      const res = await axios.get(`http://localhost:3000/pmt/get/${name}`)
-      const data = res.data
-      console.log("fetch berhasil:", data)
+  // const fetchPmtByName = async (name) => {
+  //   try {
+  //     const res = await axios.get(`http://localhost:3000/pmt/get/${name}`)
+  //     const data = res.data
+  //     console.log("fetch berhasil:", data)
 
-      if (data.length === 0) {
-        setError(data.message || "data gaada")
-      }
-      setPmtData(data)
+  //     if (data.length === 0) {
+  //       setError(data.message || "data gaada")
+  //     }
+  //     setPmtData(data)
 
-    } catch (err) {
-      console.error(`server error ${err}`)
-      setError("Server error, coba lagi")
-    } finally {
-      setLoading(false)
-    }
-  }
+  //   } catch (err) {
+  //     console.error(`server error ${err}`)
+  //     setError("Server error, coba lagi")
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
 
   const formatRupiah = (value) => {
     if(typeof value !== "number") return value
@@ -51,12 +56,45 @@ export default function PmtPage() {
     }).format(value)
   }
 
+  // useEffect(() => {
+  //   console.log("Current user in PmtPage:", currentUser)
+  //   if (currentUser?.name) {
+  //     fetchPmtByName()
+  //   }
+  // }, [currentUser?.name])
+
   useEffect(() => {
-    console.log("Current user in PmtPage:", currentUser)
-    if (currentUser?.name) {
-      fetchPmtByName(currentUser.name)
+    try {
+      const fetchPmtByName = async () => {
+        try {
+          const q = query(
+            collection(db, "pmtdatas"),
+            where("name", "==", currentUser?.name)
+          )
+          
+          const querySnapshot = await getDocs(q)
+          const data = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data()
+          }))
+          
+          console.log("fetch berhasil", data) 
+
+          setPmtData(data)
+          if (pmtData.length == 0){
+            setError(true)
+          }
+        } catch (err) {
+          console.error(`error: : ${err}`)
+        } finally {
+          setLoading(false)
+        }
+      }
+      fetchPmtByName()
+    } catch (err) {
+      console.error(err)
     }
-  }, [currentUser?.name])
+  }, [])
 
   useEffect(() => {
     if (pmtData.length > 0) {
@@ -74,11 +112,8 @@ export default function PmtPage() {
     <div className={styles.container}>
       <h2>PmtPage</h2>
       <button onClick={logout}>Logout</button>
-
       {date}
       {loading && <Loader/>}
-      {pmtData.length === 0 && <Empty/>}
-      <Loader/>
       <div className={styles.activityContainer}>
         <div>
           <div>
@@ -87,20 +122,11 @@ export default function PmtPage() {
           </div>
           <p>30/08/2025</p>
         </div>
-        {/* {pmtData.map((item) => (
-          <div key={item._id}>
-            {item.report.map((r) => (
-              <div style={{border: "solid red 1px"}} key={r._id}>
-                <p>{r.product}</p>
-                <div>
-                  <p>{r.capacity}</p>
-                </div>
-                <p>Rp {formatRupiah(r.price.amount)}</p>
-                <p>{r.price.paymentType}</p>
-              </div>
-            ))}
+        {pmtData.map((item) => (
+          <div key={item.id}>
+            <p>{item.name}</p>
           </div>
-        ))} */}
+        ))}
         {dateFiltered.map((item) => (
           <div key={item._id}>
             {item.report.map((r) => (
