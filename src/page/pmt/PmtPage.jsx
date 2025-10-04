@@ -28,25 +28,6 @@ export default function PmtPage() {
   const now = new Date()
   const date = now.toISOString().split("T")[0]
 
-  // const fetchPmtByName = async (name) => {
-  //   try {
-  //     const res = await axios.get(`http://localhost:3000/pmt/get/${name}`)
-  //     const data = res.data
-  //     console.log("fetch berhasil:", data)
-
-  //     if (data.length === 0) {
-  //       setError(data.message || "data gaada")
-  //     }
-  //     setPmtData(data)
-
-  //   } catch (err) {
-  //     console.error(`server error ${err}`)
-  //     setError("Server error, coba lagi")
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // }
-
   const formatRupiah = (value) => {
     if(typeof value !== "number") return value
     return new Intl.NumberFormat("id-ID", {
@@ -55,13 +36,6 @@ export default function PmtPage() {
       minimumFractionDigits: 0,
     }).format(value)
   }
-
-  // useEffect(() => {
-  //   console.log("Current user in PmtPage:", currentUser)
-  //   if (currentUser?.name) {
-  //     fetchPmtByName()
-  //   }
-  // }, [currentUser?.name])
 
   useEffect(() => {
     try {
@@ -81,9 +55,6 @@ export default function PmtPage() {
           console.log("fetch berhasil", data) 
 
           setPmtData(data)
-          if (pmtData.length == 0){
-            setError(true)
-          }
         } catch (err) {
           console.error(`error: : ${err}`)
         } finally {
@@ -94,18 +65,18 @@ export default function PmtPage() {
     } catch (err) {
       console.error(err)
     }
-  }, [])
+  }, [currentUser?.name])
 
   useEffect(() => {
-    if (pmtData.length > 0) {
-      const filtered = pmtData
-        .map((item) => ({
-          ...item,
-          report: item.report.filter((r) => r.createdAt === date),
-        }))
-        .filter((item) => item.report.length > 0)
-      setDateFiltered(filtered)
-    }
+    const filtered = pmtData.map((item) => ({
+      ...item,
+      report: item.report.filter(r => {
+        const reportDate = r.createAt?.toDate()?.toLocaleDateString("en-CA")
+        return reportDate === date
+      })
+    })).filter(item => item.report.length > 0)
+    setDateFiltered(filtered)
+    console.log("ppp",filtered)
   }, [pmtData, date])
 
   return (
@@ -120,21 +91,23 @@ export default function PmtPage() {
             <p>Activity</p>
             <ActivityIcon/>
           </div>
-          <p>30/08/2025</p>
         </div>
-        {pmtData.map((item) => (
-          <div key={item.id}>
-            <p>{item.name}</p>
-          </div>
-        ))}
         {dateFiltered.map((item) => (
-          <div key={item._id}>
-            {item.report.map((r) => (
-              <div key={r._id}>
-                <p>{r.product}</p>
-                <p>{r.capacity}</p>
-                <p>Rp {formatRupiah(r.price.amount)}</p>
-                <p>{r.price.paymentType}</p>
+          <div key={item.id} className={styles.activity}>
+            <p>{item.name}</p>
+            
+            {item.report.map((i) => (
+              <div key={i.id}>
+                <div>
+                  <p>warna : {i.color}</p>
+                  <p>ukuran: {i.capacity}</p>
+                </div>
+                {i.price.map((r) => (
+                  <div key={r.id}>
+                    <p>{formatRupiah(r.amount)}</p>
+                    <p>{r.stype}</p>
+                  </div>
+                ))}
               </div>
             ))}
           </div>

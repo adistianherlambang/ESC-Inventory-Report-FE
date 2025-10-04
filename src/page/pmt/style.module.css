@@ -4,5 +4,9 @@
 }
 
 .activityContainer {
-  background-color: #F6F6F6;
+  border: 1px solid #000;
+}
+
+.activity {
+  border: solid red 1px;
 }

@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, setLogLevel } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -16,6 +16,8 @@ const firebaseConfig = {
   appId: "1:483955977989:web:6800fe52c95f5386c2916c",
   measurementId: "G-CK3NSPWQDH"
 };
+
+setLogLevel("silent")
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
