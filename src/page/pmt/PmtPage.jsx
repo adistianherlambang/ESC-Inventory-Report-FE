@@ -86,30 +86,32 @@ export default function PmtPage() {
       {date}
       {loading && <Loader/>}
       <div className={styles.activityContainer}>
-        <div>
-          <div>
-            <p>Activity</p>
-            <ActivityIcon/>
-          </div>
+        <div className={styles.activityTitleWrapper}>
+          <p className={styles.activityTitle}>Activity</p>
+          <ActivityIcon/>
         </div>
         {dateFiltered.map((item) => (
           <div key={item.id} className={styles.activity}>
-            <p>{item.name}</p>
-            
-            {item.report.map((i) => (
-              <div key={i.id}>
-                <div>
-                  <p>warna : {i.color}</p>
-                  <p>ukuran: {i.capacity}</p>
+            {item.report.map((i) => {
+              const totalAmount = i.price.reduce((sum, item) => sum + item.amount, 0)
+              return (
+              <div key={i.product}>
+                <div className={styles.productContainer}>
+                  <p className={styles.productName}>{i.product}</p>
+                  <div className={styles.productDetail}>
+                    <p>warna : {i.color}</p>
+                    <p>ukuran: {i.capacity}</p>
+                  </div>
                 </div>
                 {i.price.map((r) => (
-                  <div key={r.id}>
+                  <div key={r.amount}>
                     <p>{formatRupiah(r.amount)}</p>
-                    <p>{r.stype}</p>
+                    <p>{r.type}</p>
                   </div>
                 ))}
+                <p>{formatRupiah(totalAmount)}</p>
               </div>
-            ))}
+            )})}
           </div>
         ))}
       </div>
