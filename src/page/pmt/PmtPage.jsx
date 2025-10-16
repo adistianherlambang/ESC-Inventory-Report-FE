@@ -10,6 +10,8 @@ import { db } from '../../../firebase'
 import Loader from '../../components/item/loader/Loader'
 import Empty from '../../components/item/Empty/Empty'
 import { ActivityIcon } from '../../components/Icon/Icon'
+import Logo from '../../../public/Logo'
+import { LogoutIcon } from '../../../public/Icon'
 
 
 import styles from "./style.module.css"
@@ -81,8 +83,10 @@ export default function PmtPage() {
 
   return (
     <div className={styles.container}>
-      <h2>PmtPage</h2>
-      <button onClick={logout}>Logout</button>
+      <div className={styles.topContainer}>
+        <Logo/>
+        <div className={styles.logoutButton}><LogoutIcon/>Logout</div>
+      </div>
       {date}
       {loading && <Loader/>}
       <div className={styles.activityContainer}>
