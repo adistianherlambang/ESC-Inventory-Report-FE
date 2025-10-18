@@ -95,11 +95,11 @@ export default function PmtPage() {
         </div>
         {date}
         {dateFiltered.map((item) => (
-          <div key={item.id} className={styles.activity}>
+          <div key={item.id}>
             {item.report.map((i) => {
               const totalAmount = i.price.reduce((sum, item) => sum + item.amount, 0)
               return (
-              <div key={i.product}>
+              <div key={i.product} className={styles.activity}>
                 <div className={styles.productContainer}>
                   <p className={styles.productName}>{i.product}</p>
                   <div className={styles.productDetail}>
@@ -107,13 +107,18 @@ export default function PmtPage() {
                     <p>ukuran: {i.capacity}</p>
                   </div>
                 </div>
-                {i.price.map((r) => (
-                  <div key={r.amount}>
-                    <p>{formatRupiah(r.amount)}</p>
-                    <p>{r.type}</p>
-                  </div>
-                ))}
-                <p>{formatRupiah(totalAmount)}</p>
+                <div className={styles.priceContainer}>
+                  {i.price.map((r) => (
+                    <div key={r.amount} className={styles.price}>
+                      <p className={styles.priceAmount}>{formatRupiah(r.amount)}</p>
+                      <p className={styles.type}>{r.type}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className={styles.totalPriceContainer}>
+                  <p>Total harga :</p>
+                  <p>{formatRupiah(totalAmount)}</p>
+                </div>
               </div>
             )})}
           </div>
