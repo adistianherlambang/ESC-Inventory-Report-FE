@@ -7,6 +7,8 @@ import { useStore } from 'zustand'
 import { collection, query, where, getDocs, limit } from 'firebase/firestore'
 import { db } from '../../../firebase'
 
+import FirestoreExport from './File'
+
 export default function Login() {
 
   const [unique, setUnique] = useState("")
@@ -47,34 +49,11 @@ export default function Login() {
     }
   }
 
-  // const handleLogin = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const res = await fetch("http://localhost:3000/api/auth/login", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({unique})
-  //     })
-  //     const data = await res.json()
-  //     const string = JSON.stringify(data)
-      
-  //     if(res.ok) {
-  //       alert(`Login Sukes : ${string}`)
-  //       setCurrentUser(data)
-  //       navigate("/")
-  //     } else {
-  //       alert(data.message || "login gagal")
-  //     }
-
-  //   } catch (err) {
-  //     alert(`Server Error ${err}`)
-  //   }
-  // }
-
   return (
     <div className={styles.container}>
       <div className={styles.top}>
         SuperApp
+        <FirestoreExport/>
       </div>
       <div className={styles.bottom}>
         <p className={styles.title}>

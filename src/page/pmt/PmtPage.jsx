@@ -73,7 +73,7 @@ export default function PmtPage() {
     const filtered = pmtData.map((item) => ({
       ...item,
       report: item.report.filter(r => {
-        const reportDate = r.createAt?.toDate()?.toLocaleDateString("en-CA")
+        const reportDate = r.createdAt?.toDate()?.toLocaleDateString("en-CA")
         return reportDate === date
       })
     })).filter(item => item.report.length > 0)
@@ -85,15 +85,15 @@ export default function PmtPage() {
     <div className={styles.container}>
       <div className={styles.topContainer}>
         <Logo/>
-        <div className={styles.logoutButton}><LogoutIcon/>Logout</div>
+        <div onClick={logout} className={styles.logoutButton}><LogoutIcon/>Logout</div>
       </div>
-      {date}
       {loading && <Loader/>}
       <div className={styles.activityContainer}>
         <div className={styles.activityTitleWrapper}>
           <p className={styles.activityTitle}>Activity</p>
           <ActivityIcon/>
         </div>
+        {date}
         {dateFiltered.map((item) => (
           <div key={item.id} className={styles.activity}>
             {item.report.map((i) => {

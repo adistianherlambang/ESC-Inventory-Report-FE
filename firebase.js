@@ -8,19 +8,16 @@ import { getFirestore, setLogLevel } from "firebase/firestore";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyCi9MgM9y5LxAU1nt2_KYY-5LGjvLatIJE",
-  authDomain: "esc-superapp.firebaseapp.com",
-  projectId: "esc-superapp",
-  storageBucket: "esc-superapp.firebasestorage.app",
-  messagingSenderId: "483955977989",
-  appId: "1:483955977989:web:6800fe52c95f5386c2916c",
-  measurementId: "G-CK3NSPWQDH"
+  apiKey: "AIzaSyCioW3_SieVs5F9tIrhkz_oFQRu-5PwsW4",
+  authDomain: "esc-superapp-50ff4.firebaseapp.com",
+  projectId: "esc-superapp-50ff4",
+  storageBucket: "esc-superapp-50ff4.firebasestorage.app",
+  messagingSenderId: "648506002971",
+  appId: "1:648506002971:web:dbd1b67a205ca3b4fb32be",
+  measurementId: "G-E79M9VST48"
 };
-
-setLogLevel("silent")
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-
 export const db = getFirestore(app)

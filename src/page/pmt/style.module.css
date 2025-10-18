@@ -1,8 +1,9 @@
 .container {
   padding: 2rem;
-  border: solid red 1px;
   line-height: 1;
-  gap: 320px;
+  gap: 32px;
+  display: flex;
+  flex-direction: column;
 }
 
 .topContainer {
