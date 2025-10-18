@@ -61,7 +61,7 @@
 }  
 
 .productName {
-  font-size: 24px;
+  font-size: 18px;
 }
 
 .productDetail {
@@ -85,14 +85,41 @@
   gap: 4px;
 }
 
-.priceAmount {
-  
-}
-
 .type{
   font-family: SFProRegular;
   font-size: 12px;
 }
 
-.totalPriceContainer {
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.editButton {
+  display: flex;
+  padding: 8px;
+  justify-content: center;
+  align-items: center;
+  background-color: #773FF9;
+  color: white;
+  border-radius: 8px;
+}
+
+.editButton:hover {
+  background-color: #9c71ff;
+}
+
+.deleteButton {
+  display: flex;
+  padding: 8px;
+  justify-content: center;
+  align-items: center;
+  background-color: #DA0909;
+  color: white;
+  border-radius: 8px;
+}
+
+.deleteButton:hover {
+  background-color: #ff6666;
 }

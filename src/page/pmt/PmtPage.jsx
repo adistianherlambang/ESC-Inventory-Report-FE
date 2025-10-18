@@ -12,10 +12,12 @@ import Empty from '../../components/item/Empty/Empty'
 import { ActivityIcon } from '../../components/Icon/Icon'
 import Logo from '../../../public/Logo'
 import { LogoutIcon } from '../../../public/Icon'
+import EditSection from '../../components/section/pmt/edit/EditSection'
 
 
 import styles from "./style.module.css"
 import { useStore } from 'zustand'
+
 
 export default function PmtPage() {
   const { currentUser } = userStore()
@@ -23,6 +25,8 @@ export default function PmtPage() {
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(true)
   const [dateFiltered, setDateFiltered] = useState([])
+  const [isEditing, setIsEditing] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   const navigate = useNavigate()
 
@@ -30,6 +34,7 @@ export default function PmtPage() {
   const now = new Date()
   const date = now.toISOString().split("T")[0]
 
+  
   const formatRupiah = (value) => {
     if(typeof value !== "number") return value
     return new Intl.NumberFormat("id-ID", {
@@ -38,7 +43,7 @@ export default function PmtPage() {
       minimumFractionDigits: 0,
     }).format(value)
   }
-
+  
   useEffect(() => {
     try {
       const fetchPmtByName = async () => {
@@ -55,7 +60,7 @@ export default function PmtPage() {
           }))
           
           console.log("fetch berhasil", data) 
-
+          
           setPmtData(data)
         } catch (err) {
           console.error(`error: : ${err}`)
@@ -68,7 +73,7 @@ export default function PmtPage() {
       console.error(err)
     }
   }, [currentUser?.name])
-
+  
   useEffect(() => {
     const filtered = pmtData.map((item) => ({
       ...item,
@@ -82,7 +87,15 @@ export default function PmtPage() {
   }, [pmtData, date])
 
   return (
-    <div className={styles.container}>
+    <>
+    {isEditing ? <EditSection/> : <></>}
+    <div
+      className={styles.container}
+      onClick={isEditing || isDeleting ? () => {
+        setIsDeleting(false)
+        setIsEditing(false)
+      } : undefined}
+      style={{transition: "ease-in 300ms", opacity: isEditing || isDeleting ? 0.2 : 1}}>
       <div className={styles.topContainer}>
         <Logo/>
         <div onClick={logout} className={styles.logoutButton}><LogoutIcon/>Logout</div>
@@ -116,8 +129,12 @@ export default function PmtPage() {
                   ))}
                 </div>
                 <div className={styles.totalPriceContainer}>
-                  <p>Total harga :</p>
+                  <p>Total :</p>
                   <p>{formatRupiah(totalAmount)}</p>
+                </div>
+                <div className={styles.buttonContainer}>
+                  <div className={styles.editButton} onClick={() => setIsEditing(true)}>Edit</div>
+                  <div className={styles.deleteButton} onClick={() => setIsDeleting(true)}>Hapus</div>
                 </div>
               </div>
             )})}
@@ -125,5 +142,6 @@ export default function PmtPage() {
         ))}
       </div>
     </div>
+    </>
   )
 }

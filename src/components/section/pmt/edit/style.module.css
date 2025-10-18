@@ -1,0 +1,23 @@
+.container {
+  width: 100%;
+  height: fit-content;
+  background-color: white;
+  outline: 1px solid black;
+  outline-offset: 4px; 
+  z-index: 5;
+  position: absolute;
+  bottom: 0;
+  padding: 36px;
+  border-radius: 32px 32px 0 0;
+  box-sizing: border-box;
+  animation: popUp 300ms ease-out forwards;
+}
+
+@keyframes popUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
