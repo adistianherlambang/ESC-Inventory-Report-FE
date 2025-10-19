@@ -27,6 +27,7 @@ export default function PmtPage() {
   const [dateFiltered, setDateFiltered] = useState([])
   const [isEditing, setIsEditing] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [selectedId, setSelectedId] = useState(null)
 
   const navigate = useNavigate()
 
@@ -86,9 +87,14 @@ export default function PmtPage() {
     console.log("ppp",filtered)
   }, [pmtData, date])
 
+  const handleEdit = (id) => {
+    setIsEditing(true)
+    setSelectedId(id)
+  }
+
   return (
     <>
-    {isEditing ? <EditSection isOpen={isEditing}/> : <></>}
+    {isEditing ? <EditSection isOpen={isEditing} docId={selectedId}/> : <></>}
     <div
       className={styles.container}
       onClick={isEditing || isDeleting ? () => {
@@ -133,7 +139,7 @@ export default function PmtPage() {
                   <p>{formatRupiah(totalAmount)}</p>
                 </div>
                 <div className={styles.buttonContainer}>
-                  <div className={styles.editButton} onClick={() => setIsEditing(true)}>Edit</div>
+                  <div className={styles.editButton} onClick={() => handleEdit(item.id)}>Edit</div>
                   <div className={styles.deleteButton} onClick={() => setIsDeleting(true)}>Hapus</div>
                 </div>
               </div>
