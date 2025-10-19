@@ -88,7 +88,7 @@ export default function PmtPage() {
 
   return (
     <>
-    {isEditing ? <EditSection/> : <></>}
+    {isEditing ? <EditSection isOpen={isEditing}/> : <></>}
     <div
       className={styles.container}
       onClick={isEditing || isDeleting ? () => {

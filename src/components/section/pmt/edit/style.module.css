@@ -13,11 +13,24 @@
   animation: popUp 300ms ease-out forwards;
 }
 
+.container.hide {
+  animation: popDown 300ms ease-out forwards;
+}
+
 @keyframes popUp {
   from {
     transform: translateY(100%);
   }
   to {
     transform: translateY(0);
+  }
+}
+
+@keyframes popDown {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
   }
 }
