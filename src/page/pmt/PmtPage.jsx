@@ -28,6 +28,7 @@ export default function PmtPage() {
   const [isEditing, setIsEditing] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [selectedId, setSelectedId] = useState(null)
+  const [editData, setEditData] = useState(null)
 
   const navigate = useNavigate()
 
@@ -88,13 +89,14 @@ export default function PmtPage() {
   }, [pmtData, date])
 
   const handleEdit = (id) => {
+    setEditData(dateFiltered)
     setIsEditing(true)
     setSelectedId(id)
   }
 
   return (
     <>
-    {isEditing ? <EditSection isOpen={isEditing} docId={selectedId}/> : <></>}
+    {isEditing ? <EditSection isOpen={isEditing} docId={selectedId} data={editData}/> : <></>}
     <div
       className={styles.container}
       onClick={isEditing || isDeleting ? () => {
