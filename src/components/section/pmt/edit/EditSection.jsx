@@ -54,124 +54,117 @@ export default function EditSection({ isOpen, docId, imei, onClose, data }) {
       {data.map((item) =>
         item.report.map((r) => (
           <div key={item.id} className={styles.itemContainer}>
+
             <p className={styles.title}>Edit</p>
-            <div>
-              <p>{item.brand}</p>
-              <p>
-                IMEI: <span>{imei}</span>
+
+            <div className={styles.itemDetail}>
+              <p className={styles.productName}>{r.product}</p>
+              <p className={styles.silver}>
+                IMEI: <span className={styles.black}>{imei}</span>
               </p>
-              <div>
-                <p>Warna: {r.color}</p>
-                <p>Ukuran: {r.capacity}</p>
+              <div className={styles.productDetail}>
+                <p className={styles.silver}>Warna: <span className={styles.black}>{r.color}</span></p>
+                <p className={styles.silver}>Ukuran: <span className={styles.black}>{r.capacity}</span></p>
               </div>
             </div>
+
+            {prices.map((price, index) => (
+              <div key={index} className={styles.inputContainer}>
+                <div className={styles.radioContainer}>
+                  <p className={styles.method}>Metode pembayaran :</p>
+                  <label className={styles.radio}>
+                    <input
+                      type="radio"
+                      name={`type-${index}`}
+                      value="cash"
+                      checked={price.type === "cash"}
+                      onChange={() => handleChange(index, "type", "cash")}
+                    />
+                    CS
+                  </label>
+                  <label className={styles.radio}>
+                    <input
+                      type="radio"
+                      name={`type-${index}`}
+                      value="transfer"
+                      checked={price.type === "transfer"}
+                      onChange={() => handleChange(index, "type", "transfer")}
+                    />
+                    TF
+                  </label>
+                  <label className={styles.radio}>
+                    <input
+                      type="radio"
+                      name={`type-${index}`}
+                      value="debit"
+                      checked={price.type === "debit"}
+                      onChange={() => handleChange(index, "type", "debit")}
+                    />
+                    GS
+                  </label>
+                </div>
+                <input
+                  type="number"
+                  placeholder="Harga"
+                  value={price.amount}
+                  onChange={(e) => handleChange(index, "amount", e.target.value)}
+                  className={styles.input}
+                />
+              </div>
+            ))}
+
+            <button
+              onClick={addPriceField}
+              style={{
+                marginTop: "10px",
+                background: "#ccc",
+                padding: "6px 10px",
+                borderRadius: "6px",
+                border: "none",
+              }}
+            >
+              + Tambah Harga
+            </button>
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                gap: "10px",
+                marginTop: "20px",
+              }}
+            >
+              <button
+                onClick={onClose}
+                style={{
+                  background: "#999",
+                  color: "white",
+                  padding: "6px 14px",
+                  borderRadius: "6px",
+                  border: "none",
+                }}
+              >
+                Batal
+              </button>
+              <button
+                onClick={handleSave}
+                disabled={loading}
+                style={{
+                  background: "#16a34a",
+                  color: "white",
+                  padding: "6px 14px",
+                  borderRadius: "6px",
+                  border: "none",
+                }}
+              >
+                {loading ? "Menyimpan..." : "Simpan"}
+              </button>
+            </div>
+            
           </div>
         )),
       )}
-      {prices.map((p, i) => (
-        <div
-          key={i}
-          style={{
-            display: "flex",
-            gap: "8px",
-            marginTop: "8px",
-            alignItems: "center",
-          }}
-        >
-          <div style={{ display: "flex", gap: "8px" }}>
-            <label>
-              <input
-                type="radio"
-                name={`type-${i}`}
-                value="cash"
-                checked={p.type === "cash"}
-                onChange={() => handleChange(i, "type", "cash")}
-              />
-              Cash
-            </label>
-            <label>
-              <input
-                type="radio"
-                name={`type-${i}`}
-                value="transfer"
-                checked={p.type === "transfer"}
-                onChange={() => handleChange(i, "type", "transfer")}
-              />
-              Transfer
-            </label>
-            <label>
-              <input
-                type="radio"
-                name={`type-${i}`}
-                value="debit"
-                checked={p.type === "debit"}
-                onChange={() => handleChange(i, "type", "debit")}
-              />
-              Debit
-            </label>
-          </div>
-          <input
-            type="number"
-            placeholder="Amount"
-            value={p.amount}
-            onChange={(e) => handleChange(i, "amount", e.target.value)}
-            style={{
-              flex: 1,
-              border: "1px solid #ccc",
-              borderRadius: "6px",
-              padding: "6px",
-            }}
-          />
-        </div>
-      ))}
 
-      <button
-        onClick={addPriceField}
-        style={{
-          marginTop: "10px",
-          background: "#ccc",
-          padding: "6px 10px",
-          borderRadius: "6px",
-          border: "none",
-        }}
-      >
-        + Tambah Harga
-      </button>
-
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          gap: "10px",
-          marginTop: "20px",
-        }}
-      >
-        <button
-          onClick={onClose}
-          style={{
-            background: "#999",
-            color: "white",
-            padding: "6px 14px",
-            borderRadius: "6px",
-            border: "none",
-          }}
-        >
-          Batal
-        </button>
-        <button
-          onClick={handleSave}
-          disabled={loading}
-          style={{
-            background: "#16a34a",
-            color: "white",
-            padding: "6px 14px",
-            borderRadius: "6px",
-            border: "none",
-          }}
-        >
-          {loading ? "Menyimpan..." : "Simpan"}
-        </button>
-      </div>
     </div>
   );
 }
