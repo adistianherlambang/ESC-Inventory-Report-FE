@@ -35,6 +35,7 @@ export default function EditSection({ isOpen, docId, imei, onClose, data }) {
       r.IMEI === imei
         ? {
             ...r,
+            userType: a,
             price: prices.map((p) => ({
               type: p.type,
               amount: Number(p.amount),
@@ -68,10 +69,32 @@ export default function EditSection({ isOpen, docId, imei, onClose, data }) {
               </div>
             </div>
 
+            <div className={styles.radioContainer}>
+              <p className={styles.method}>Jenis User :</p>
+              <label className={styles.radio}>
+                <input
+                  type="radio"
+                  name={r.userType}
+                  value="User"
+                  checked={r.userType == "user"}
+                />
+                User
+              </label>
+               <label className={styles.radio}>
+                <input
+                  type="radio"
+                  name={r.userType}
+                  value="CN"
+                  checked={r.userType == "CN"}
+                />
+                CN
+              </label>
+            </div>
+
             {prices.map((price, index) => (
               <div key={index} className={styles.inputContainer}>
                 <div className={styles.radioContainer}>
-                  <p className={styles.method}>Metode pembayaran :</p>
+                  <p className={styles.method}>Metode Pembayaran :</p>
                   <label className={styles.radio}>
                     <input
                       type="radio"
@@ -103,13 +126,16 @@ export default function EditSection({ isOpen, docId, imei, onClose, data }) {
                     GS
                   </label>
                 </div>
-                <input
-                  type="number"
-                  placeholder="Harga"
-                  value={price.amount}
-                  onChange={(e) => handleChange(index, "amount", e.target.value)}
-                  className={styles.input}
-                />
+                <div className={styles.priceContainer}>
+                  <p>Rp</p>
+                  <input
+                    type="number"
+                    placeholder="Harga"
+                    value={price.amount}
+                    onChange={(e) => handleChange(index, "amount", e.target.value)}
+                    className={styles.input}
+                  />
+                </div>
               </div>
             ))}
 

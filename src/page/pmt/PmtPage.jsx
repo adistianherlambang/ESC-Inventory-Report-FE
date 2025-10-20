@@ -158,7 +158,7 @@ export default function PmtPage() {
                           <p className={styles.priceAmount}>
                             {formatRupiah(r.amount)}
                           </p>
-                          <p className={styles.type}>{r.type}</p>
+                          <p className={styles.type}>{i.userType} {r.type}</p>
                         </div>
                       ))}
                     </div>
