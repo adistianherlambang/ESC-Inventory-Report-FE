@@ -6,6 +6,7 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 export default function EditSection({ isOpen, docId, imei, onClose, data }) {
   const [prices, setPrices] = useState([{ type: "", amount: "" }]);
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState("")
 
   useEffect(() => {
     if (docId && imei) {
@@ -35,7 +36,7 @@ export default function EditSection({ isOpen, docId, imei, onClose, data }) {
       r.IMEI === imei
         ? {
             ...r,
-            userType: a,
+            userType: user,
             price: prices.map((p) => ({
               type: p.type,
               amount: Number(p.amount),
@@ -74,18 +75,20 @@ export default function EditSection({ isOpen, docId, imei, onClose, data }) {
               <label className={styles.radio}>
                 <input
                   type="radio"
-                  name={r.userType}
+                  name={`userType-${r.IMEI}`}
                   value="User"
-                  checked={r.userType == "user"}
+                  checked={user === "User"}
+                  onChange={() => setUser("User")}
                 />
                 User
               </label>
-               <label className={styles.radio}>
+              <label className={styles.radio}>
                 <input
                   type="radio"
-                  name={r.userType}
+                  name={`userType-${r.IMEI}`}
                   value="CN"
-                  checked={r.userType == "CN"}
+                  checked={user === "CN"}
+                  onChange={() => setUser("CN")}
                 />
                 CN
               </label>
