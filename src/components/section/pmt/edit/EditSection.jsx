@@ -6,7 +6,7 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 export default function EditSection({ isOpen, docId, imei, onClose, data }) {
   const [prices, setPrices] = useState([{ type: "", amount: "" }]);
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState("")
+  const [user, setUser] = useState("");
 
   useEffect(() => {
     if (docId && imei) {
@@ -56,7 +56,6 @@ export default function EditSection({ isOpen, docId, imei, onClose, data }) {
       {data.map((item) =>
         item.report.map((r) => (
           <div key={item.id} className={styles.itemContainer}>
-
             <p className={styles.title}>Edit</p>
 
             <div className={styles.itemDetail}>
@@ -65,8 +64,12 @@ export default function EditSection({ isOpen, docId, imei, onClose, data }) {
                 IMEI: <span className={styles.black}>{imei}</span>
               </p>
               <div className={styles.productDetail}>
-                <p className={styles.silver}>Warna: <span className={styles.black}>{r.color}</span></p>
-                <p className={styles.silver}>Ukuran: <span className={styles.black}>{r.capacity}</span></p>
+                <p className={styles.silver}>
+                  Warna: <span className={styles.black}>{r.color}</span>
+                </p>
+                <p className={styles.silver}>
+                  Ukuran: <span className={styles.black}>{r.capacity}</span>
+                </p>
               </div>
             </div>
 
@@ -135,7 +138,9 @@ export default function EditSection({ isOpen, docId, imei, onClose, data }) {
                     type="number"
                     placeholder="Harga"
                     value={price.amount}
-                    onChange={(e) => handleChange(index, "amount", e.target.value)}
+                    onChange={(e) =>
+                      handleChange(index, "amount", e.target.value)
+                    }
                     className={styles.input}
                   />
                 </div>
@@ -143,17 +148,11 @@ export default function EditSection({ isOpen, docId, imei, onClose, data }) {
             ))}
 
             <div className={styles.button}>
-              <button
-                onClick={addPriceField}
-                className={styles.addPrice}
-              >
+              <button onClick={addPriceField} className={styles.addPrice}>
                 + Tambah Harga
               </button>
               <div className={styles.saveClose}>
-                <button
-                  onClick={onClose}
-                  className={styles.close}
-                >
+                <button onClick={onClose} className={styles.close}>
                   Batal
                 </button>
                 <button
@@ -165,11 +164,9 @@ export default function EditSection({ isOpen, docId, imei, onClose, data }) {
                 </button>
               </div>
             </div>
-
           </div>
         )),
       )}
-
     </div>
   );
 }
