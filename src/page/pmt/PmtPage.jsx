@@ -27,6 +27,7 @@ export default function PmtPage() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [editData, setEditData] = useState(null);
+  const [selectedImei, setSelectedImei] = useState(null)
 
   const navigate = useNavigate();
 
@@ -87,16 +88,17 @@ export default function PmtPage() {
     console.log("ppp", filtered);
   }, [pmtData, date]);
 
-  const handleEdit = (id) => {
+  const handleEdit = ({id, imei}) => {
     setEditData(dateFiltered);
     setIsEditing(true);
     setSelectedId(id);
+    setSelectedImei(imei)
   };
 
   return (
     <>
       {isEditing ? (
-        <EditSection isOpen={isEditing} docId={selectedId} data={editData} />
+        <EditSection isOpen={isEditing} docId={selectedId} data={editData} imei={selectedImei}/>
       ) : (
         <></>
       )}
@@ -162,7 +164,7 @@ export default function PmtPage() {
                     <div className={styles.buttonContainer}>
                       <div
                         className={styles.editButton}
-                        onClick={() => handleEdit(item.id)}
+                        onClick={() => handleEdit({id: item.id, imei: i.IMEI})}
                       >
                         Edit
                       </div>
