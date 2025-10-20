@@ -51,24 +51,33 @@ export default function EditSection({ isOpen, docId, imei, onClose, data }) {
 
   return (
     <div className={`${styles.container} ${!isOpen ? styles.hide : ""}`}>
-
       {data.map((item) =>
         item.report.map((r) => (
           <div key={item.id} className={styles.itemContainer}>
             <p className={styles.title}>Edit</p>
             <div>
               <p>{item.brand}</p>
-              <p>IMEI: <span>{imei}</span></p>
+              <p>
+                IMEI: <span>{imei}</span>
+              </p>
               <div>
                 <p>Warna: {r.color}</p>
                 <p>Ukuran: {r.capacity}</p>
               </div>
             </div>
           </div>
-        ))
+        )),
       )}
       {prices.map((p, i) => (
-        <div key={i} style={{ display: "flex", gap: "8px", marginTop: "8px", alignItems: "center" }}>
+        <div
+          key={i}
+          style={{
+            display: "flex",
+            gap: "8px",
+            marginTop: "8px",
+            alignItems: "center",
+          }}
+        >
           <div style={{ display: "flex", gap: "8px" }}>
             <label>
               <input
