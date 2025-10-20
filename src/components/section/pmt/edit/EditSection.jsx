@@ -142,54 +142,30 @@ export default function EditSection({ isOpen, docId, imei, onClose, data }) {
               </div>
             ))}
 
-            <button
-              onClick={addPriceField}
-              style={{
-                marginTop: "10px",
-                background: "#ccc",
-                padding: "6px 10px",
-                borderRadius: "6px",
-                border: "none",
-              }}
-            >
-              + Tambah Harga
-            </button>
-
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                gap: "10px",
-                marginTop: "20px",
-              }}
-            >
+            <div className={styles.button}>
               <button
-                onClick={onClose}
-                style={{
-                  background: "#999",
-                  color: "white",
-                  padding: "6px 14px",
-                  borderRadius: "6px",
-                  border: "none",
-                }}
+                onClick={addPriceField}
+                className={styles.addPrice}
               >
-                Batal
+                + Tambah Harga
               </button>
-              <button
-                onClick={handleSave}
-                disabled={loading}
-                style={{
-                  background: "#16a34a",
-                  color: "white",
-                  padding: "6px 14px",
-                  borderRadius: "6px",
-                  border: "none",
-                }}
-              >
-                {loading ? "Menyimpan..." : "Simpan"}
-              </button>
+              <div className={styles.saveClose}>
+                <button
+                  onClick={onClose}
+                  className={styles.close}
+                >
+                  Batal
+                </button>
+                <button
+                  onClick={handleSave}
+                  disabled={loading}
+                  className={styles.save}
+                >
+                  {loading ? "Menyimpan..." : "Simpan"}
+                </button>
+              </div>
             </div>
-            
+
           </div>
         )),
       )}

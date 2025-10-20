@@ -20,9 +20,13 @@
   font-size: 16px;
 }
 
-.container.hide {
-  animation: popDown 300ms ease-out forwards;
+.hide {
+  display: none;
 }
+
+/* .container.hide {
+  animation: popDown 300ms ease-out forwards;
+} */
 
 .itemContainer {
   display: flex;
@@ -119,6 +123,36 @@
 
 .input::placeholder {
   color: black;
+}
+
+.button {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-family: SFProBold;
+}
+
+.addPrice {
+  border: solid #773FF9 2px;
+  color: #773FF9;
+}
+
+.saveClose {
+  width: 100%;
+  display: flex;
+  gap: 16px;
+}
+
+.save {
+  background-color: #773FF9;
+  color: white;
+  width: 100%;
+}
+
+.close {
+  background-color: #DA0909;
+  color: white;
+  width: 100%;
 }
 
 @keyframes popUp {

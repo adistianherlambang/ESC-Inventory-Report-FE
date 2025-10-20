@@ -103,6 +103,7 @@ export default function PmtPage() {
           docId={selectedId}
           data={editData}
           imei={selectedImei}
+          onClose={() => setIsEditing(!isEditing)}
         />
       ) : (
         <></>
