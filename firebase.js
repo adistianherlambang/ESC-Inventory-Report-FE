@@ -14,10 +14,10 @@ const firebaseConfig = {
   storageBucket: "esc-superapp-50ff4.firebasestorage.app",
   messagingSenderId: "648506002971",
   appId: "1:648506002971:web:dbd1b67a205ca3b4fb32be",
-  measurementId: "G-E79M9VST48"
+  measurementId: "G-E79M9VST48",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-export const db = getFirestore(app)
+export const db = getFirestore(app);

@@ -1,5 +1,5 @@
-import React from 'react'
-import styles from "./style.module.css"
+import React from "react";
+import styles from "./style.module.css";
 
 export default function Empty() {
   return (
@@ -7,5 +7,5 @@ export default function Empty() {
       <p className={styles.title}>😭 Tidak ada data</p>
       <p className={styles.desc}>Silahkan tunggu beberapa saat lagi</p>
     </div>
-  )
+  );
 }

@@ -46,7 +46,6 @@
 //     }
 //   };
 
-
 //   return(
 //     <div style={{zIndex: 0, position: 'relative'}}
 //       onTouchStart={handleTouchStart}
@@ -68,4 +67,3 @@
 //     </div>
 //   )
 // }
-

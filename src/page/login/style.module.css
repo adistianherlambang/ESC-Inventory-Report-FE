@@ -23,7 +23,7 @@ body {
 }
 
 .span {
-  color: #BDBDBD
+  color: #bdbdbd;
 }
 
 .form {
@@ -36,7 +36,7 @@ body {
 .input {
   padding: 12px;
   text-align: center;
-  background-color: #F6F6F6;
+  background-color: #f6f6f6;
   border: solid black 1px;
   color: black;
   border-radius: 4px;
@@ -44,7 +44,7 @@ body {
 }
 
 .button {
-  background-color: #773FF9;
+  background-color: #773ff9;
   padding: 12px;
   font-family: SFProBold;
   font-size: 1rem;
@@ -53,6 +53,6 @@ body {
 .text {
   font-family: SFProRegular;
   font-size: 12px;
-  color: #BDBDBD;
+  color: #bdbdbd;
   line-height: 1;
 }

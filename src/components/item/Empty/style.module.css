@@ -11,13 +11,12 @@
 
 .title {
   line-height: 0;
-  color: #DA0909;
-  
+  color: #da0909;
 }
 
 .desc {
   font-family: SFProRegular;
   font-size: 12;
-  color: #717B7A;
+  color: #717b7a;
   line-height: 0;
 }

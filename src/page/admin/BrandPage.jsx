@@ -1,45 +1,47 @@
-import React, { useState, useEffect } from 'react'
-import { useParams, useNavigate } from "react-router-dom"
-import axios from "axios"
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function BrandPage() {
-  const { label } = useParams()
-  const [product, setProduct] = useState([])
-  const [imeiInput, setImeiInput] = useState("")
+  const { label } = useParams();
+  const [product, setProduct] = useState([]);
+  const [imeiInput, setImeiInput] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:3000/product/getbybrand?brand=${label.toLowerCase()}`
-        )
-        setProduct(res.data)
+          `http://localhost:3000/product/getbybrand?brand=${label.toLowerCase()}`,
+        );
+        setProduct(res.data);
       } catch (err) {
-        console.error(err.message)
+        console.error(err.message);
       }
-    }
-    fetchData()
-  }, [label])
+    };
+    fetchData();
+  }, [label]);
 
   const handleAddImei = async (id) => {
     try {
       const res = await axios.post(
         `http://localhost:3000/product/add-imei/${id}`,
-        { imei: imeiInput }
-      )
-      setProduct(product.map(p => p._id === id ? res.data : p))
-      setImeiInput("")
+        { imei: imeiInput },
+      );
+      setProduct(product.map((p) => (p._id === id ? res.data : p)));
+      setImeiInput("");
     } catch (err) {
-      console.error(err.message)
+      console.error(err.message);
     }
-  }
+  };
 
   return (
     <div>
       <h1>Brand: {label}</h1>
       {product.map((item, index) => (
         <div key={index}>
-          <p>{item.product} ({item.IMEI.length} IMEI)</p>
+          <p>
+            {item.product} ({item.IMEI.length} IMEI)
+          </p>
           <input
             value={imeiInput}
             onChange={(e) => setImeiInput(e.target.value)}
@@ -49,5 +51,5 @@ export default function BrandPage() {
         </div>
       ))}
     </div>
-  )
+  );
 }
