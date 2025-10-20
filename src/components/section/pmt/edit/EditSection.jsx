@@ -3,24 +3,14 @@ import styles from "./style.module.css";
 import { db } from "../../../../../firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 
-export default function EditSection({ isOpen, docId, imei, onClose }) {
+export default function EditSection({ isOpen, docId, imei, onClose, data }) {
   const [prices, setPrices] = useState([{ type: "", amount: "" }]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (!docId || !imei) return;
-      const docRef = doc(db, "pmtdatas", docId);
-      const snap = await getDoc(docRef);
-      if (!snap.exists()) return;
-
-      const data = snap.data();
-      const target = data.report?.find((r) => r.IMEI === imei);
-      if (target && target.price) {
-        setPrices(target.price);
-      }
-    };
-    fetchData();
+    if (docId && imei) {
+      setPrices([{ type: "", amount: "" }]);
+    }
   }, [docId, imei]);
 
   const addPriceField = () => {
@@ -61,24 +51,56 @@ export default function EditSection({ isOpen, docId, imei, onClose }) {
 
   return (
     <div className={`${styles.container} ${!isOpen ? styles.hide : ""}`}>
-      <h2 style={{ fontWeight: "bold", fontSize: "18px" }}>
-        Edit Harga - IMEI: {imei}
-      </h2>
 
+      {data.map((item) =>
+        item.report.map((r) => (
+          <div key={item.id} className={styles.itemContainer}>
+            <p className={styles.title}>Edit</p>
+            <div>
+              <p>{item.brand}</p>
+              <p>IMEI: <span>{imei}</span></p>
+              <div>
+                <p>Warna: {r.color}</p>
+                <p>Ukuran: {r.capacity}</p>
+              </div>
+            </div>
+          </div>
+        ))
+      )}
       {prices.map((p, i) => (
-        <div key={i} style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
-          <input
-            type="text"
-            placeholder="Type (cash, debit, etc)"
-            value={p.type}
-            onChange={(e) => handleChange(i, "type", e.target.value)}
-            style={{
-              flex: 1,
-              border: "1px solid #ccc",
-              borderRadius: "6px",
-              padding: "6px",
-            }}
-          />
+        <div key={i} style={{ display: "flex", gap: "8px", marginTop: "8px", alignItems: "center" }}>
+          <div style={{ display: "flex", gap: "8px" }}>
+            <label>
+              <input
+                type="radio"
+                name={`type-${i}`}
+                value="cash"
+                checked={p.type === "cash"}
+                onChange={() => handleChange(i, "type", "cash")}
+              />
+              Cash
+            </label>
+            <label>
+              <input
+                type="radio"
+                name={`type-${i}`}
+                value="transfer"
+                checked={p.type === "transfer"}
+                onChange={() => handleChange(i, "type", "transfer")}
+              />
+              Transfer
+            </label>
+            <label>
+              <input
+                type="radio"
+                name={`type-${i}`}
+                value="debit"
+                checked={p.type === "debit"}
+                onChange={() => handleChange(i, "type", "debit")}
+              />
+              Debit
+            </label>
+          </div>
           <input
             type="number"
             placeholder="Amount"

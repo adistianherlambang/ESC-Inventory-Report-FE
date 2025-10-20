@@ -3,7 +3,7 @@
   height: fit-content;
   background-color: white;
   outline: 1px solid black;
-  outline-offset: 4px;
+  outline-offset: 0;
   z-index: 5;
   position: absolute;
   bottom: 0;
@@ -15,6 +15,18 @@
 
 .container.hide {
   animation: popDown 300ms ease-out forwards;
+}
+
+.itemContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.title {
+  font-size: 24px;
+  text-decoration: underline;
+  text-align: center;
 }
 
 @keyframes popUp {

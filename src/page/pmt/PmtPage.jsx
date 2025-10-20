@@ -72,7 +72,7 @@ export default function PmtPage() {
     } catch (err) {
       console.error(err);
     }
-  }, [currentUser?.name]);
+  }, [currentUser?.name, isEditing]);
 
   useEffect(() => {
     const filtered = pmtData
@@ -143,8 +143,8 @@ export default function PmtPage() {
                     <div className={styles.productContainer}>
                       <p className={styles.productName}>{i.product}</p>
                       <div className={styles.productDetail}>
-                        <p>warna : {i.color}</p>
-                        <p>ukuran: {i.capacity}</p>
+                        <p>Warna : {i.color}</p>
+                        <p>Ukuran: {i.capacity}</p>
                       </div>
                     </div>
                     <div className={styles.priceContainer}>
