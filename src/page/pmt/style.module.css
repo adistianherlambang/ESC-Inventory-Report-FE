@@ -65,6 +65,12 @@
   color: #B1B1B1;
 }
 
+.activityWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .activity {
   border: solid black 1px;
   padding: 16px;

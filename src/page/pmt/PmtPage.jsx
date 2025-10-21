@@ -97,7 +97,7 @@ export default function PmtPage() {
 
   const handleDelete = ({ id, imei }) => {
     setSelectedId(id)
-    setSelectedImei("imei")
+    setSelectedImei(imei)
     setIsDeleting(true)
   }
 
