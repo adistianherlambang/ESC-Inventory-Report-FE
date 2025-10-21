@@ -8,6 +8,7 @@ import { collection, query, where, getDocs, limit } from "firebase/firestore";
 import { db } from "../../../firebase";
 
 import FirestoreExport from "./File";
+import Add from "./Add";
 
 export default function Login() {
   const [unique, setUnique] = useState("");
@@ -52,6 +53,7 @@ export default function Login() {
       <div className={styles.top}>
         SuperApp
         <FirestoreExport />
+        <Add/>
       </div>
       <div className={styles.bottom}>
         <p className={styles.title}>
