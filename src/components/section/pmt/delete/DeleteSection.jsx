@@ -1,8 +1,7 @@
 import React from "react";
-import styles from "./style.module.css"
+import styles from "./style.module.css";
 
 export default function DeleteSection({ docId, imei, onClose }) {
-
   const deleteReportByIMEI = async (docId, imei) => {
     try {
       const docRef = doc(db, "pmtdatas", docId);

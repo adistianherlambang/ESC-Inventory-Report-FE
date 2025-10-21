@@ -2,7 +2,7 @@
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch; 
+  -webkit-overflow-scrolling: touch;
   background-color: white;
   outline: 1px solid black;
   outline-offset: 0;

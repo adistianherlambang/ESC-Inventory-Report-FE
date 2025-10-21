@@ -96,10 +96,10 @@ export default function PmtPage() {
   };
 
   const handleDelete = ({ id, imei }) => {
-    setSelectedId(id)
-    setSelectedImei(imei)
-    setIsDeleting(true)
-  }
+    setSelectedId(id);
+    setSelectedImei(imei);
+    setIsDeleting(true);
+  };
 
   return (
     <>
@@ -115,7 +115,11 @@ export default function PmtPage() {
         <></>
       )}
       {isDeleting ? (
-        <DeleteSection docId={selectedId} imei={selectedImei} onClose={() => setIsDeleting(!isDeleting)}/>
+        <DeleteSection
+          docId={selectedId}
+          imei={selectedImei}
+          onClose={() => setIsDeleting(!isDeleting)}
+        />
       ) : (
         <></>
       )}
@@ -199,7 +203,9 @@ export default function PmtPage() {
                       </div>
                       <div
                         className={styles.deleteButton}
-                        onClick={() => handleDelete({id: item.id, imei: i.IMEI})}
+                        onClick={() =>
+                          handleDelete({ id: item.id, imei: i.IMEI })
+                        }
                       >
                         Hapus
                       </div>
