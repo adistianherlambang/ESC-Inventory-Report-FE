@@ -1,5 +1,7 @@
 import React from "react";
 import styles from "./style.module.css";
+import { db } from "../../../../../firebase";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 export default function DeleteSection({ docId, imei, onClose }) {
   const deleteReportByIMEI = async (docId, imei) => {
