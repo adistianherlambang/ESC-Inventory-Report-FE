@@ -63,7 +63,7 @@ export default function EditSection({ isOpen, docId, imei, onClose, data }) {
             <div className={styles.itemDetail}>
               <p className={styles.productName}>{r.product}</p>
               <p className={styles.silver}>
-                IEI: <span className={styles.black}>{r.IMEI}</span>
+                IMEI: <span className={styles.black}>{r.IMEI}</span>
               </p>
               <div className={styles.productDetail}>
                 <p className={styles.silver}>
