@@ -30,7 +30,7 @@ export default function DeleteSection({ docId, imei, onClose }) {
     <div className={styles.container}>
       {docId}
       <p>{imei}</p>
-      <button onClick={deleteReportByIMEI}>hapus</button>
+      <button onClick={() => deleteReportByIMEI(docId, imei)}>hapus</button>
     </div>
   );
 }
