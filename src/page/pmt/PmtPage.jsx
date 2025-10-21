@@ -13,9 +13,9 @@ import { ActivityIcon } from "../../components/Icon/Icon";
 import Logo from "../../../public/Logo";
 import { LogoutIcon } from "../../../public/Icon";
 import EditSection from "../../components/section/pmt/edit/EditSection";
+import DeleteSection from "../../components/section/pmt/delete/DeleteSection";
 
 import styles from "./style.module.css";
-import { useStore } from "zustand";
 
 export default function PmtPage() {
   const { currentUser } = userStore();
@@ -95,6 +95,12 @@ export default function PmtPage() {
     setSelectedImei(imei);
   };
 
+  const handleDelete = ({ id, imei }) => {
+    setSelectedId(id)
+    setSelectedImei("imei")
+    setIsDeleting(true)
+  }
+
   return (
     <>
       {isEditing ? (
@@ -105,6 +111,11 @@ export default function PmtPage() {
           imei={selectedImei}
           onClose={() => setIsEditing(!isEditing)}
         />
+      ) : (
+        <></>
+      )}
+      {isDeleting ? (
+        <DeleteSection docId={selectedId} imei={selectedImei} onClose={() => setIsDeleting(!isDeleting)}/>
       ) : (
         <></>
       )}
@@ -130,13 +141,21 @@ export default function PmtPage() {
             Logout
           </div>
         </div>
+        {pmtData.map((item) => (
+          <div key={item.id} className={styles.pmtContainer}>
+            <p>Bismillah, {item.name}👋</p>
+            <p className={styles.pmt}>PMT {item.brand}</p>
+          </div>
+        ))}
         {loading && <Loader />}
         <div className={styles.activityContainer}>
-          <div className={styles.activityTitleWrapper}>
-            <p className={styles.activityTitle}>Activity</p>
+          <div className={styles.activityTitleContainer}>
+            <div className={styles.activityTitleWrapper}>
+              <p className={styles.activityTitle}>Activity</p>
+              <p className={styles.date}>{date}</p>
+            </div>
             <ActivityIcon />
           </div>
-          {date}
           {dateFiltered.map((item) => (
             <div key={item.id}>
               {item.report.map((i) => {
@@ -180,7 +199,7 @@ export default function PmtPage() {
                       </div>
                       <div
                         className={styles.deleteButton}
-                        onClick={() => setIsDeleting(true)}
+                        onClick={() => handleDelete({id: item.id, imei: i.IMEI})}
                       >
                         Hapus
                       </div>

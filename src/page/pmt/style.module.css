@@ -6,7 +6,6 @@
 }
 
 .topContainer {
-  /* border: solid black 1px; */
   display: flex;
   justify-content: space-between;
   align-content: center;
@@ -25,6 +24,15 @@
   gap: 8px;
 }
 
+.pmtContainer {
+  font-size: 32px;
+  text-transform: capitalize;
+}
+
+.pmt {
+  color: #717B7A
+}
+
 .activityContainer {
   padding: 16px 24px;
   background-color: #f6f6f6;
@@ -34,16 +42,27 @@
   gap: 24px;
 }
 
-.activityTitleWrapper {
+.activityTitleContainer {
   display: flex;
   width: 100%;
   align-items: center;
   justify-content: space-between;
 }
 
+.activityTitleWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}
+
 .activityTitle {
   font-family: SFProMedium;
   font-size: 24px;
+}
+
+.date {
+  font-family: SFProRegular;
+  color: #B1B1B1;
 }
 
 .activity {
