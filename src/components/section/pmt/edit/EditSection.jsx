@@ -53,15 +53,17 @@ export default function EditSection({ isOpen, docId, imei, onClose, data }) {
 
   return (
     <div className={`${styles.container} ${!isOpen ? styles.hide : ""}`}>
-      {data.map((item) =>
-        item.report.map((r) => (
-          <div key={item.id} className={styles.itemContainer}>
+      {data
+        .flatMap((item) => item.report)
+        .filter((r) => r.IMEI === imei)
+        .map((r) => (
+          <div key={r.IMEI} className={styles.itemContainer}>
             <p className={styles.title}>Edit</p>
 
             <div className={styles.itemDetail}>
               <p className={styles.productName}>{r.product}</p>
               <p className={styles.silver}>
-                IMEI: <span className={styles.black}>{imei}</span>
+                IMEI: <span className={styles.black}>{r.IMEI}</span>
               </p>
               <div className={styles.productDetail}>
                 <p className={styles.silver}>
@@ -165,8 +167,7 @@ export default function EditSection({ isOpen, docId, imei, onClose, data }) {
               </div>
             </div>
           </div>
-        )),
-      )}
+        ))}
     </div>
   );
 }

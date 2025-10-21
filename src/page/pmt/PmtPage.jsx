@@ -157,7 +157,7 @@ export default function PmtPage() {
             <ActivityIcon />
           </div>
           {dateFiltered.map((item) => (
-            <div key={item.id}>
+            <div key={item.id} className={styles.activityWrapper}>
               {item.report.map((i) => {
                 const totalAmount = i.price.reduce(
                   (sum, item) => sum + item.amount,
