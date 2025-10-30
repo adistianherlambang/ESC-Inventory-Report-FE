@@ -14,6 +14,8 @@ import Logo from "../../../public/Logo";
 import { LogoutIcon } from "../../../public/Icon";
 import EditSection from "../../components/section/pmt/edit/EditSection";
 import DeleteSection from "../../components/section/pmt/delete/DeleteSection";
+import Product from "../../components/section/product/Product";
+import Search from "../../components/section/search/Search";
 
 import styles from "./style.module.css";
 
@@ -146,9 +148,15 @@ export default function PmtPage() {
           </div>
         </div>
         {pmtData.map((item) => (
-          <div key={item.id} className={styles.pmtContainer}>
-            <p>Bismillah, {item.name}👋</p>
-            <p className={styles.pmt}>PMT {item.brand}</p>
+          <div key={item.id} className={styles.top}>
+            <div className={styles.pmtContainer}>
+              <p>Bismillah, {item.name}👋</p>
+              <p className={styles.pmt}>PMT {item.brand}</p>
+            </div>
+            <div className={styles.stock}>
+
+              <Product brand={item.brand}/>
+            </div>
           </div>
         ))}
         {loading && <Loader />}

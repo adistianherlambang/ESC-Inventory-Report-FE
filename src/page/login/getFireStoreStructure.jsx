@@ -16,7 +16,7 @@ const getCollectionData = async (colName) => {
 
 // Fungsi utama untuk ekspor struktur Firestore
 export const getFirestoreStructure = async () => {
-  const collections = ["users", "pmtdatas"]; // koleksi kamu
+  const collections = ["users", "pmtdatas", "allproducts"]; // koleksi kamu
   const result = {};
 
   for (const colName of collections) {

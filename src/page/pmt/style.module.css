@@ -1,6 +1,6 @@
 .container {
   padding: 2rem;
-  gap: 32px;
+  gap: 48px;
   display: flex;
   flex-direction: column;
 }
@@ -9,6 +9,18 @@
   display: flex;
   justify-content: space-between;
   align-content: center;
+}
+
+.top {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.stock {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .logoutButton {

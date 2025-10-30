@@ -1,0 +1,17 @@
+.container {
+  background-color: #773FF9;
+  color: white;
+  padding: 16px 24px;
+  border-radius: 16px;
+  gap: 8px;
+  display: flex;
+  flex-direction: column;
+  font-size: 18px;
+}
+
+.type {
+  display: flex;
+  font-family: SFProRegular;
+  font-size: 14px;
+  gap: 16px;
+}
