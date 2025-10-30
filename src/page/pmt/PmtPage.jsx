@@ -16,6 +16,7 @@ import EditSection from "../../components/section/pmt/edit/EditSection";
 import DeleteSection from "../../components/section/pmt/delete/DeleteSection";
 import Product from "../../components/section/product/Product";
 import Search from "../../components/section/search/Search";
+import Report from "../../components/section/pmt/report/Report";
 
 import styles from "./style.module.css";
 
@@ -153,9 +154,7 @@ export default function PmtPage() {
               <p>Bismillah, {item.name}👋</p>
               <p className={styles.pmt}>PMT {item.brand}</p>
             </div>
-            <div className={styles.stock}>
-              <Search brand={item.brand}/>
-            </div>
+            <Search brand={item.brand}/>
           </div>
         ))}
         {loading && <Loader />}
@@ -224,6 +223,7 @@ export default function PmtPage() {
           ))}
         </div>
       </div>
+      <Report/>
     </>
   );
 }

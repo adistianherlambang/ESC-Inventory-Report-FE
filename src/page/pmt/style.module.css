@@ -17,12 +17,6 @@
   gap: 48px;
 }
 
-.stock {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
 .logoutButton {
   background-color: #da0909;
   color: white;
