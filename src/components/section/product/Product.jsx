@@ -7,11 +7,11 @@ import { db } from '../../../../firebase'
 import Loader from '../../item/loader/Loader';
 import Empty from '../../item/Empty/Empty';
 
-export default function Product({brand}) {
+export default function Product({search, brand}) {
 
-  const [product, setProduct] = useState(null);
+  const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -20,7 +20,7 @@ export default function Product({brand}) {
       try {
         const q = query(
           collection(db, "allproducts"),
-          where("brand", "==", brand)
+          where("brand", "==", brand),
         );
         const querySnapshot = await getDocs(q);
         const data = querySnapshot.docs.map((doc) => ({
@@ -42,12 +42,16 @@ export default function Product({brand}) {
     }
   }, [brand]);
 
+  const filtered = product.filter((item) =>
+    item.product.toLowerCase().includes((search || "").toLowerCase())
+  );
+
   if (loading) return <div className={styles.loading}><Loader/></div>;
   if (error) return <div className={styles.error}><Empty/></div>;
   if (!product) return null;
   if (product) return (
     <>
-    {product.map((item) => (
+    {filtered.map((item) => (
       <div key={item.id} className={styles.container}>
         <p>{item.product}</p>
         <div className={styles.type}>

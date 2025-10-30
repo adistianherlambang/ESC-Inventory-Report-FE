@@ -1,0 +1,26 @@
+.container{
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+input {
+  all: unset;
+  width: 100%;
+}
+
+.input {
+  border: solid black 1px;
+  padding: 16px 24px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  border-radius: 100px;
+  font-family: SFProRegular;
+}
+
+.product {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

@@ -154,8 +154,7 @@ export default function PmtPage() {
               <p className={styles.pmt}>PMT {item.brand}</p>
             </div>
             <div className={styles.stock}>
-
-              <Product brand={item.brand}/>
+              <Search brand={item.brand}/>
             </div>
           </div>
         ))}
