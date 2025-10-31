@@ -4,10 +4,9 @@ import { db } from '../../../../../../firebase'
 
 import styles from "./style.module.css"
 
-import Report from '../popup/Report'
-
 export default function Report({name, brand}) {
   return (
+    <>
     <div className={styles.container}>
       <div className={styles.wrapper}>
         <svg width="37" height="29" viewBox="0 0 37 29" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -17,5 +16,6 @@ export default function Report({name, brand}) {
         </svg>
       </div>
     </div>
+    </>
   )
 }

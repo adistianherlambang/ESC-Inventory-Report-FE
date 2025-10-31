@@ -17,6 +17,7 @@ import DeleteSection from "../../components/section/pmt/delete/DeleteSection";
 import Product from "../../components/section/product/Product";
 import Search from "../../components/section/search/Search";
 import Report from "../../components/section/pmt/report/button/Report";
+import ReportPopUp from "../../components/section/pmt/report/popup/Report";
 
 import styles from "./style.module.css";
 
@@ -127,6 +128,7 @@ export default function PmtPage() {
         <></>
       )}
       <Report/>
+      <ReportPopUp/>
       <div
         className={styles.container}
         onClick={
