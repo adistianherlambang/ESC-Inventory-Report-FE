@@ -33,11 +33,29 @@
 }
 
 .button {
-  background-color: #773FF9;
+  
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
   padding: 16px;
   border-radius: 8px;
+}
+
+@keyframes popUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes popDown {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
 }

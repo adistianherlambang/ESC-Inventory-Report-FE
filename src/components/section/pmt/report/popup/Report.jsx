@@ -20,6 +20,7 @@ export default function ReportPopUp() {
 }
 
 function Manual() {
+  
 }
 
 function Scan() {

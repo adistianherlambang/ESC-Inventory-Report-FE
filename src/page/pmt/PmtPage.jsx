@@ -128,7 +128,7 @@ export default function PmtPage() {
         <></>
       )}
       <Report/>
-      <ReportPopUp/>
+      {/* <ReportPopUp/> */}
       <div
         className={styles.container}
         onClick={
