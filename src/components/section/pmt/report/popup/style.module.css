@@ -1,6 +1,6 @@
 .container {
   width: 100%;
-  max-height: 100vh;
+  max-height: 90vh;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   background-color: white;
@@ -18,4 +18,26 @@
   flex-direction: column;
   gap: 32px;
   font-size: 16px;
+}
+
+.title {
+  text-decoration: underline;
+  text-align: center;
+  font-size: 24px;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.button {
+  background-color: #773FF9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  padding: 16px;
+  border-radius: 8px;
 }
