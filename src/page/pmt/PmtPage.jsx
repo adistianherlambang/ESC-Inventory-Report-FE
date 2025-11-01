@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { userStore } from "../../state/state";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -19,6 +18,10 @@ import Search from "../../components/section/search/Search";
 import Report from "../../components/section/pmt/report/button/Report";
 import ReportPopUp from "../../components/section/pmt/report/popup/Report";
 
+//State
+import { pmtReport } from "../../state/state";
+import { userStore } from "../../state/state";
+
 import styles from "./style.module.css";
 
 export default function PmtPage() {
@@ -34,6 +37,8 @@ export default function PmtPage() {
   const [selectedImei, setSelectedImei] = useState(null);
 
   const navigate = useNavigate();
+
+  const {active, toogleActive} = pmtReport()
 
   const logout = userStore((state) => state.logout);
   const now = new Date();
@@ -127,21 +132,20 @@ export default function PmtPage() {
       ) : (
         <></>
       )}
+      {active ? <ReportPopUp/> : <></>}
       <Report/>
-      {/* <ReportPopUp/> */}
       <div
         className={styles.container}
-        onClick={
-          isEditing || isDeleting
-            ? () => {
-                setIsDeleting(false);
-                setIsEditing(false);
-              }
-            : undefined
-        }
+        onClick={() => {
+          if (isEditing || isDeleting || active) {
+            toogleActive?.();
+            setIsDeleting(false);
+            setIsEditing(false);
+          }
+        }}
         style={{
           transition: "ease-in 300ms",
-          opacity: isEditing || isDeleting ? 0.2 : 1,
+          opacity: isEditing || isDeleting || active ? 0.2 : 1,
         }}
       >
         <div className={styles.topContainer}>
