@@ -53,7 +53,7 @@ export default function Login() {
       <div className={styles.top}>
         SuperApp
         <FirestoreExport />
-        <Add/>
+        <Add />
       </div>
       <div className={styles.bottom}>
         <p className={styles.title}>

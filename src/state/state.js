@@ -27,8 +27,8 @@ const userStore = create((set) => ({
 
 const pmtReport = create((set) => ({
   active: false,
-  setActive: (value) => set({active: value}),
-  toogleActive: () => set((state) => ({active: !state.active}))
-}))
+  setActive: (value) => set({ active: value }),
+  toogleActive: () => set((state) => ({ active: !state.active })),
+}));
 
 export { userStore, pmtReport };

@@ -33,13 +33,26 @@
 }
 
 .button {
-  
+  background-color: #773ff9;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
   padding: 16px;
   border-radius: 8px;
+}
+
+.input {
+  background-color: #f6f6f6;
+  box-sizing: border-box;
+  border: 1px solid #000;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.input::placeholder {
+  text-align: center;
 }
 
 @keyframes popUp {

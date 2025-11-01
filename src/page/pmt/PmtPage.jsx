@@ -38,7 +38,7 @@ export default function PmtPage() {
 
   const navigate = useNavigate();
 
-  const {active, toogleActive} = pmtReport()
+  const { active, toogleActive } = pmtReport();
 
   const logout = userStore((state) => state.logout);
   const now = new Date();
@@ -132,8 +132,8 @@ export default function PmtPage() {
       ) : (
         <></>
       )}
-      {active ? <ReportPopUp/> : <></>}
-      <Report/>
+      {active ? <ReportPopUp /> : <></>}
+      <Report />
       <div
         className={styles.container}
         onClick={() => {
@@ -161,7 +161,7 @@ export default function PmtPage() {
               <p>Bismillah, {item.name}👋</p>
               <p className={styles.pmt}>PMT {item.brand}</p>
             </div>
-            <Search brand={item.brand}/>
+            <Search brand={item.brand} />
           </div>
         ))}
         {loading && <Loader />}

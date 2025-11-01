@@ -41,7 +41,9 @@ export default function Add() {
       };
 
       // Duplikasikan array report dan tambahkan yang baru
-      const updatedReports = data.report ? [...data.report, newReport] : [newReport];
+      const updatedReports = data.report
+        ? [...data.report, newReport]
+        : [newReport];
 
       await updateDoc(docRef, { report: updatedReports });
 
