@@ -77,30 +77,46 @@ function Check({imei}) {
   const [data, setData] = useState([])
 
   useEffect(() => {
-    try {
-      const fetchData = async () => {
+    const fetchData = async () => {
+      try {
         const q = query(
           collection(db, "allproducts"),
-          where("imei", "==", {imei})
+          where("IMEI", "array-contains", imei)
         )
+        const querySnapshot = await getDocs(q)
+        const data = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setData(data)
+      } catch (err) {
+        console.error(err)
       }
-    } catch(err) {
-      return 
     }
+    fetchData()
   }, [])
 
   return(
     <>
-    <div className={styles.container}>
-      <p className={styles.title}>Report</p>
-      <div className={styles.wrapper}>
-        <p>{imei}</p>
+    {data.length === 0 ? <Empty/> :
+      <div className={styles.container}>
+        <p className={styles.title}>Report</p>
+        <div className={styles.wrapper}>
+          <p>{imei}</p>
+          {data.map((item) => (
+            <div key={item.id}>
+              {item.product}
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    }
     </>
   )
 }
 
 function Empty() {
-
+  return(
+    <></>
+  )
 }
