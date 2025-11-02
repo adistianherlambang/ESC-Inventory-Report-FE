@@ -13,7 +13,7 @@ import {
   where,
   serverTimestamp,
   arrayUnion,
-  arrayRemove
+  arrayRemove,
 } from "firebase/firestore";
 
 import { pmtReport } from "../../../../../state/state";
@@ -33,7 +33,11 @@ export default function ReportPopUp() {
 
   return (
     <>
-      <div className={styles.container} onClick={handleClose} style={manual || scan ? {display: "none"} : {}}>
+      <div
+        className={styles.container}
+        onClick={handleClose}
+        style={manual || scan ? { display: "none" } : {}}
+      >
         <p className={styles.title}>Report</p>
         {active}
         <div className={styles.wrapper}>
@@ -51,25 +55,36 @@ export default function ReportPopUp() {
 }
 
 function Manual() {
-
-  const [isCheck, setIsCheck] = useState(false)
-  const [input, setInput] = useState("")
+  const [isCheck, setIsCheck] = useState(false);
+  const [input, setInput] = useState("");
 
   const handleSubmit = (e) => {
-    setIsCheck(true)
-    e.preventDefault()
-  }
+    setIsCheck(true);
+    e.preventDefault();
+  };
 
   return (
     <>
-      <div className={styles.container} onClick={() => isCheck ? setIsCheck(false) : undefined} style={isCheck ? {display: "none"} : {}}>
+      <div
+        className={styles.container}
+        onClick={() => (isCheck ? setIsCheck(false) : undefined)}
+        style={isCheck ? { display: "none" } : {}}
+      >
         <p className={styles.title}>Report</p>
         <form className={styles.wrapper} onSubmit={handleSubmit}>
-          <input type="text" placeholder="Masukkan IMEI" className={styles.input} onChange={(e) => setInput(e.target.value)} required/>
-          <button type="submit" className={styles.button}>Check</button>
+          <input
+            type="text"
+            placeholder="Masukkan IMEI"
+            className={styles.input}
+            onChange={(e) => setInput(e.target.value)}
+            required
+          />
+          <button type="submit" className={styles.button}>
+            Check
+          </button>
         </form>
       </div>
-      {isCheck ? <Check imei={input}/> : <></>}
+      {isCheck ? <Check imei={input} /> : <></>}
     </>
   );
 }
@@ -91,7 +106,7 @@ function Check({ imei }) {
         console.log("Fetching product for IMEI:", imei);
         const q = query(
           collection(db, "allproducts"),
-          where("IMEI", "array-contains", imei)
+          where("IMEI", "array-contains", imei),
         );
         const querySnapshot = await getDocs(q);
         const docs = querySnapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
@@ -173,7 +188,12 @@ function Check({ imei }) {
 
       alert(`✅ IMEI ${imei} berhasil dipindahkan.`);
       // opsi: refresh data local
-      setData((prev) => prev.filter((p) => p.id !== item.id || (p.IMEI && p.IMEI.includes(imei) === false)));
+      setData((prev) =>
+        prev.filter(
+          (p) =>
+            p.id !== item.id || (p.IMEI && p.IMEI.includes(imei) === false),
+        ),
+      );
     } catch (err) {
       console.error("Submit error:", err);
       // Beri pesan yang lebih deskriptif ke user bila perlu
@@ -198,10 +218,16 @@ function Check({ imei }) {
           {data.map((item) => (
             <div key={item.id} className={styles.wrapper}>
               <p>{item.product}</p>
-              <p>Barcode: <span>{imei}</span></p>
+              <p>
+                Barcode: <span>{imei}</span>
+              </p>
               <div>
-                <p>Warna: <span>{item.color}</span></p>
-                <p>Ukuran: <span>{item.capacity}</span></p>
+                <p>
+                  Warna: <span>{item.color}</span>
+                </p>
+                <p>
+                  Ukuran: <span>{item.capacity}</span>
+                </p>
               </div>
 
               {/* input ... */}
@@ -213,15 +239,60 @@ function Check({ imei }) {
                   onChange={(e) => setPrice(e.target.value)}
                 />
                 {/* payType */}
-                <label><input type="radio" name={`pay-${item.id}`} value="CS" onChange={(e) => setPayType(e.target.value)} /> CS</label>
-                <label><input type="radio" name={`pay-${item.id}`} value="TF" onChange={(e) => setPayType(e.target.value)} /> TF</label>
-                <label><input type="radio" name={`pay-${item.id}`} value="GS" onChange={(e) => setPayType(e.target.value)} /> GS</label>
+                <label>
+                  <input
+                    type="radio"
+                    name={`pay-${item.id}`}
+                    value="CS"
+                    onChange={(e) => setPayType(e.target.value)}
+                  />{" "}
+                  CS
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name={`pay-${item.id}`}
+                    value="TF"
+                    onChange={(e) => setPayType(e.target.value)}
+                  />{" "}
+                  TF
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name={`pay-${item.id}`}
+                    value="GS"
+                    onChange={(e) => setPayType(e.target.value)}
+                  />{" "}
+                  GS
+                </label>
 
                 {/* userType */}
-                <label><input type="radio" name={`user-${item.id}`} value="CN" onChange={(e) => setUserType(e.target.value)} /> CN</label>
-                <label><input type="radio" name={`user-${item.id}`} value="User" onChange={(e) => setUserType(e.target.value)} /> User</label>
+                <label>
+                  <input
+                    type="radio"
+                    name={`user-${item.id}`}
+                    value="CN"
+                    onChange={(e) => setUserType(e.target.value)}
+                  />{" "}
+                  CN
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name={`user-${item.id}`}
+                    value="User"
+                    onChange={(e) => setUserType(e.target.value)}
+                  />{" "}
+                  User
+                </label>
 
-                <input type="text" placeholder="Keterangan" value={desc} onChange={(e) => setDesc(e.target.value)} />
+                <input
+                  type="text"
+                  placeholder="Keterangan"
+                  value={desc}
+                  onChange={(e) => setDesc(e.target.value)}
+                />
               </div>
 
               <button disabled={submitting} onClick={() => handleSubmit(item)}>
@@ -256,7 +327,7 @@ function Empty() {
 //           ...doc.data(),
 //         }));
 //         const newReport = {
-          
+
 //         }
 //         setData(data)
 //       } catch (err) {
@@ -305,4 +376,3 @@ function Empty() {
 //     </>
 //   )
 // }
-
