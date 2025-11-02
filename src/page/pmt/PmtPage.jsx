@@ -2,7 +2,14 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-import { collection, query, where, getDocs, limit, arrayUnion } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  limit,
+  arrayUnion,
+} from "firebase/firestore";
 import { db } from "../../../firebase";
 
 //Component
@@ -104,19 +111,16 @@ export default function PmtPage() {
     setSelectedImei(imei);
   };
 
-  const handleDelete = ({ id, imei }) => {
+  const handleDelete = ({ id, imei, product, color, capacity }) => {
     setSelectedId(id);
     setSelectedImei(imei);
     setIsDeleting(true);
     try {
       const putBackIMEI = () => {
-        const q = query(
-          collection(db, "allproduct"),
-          where()
-        )
-      }
-    } catch(err) {
-      alert(err)
+        const q = query(collection(db, "allproduct"), where());
+      };
+    } catch (err) {
+      alert(err);
     }
   };
 
@@ -148,7 +152,7 @@ export default function PmtPage() {
         className={styles.container}
         onClick={() => {
           if (isEditing || isDeleting || active) {
-            toogleDeact()
+            toogleDeact();
             setIsDeleting(false);
             setIsEditing(false);
           }
@@ -227,7 +231,13 @@ export default function PmtPage() {
                       <div
                         className={styles.deleteButton}
                         onClick={() =>
-                          handleDelete({ id: item.id, imei: i.IMEI })
+                          handleDelete({
+                            id: item.id,
+                            imei: i.IMEI,
+                            product: i.product,
+                            color: i.color,
+                            capacity: i.capacity,
+                          })
                         }
                       >
                         Batalkan
