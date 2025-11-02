@@ -118,7 +118,9 @@ export default function PmtPage() {
     setSelectedId(id);
     setSelectedImei(imei);
     setIsDeleting(true);
-    s
+    setSelectedProduct(product)
+    setSelectedColor(color)
+    setSelectedCapacity(capacity)
   };
 
   return (
@@ -138,6 +140,9 @@ export default function PmtPage() {
         <DeleteSection
           docId={selectedId}
           imei={selectedImei}
+          product={selectedProduct}
+          capacity={selectedCapacity}
+          color={selectedColor}
           onClose={() => setIsDeleting(!isDeleting)}
         />
       ) : (
