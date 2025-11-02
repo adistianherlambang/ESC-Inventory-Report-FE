@@ -101,14 +101,18 @@ function Check({imei}) {
     {data.length === 0 ? <Empty/> :
       <div className={styles.container}>
         <p className={styles.title}>Report</p>
-        <div className={styles.wrapper}>
-          <p>{imei}</p>
-          {data.map((item) => (
-            <div key={item.id}>
-              {item.product}
+        {data.map((item) => (
+          <div key={item.id} className={styles.wrapper}>
+            <div>
+              <p>{item.product}</p>
+              <p>Barcode: <span>{imei}</span></p>
+              <div>
+                <p>Warna: <span>{item.color}</span></p>
+                <p>Ukuran: <spaan>{item.capacity}</spaan></p>
+              </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     }
     </>
