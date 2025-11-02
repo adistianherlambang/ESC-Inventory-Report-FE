@@ -220,7 +220,7 @@ export default function PmtPage() {
                           handleDelete({ id: item.id, imei: i.IMEI })
                         }
                       >
-                        Hapus
+                        Batalkan
                       </div>
                     </div>
                   </div>
