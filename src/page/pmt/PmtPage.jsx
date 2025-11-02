@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-import { collection, query, where, getDocs, limit } from "firebase/firestore";
+import { collection, query, where, getDocs, limit, arrayUnion } from "firebase/firestore";
 import { db } from "../../../firebase";
 
 //Component
@@ -108,6 +108,16 @@ export default function PmtPage() {
     setSelectedId(id);
     setSelectedImei(imei);
     setIsDeleting(true);
+    try {
+      const putBackIMEI = () => {
+        const q = query(
+          collection(db, "allproduct"),
+          where()
+        )
+      }
+    } catch(err) {
+      alert(err)
+    }
   };
 
   return (
