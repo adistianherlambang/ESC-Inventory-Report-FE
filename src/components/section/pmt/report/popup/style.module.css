@@ -26,7 +26,7 @@
   font-size: 24px;
 }
 
-.buttonContainer {
+.wrapper {
   display: flex;
   flex-direction: column;
   gap: 16px;

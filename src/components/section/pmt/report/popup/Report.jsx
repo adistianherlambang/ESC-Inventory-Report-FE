@@ -29,10 +29,10 @@ export default function ReportPopUp() {
 
   return (
     <>
-      <div className={styles.container} onClick={handleClose}>
+      <div className={styles.container} onClick={handleClose} style={manual || scan ? {display: "none"} : {}}>
         <p className={styles.title}>Report</p>
         {active}
-        <div className={styles.buttonContainer}>
+        <div className={styles.wrapper}>
           <div className={styles.button} onClick={() => setManual(true)}>
             Manual
           </div>
@@ -47,17 +47,60 @@ export default function ReportPopUp() {
 }
 
 function Manual() {
+
+  const [isCheck, setIsCheck] = useState(false)
+  const [input, setInput] = useState("")
+
+  const handleSubmit = (e) => {
+    setIsCheck(true)
+    e.preventDefault()
+  }
+
   return (
     <>
-      <div className={styles.container}>
-        <p className={styles.title}>Manual</p>
-        <div className={styles.buttonContainer}>
-          <input type="text" placeholder="aiosdou" className={styles.input} />
-          <div className={styles.button}>Check</div>
-        </div>
+      <div className={styles.container} onClick={() => isCheck ? setIsCheck(false) : undefined} style={isCheck ? {display: "none"} : {}}>
+        <p className={styles.title}>Report</p>
+        <form className={styles.wrapper} onSubmit={handleSubmit}>
+          <input type="text" placeholder="Masukkan IMEI" className={styles.input} onChange={(e) => setInput(e.target.value)} required/>
+          <button type="submit" className={styles.button}>Check</button>
+        </form>
       </div>
+      {isCheck ? <Check imei={input}/> : <></>}
     </>
   );
 }
 
 function Scan() {}
+
+function Check({imei}) {
+
+  const [data, setData] = useState([])
+
+  useEffect(() => {
+    try {
+      const fetchData = async () => {
+        const q = query(
+          collection(db, "allproducts"),
+          where("imei", "==", {imei})
+        )
+      }
+    } catch(err) {
+      return 
+    }
+  }, [])
+
+  return(
+    <>
+    <div className={styles.container}>
+      <p className={styles.title}>Report</p>
+      <div className={styles.wrapper}>
+        <p>{imei}</p>
+      </div>
+    </div>
+    </>
+  )
+}
+
+function Empty() {
+
+}
