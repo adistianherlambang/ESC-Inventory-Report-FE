@@ -8,7 +8,6 @@ import {
   where,
   getDocs,
   limit,
-  arrayUnion,
 } from "firebase/firestore";
 import { db } from "../../../firebase";
 
@@ -39,9 +38,13 @@ export default function PmtPage() {
   const [dateFiltered, setDateFiltered] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [selectedId, setSelectedId] = useState(null);
   const [editData, setEditData] = useState(null);
+
+  const [selectedId, setSelectedId] = useState(null);
   const [selectedImei, setSelectedImei] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState("")
+  const [selectedColor, setSelectedColor] = useState("")
+  const [selectedCapacity, setSelectedCapacity] = useState("")
 
   const navigate = useNavigate();
 
@@ -115,13 +118,7 @@ export default function PmtPage() {
     setSelectedId(id);
     setSelectedImei(imei);
     setIsDeleting(true);
-    try {
-      const putBackIMEI = () => {
-        const q = query(collection(db, "allproduct"), where());
-      };
-    } catch (err) {
-      alert(err);
-    }
+    s
   };
 
   return (
