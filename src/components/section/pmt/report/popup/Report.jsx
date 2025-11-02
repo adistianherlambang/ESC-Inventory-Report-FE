@@ -3,6 +3,7 @@ import styles from "./style.module.css";
 import { db } from "../../../../../../firebase";
 import {
   collection,
+  getDoc,
   getDocs,
   addDoc,
   deleteDoc,
@@ -10,6 +11,9 @@ import {
   updateDoc,
   query,
   where,
+  serverTimestamp,
+  arrayUnion,
+  arrayRemove
 } from "firebase/firestore";
 
 import { pmtReport } from "../../../../../state/state";
@@ -78,78 +82,109 @@ function Check({ imei }) {
   const [payType, setPayType] = useState("");
   const [userType, setUserType] = useState("");
   const [desc, setDesc] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        if (!imei) return; // jangan fetch kalau imei falsy
+        console.log("Fetching product for IMEI:", imei);
         const q = query(
           collection(db, "allproducts"),
           where("IMEI", "array-contains", imei)
         );
         const querySnapshot = await getDocs(q);
-        const data = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setData(data);
+        const docs = querySnapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+        console.log("Query result:", docs);
+        setData(docs);
       } catch (err) {
-        console.error(err);
+        console.error("Fetch error:", err);
       }
     };
     fetchData();
   }, [imei]);
 
-  // 🟣 handle submit
   const handleSubmit = async (item) => {
+    setSubmitting(true);
     try {
-      // ID dokumen tujuan di pmtdatas (bisa kamu ganti sesuai user aktif)
-      const targetId = "YSvrfpBbLkIE0fnGp57V";
+      if (!imei) throw new Error("IMEI tidak tersedia");
+      if (!item || !item.id) throw new Error("Data produk tidak valid");
+
+      const targetId = "YSvrfpBbLkIE0fnGp57V"; // bisa diganti dinamis
       const pmtRef = doc(db, "pmtdatas", targetId);
       const productRef = doc(db, "allproducts", item.id);
 
-      // 🧩 data baru yang akan disalin ke report
+      // 1) build newReport
       const newReport = {
-        product: item.product,
-        brand: item.brand,
-        capacity: item.capacity,
-        color: item.color,
-        IMEI: imei,
-        userType,
-        desc,
+        product: item.product || "",
+        brand: item.brand || "",
+        capacity: item.capacity || "",
+        color: item.color || "",
+        IMEI: String(imei), // pastikan string
+        userType: userType || "CN",
+        desc: desc || "",
         price: [
           {
-            type: payType,
-            amount: Number(price),
+            type: payType || "cash",
+            amount: Number(price) || 0,
           },
         ],
-        createdAt: serverTimestamp(),
+        createdAt: new Date(),
       };
 
-      // 1️⃣ Tambahkan ke report array di pmtdatas
+      console.log("New report object:", newReport);
+
+      // 2) Pastikan dokumen pmtdatas/{targetId} ada — jika tidak, buat dulu dengan struktur report: []
+      const pmtSnap = await getDoc(pmtRef);
+      if (!pmtSnap.exists()) {
+        console.warn(`pmtdatas/${targetId} tidak ada — akan dibuat baru.`);
+        await setDoc(pmtRef, { report: [] }); // buat dokumen awal
+      }
+
+      // 3) Tambahkan ke report (arrayUnion)
       await updateDoc(pmtRef, {
         report: arrayUnion(newReport),
       });
+      console.log("Added to pmtdatas report");
 
-      // 2️⃣ Hapus IMEI yang sesuai dari allproducts
+      // 4) Hapus IMEI dari produk sumber. Pastikan tipe sama.
       await updateDoc(productRef, {
-        IMEI: arrayRemove(imei),
+        IMEI: arrayRemove(String(imei)),
       });
+      console.log("Requested arrayRemove for IMEI:", imei);
 
-      // 3️⃣ Ambil ulang data produk untuk cek apakah IMEI kosong
+      // 5) Ambil ulang produk untuk cek sisa IMEI
       const updatedSnap = await getDoc(productRef);
-      const updatedData = updatedSnap.data();
 
-      if (!updatedData.IMEI || updatedData.IMEI.length === 0) {
-        await deleteDoc(productRef);
-        console.log(`🗑️ Produk ${item.product} dihapus karena IMEI kosong`);
+      // Jika dokumen sudah dihapus oleh pihak lain, getDoc may be not exist
+      if (!updatedSnap.exists()) {
+        console.log("Product doc no longer exists after update (was removed).");
       } else {
-        console.log(`✅ IMEI ${imei} dihapus, sisa:`, updatedData.IMEI);
+        const updatedData = updatedSnap.data();
+        console.log("Updated product data:", updatedData);
+        if (!updatedData.IMEI || updatedData.IMEI.length === 0) {
+          // hapus dokumen
+          await deleteDoc(productRef);
+          console.log("Product doc deleted because IMEI is empty");
+        } else {
+          console.log("Product still has IMEI:", updatedData.IMEI);
+        }
       }
 
-      alert(`✅ Data IMEI ${imei} berhasil dipindahkan ke report`);
-    } catch (error) {
-      console.error("❌ Gagal memindahkan data:", error);
-      alert("Terjadi kesalahan saat submit");
+      alert(`✅ IMEI ${imei} berhasil dipindahkan.`);
+      // opsi: refresh data local
+      setData((prev) => prev.filter((p) => p.id !== item.id || (p.IMEI && p.IMEI.includes(imei) === false)));
+    } catch (err) {
+      console.error("Submit error:", err);
+      // Beri pesan yang lebih deskriptif ke user bila perlu
+      if (err.code) {
+        // firestore error biasanya punya code, contoh 'permission-denied'
+        alert(`Gagal: ${err.code} — ${err.message || "Lihat console"}`);
+      } else {
+        alert(`Terjadi kesalahan saat submit: ${err.message || err}`);
+      }
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -169,75 +204,29 @@ function Check({ imei }) {
                 <p>Ukuran: <span>{item.capacity}</span></p>
               </div>
 
-              {/* 🟢 Input user */}
+              {/* input ... */}
               <div>
-                <div>
-                  <p>Rp</p>
-                  <input
-                    type="text"
-                    placeholder="Harga Unit"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                  />
-                </div>
-
-                <div>
-                  <p>Metode Pembayaran:</p>
-                  <label>
-                    <input
-                      type="radio"
-                      name="pay"
-                      value="CS"
-                      onChange={(e) => setPayType(e.target.value)}
-                    /> CS
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="pay"
-                      value="TF"
-                      onChange={(e) => setPayType(e.target.value)}
-                    /> TF
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="pay"
-                      value="GS"
-                      onChange={(e) => setPayType(e.target.value)}
-                    /> GS
-                  </label>
-                </div>
-
-                <div>
-                  <p>Jenis User:</p>
-                  <label>
-                    <input
-                      type="radio"
-                      name="userType"
-                      value="CN"
-                      onChange={(e) => setUserType(e.target.value)}
-                    /> CN
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="userType"
-                      value="User"
-                      onChange={(e) => setUserType(e.target.value)}
-                    /> User
-                  </label>
-                </div>
-
                 <input
                   type="text"
-                  placeholder="Keterangan"
-                  value={desc}
-                  onChange={(e) => setDesc(e.target.value)}
+                  placeholder="Harga Unit"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
                 />
+                {/* payType */}
+                <label><input type="radio" name={`pay-${item.id}`} value="CS" onChange={(e) => setPayType(e.target.value)} /> CS</label>
+                <label><input type="radio" name={`pay-${item.id}`} value="TF" onChange={(e) => setPayType(e.target.value)} /> TF</label>
+                <label><input type="radio" name={`pay-${item.id}`} value="GS" onChange={(e) => setPayType(e.target.value)} /> GS</label>
+
+                {/* userType */}
+                <label><input type="radio" name={`user-${item.id}`} value="CN" onChange={(e) => setUserType(e.target.value)} /> CN</label>
+                <label><input type="radio" name={`user-${item.id}`} value="User" onChange={(e) => setUserType(e.target.value)} /> User</label>
+
+                <input type="text" placeholder="Keterangan" value={desc} onChange={(e) => setDesc(e.target.value)} />
               </div>
 
-              <button onClick={() => handleSubmit(item)}>Submit</button>
+              <button disabled={submitting} onClick={() => handleSubmit(item)}>
+                {submitting ? "Processing..." : "Submit"}
+              </button>
             </div>
           ))}
         </div>
