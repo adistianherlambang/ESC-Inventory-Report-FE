@@ -38,7 +38,7 @@ export default function PmtPage() {
 
   const navigate = useNavigate();
 
-  const { active, toogleActive } = pmtReport();
+  const { active, toogleActive, toogleDeact } = pmtReport();
 
   const logout = userStore((state) => state.logout);
   const now = new Date();
@@ -138,7 +138,7 @@ export default function PmtPage() {
         className={styles.container}
         onClick={() => {
           if (isEditing || isDeleting || active) {
-            toogleActive?.();
+            toogleDeact()
             setIsDeleting(false);
             setIsEditing(false);
           }
