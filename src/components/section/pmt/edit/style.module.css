@@ -135,8 +135,10 @@
 }
 
 .addPrice {
+  padding: 16px;
   border: solid #773ff9 2px;
   color: #773ff9;
+  background-color: white;
 }
 
 .saveClose {
@@ -146,12 +148,14 @@
 }
 
 .save {
+  padding: 16px;
   background-color: #773ff9;
   color: white;
   width: 100%;
 }
 
 .close {
+  padding: 16px;
   background-color: #da0909;
   color: white;
   width: 100%;
