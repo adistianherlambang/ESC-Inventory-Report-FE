@@ -70,6 +70,15 @@
   text-align: center;
 }
 
+.subTitle {
+  margin-left: -1rem;
+}
+
+.desc {
+  font-family: SFProRegular;
+  font-size: 12px;
+}
+
 @keyframes popUp {
   from {
     transform: translateY(100%);

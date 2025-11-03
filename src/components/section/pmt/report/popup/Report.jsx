@@ -312,8 +312,8 @@ function Empty() {
     <div className={`${styles.container} ${styles.empty}`}>
       <p className={`${styles.title} ${styles.empty}`}>Report</p>
       <div className={styles.descContainer}>
-        <p className={styles.subtitle}>😭 Tidak ada data</p>
-        <p>Silahkan tunggu beberapa saat lagi</p>
+        <p className={styles.subTitle}>😭 Tidak ada data</p>
+        <p className={styles.desc}>Silahkan tunggu beberapa saat lagi</p>
       </div>
     </div>
     </>
