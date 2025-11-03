@@ -79,6 +79,47 @@
   font-size: 12px;
 }
 
+.productName {
+  font-family: SFProBold;
+  font-size: 18px;
+}
+
+/*ini untuk popup add reportnya*/
+
+.productWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-family: SFProRegular;
+  font-size: 18px;
+}
+
+.itemDetail {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.productName {
+  font-family: SFProBold;
+  font-size: 18px;
+}
+
+.silver {
+  color: #b0b0b0;
+}
+
+.black {
+  color: black;
+}
+
+.productDetail {
+  font-size: 16px;
+  font-family: SFProRegular;
+  display: flex;
+  gap: 16px;
+}
+
 @keyframes popUp {
   from {
     transform: translateY(100%);

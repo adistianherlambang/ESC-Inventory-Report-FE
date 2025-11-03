@@ -98,6 +98,7 @@ function Check({ imei }) {
   const [userType, setUserType] = useState("");
   const [desc, setDesc] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [prices, setPrices] = useState([{ type: "", amount: "" }]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -208,6 +209,16 @@ function Check({ imei }) {
     }
   };
 
+  // useEffect(() => {
+  //     if (docId && imei) {
+  //       setPrices([{ type: "", amount: "" }]);
+  //     }
+  //   }, [docId, imei]);
+  
+  //   const addPriceField = () => {
+  //     setPrices([...prices, { type: "", amount: "" }]);
+  //   };
+
   return (
     <>
       {data.length === 0 ? (
@@ -216,18 +227,20 @@ function Check({ imei }) {
         <div className={styles.container}>
           <p className={styles.title}>Report</p>
           {data.map((item) => (
-            <div key={item.id} className={styles.wrapper}>
-              <p>{item.product}</p>
-              <p>
-                Barcode: <span>{imei}</span>
-              </p>
-              <div>
-                <p>
-                  Warna: <span>{item.color}</span>
+            <div key={item.id} className={styles.productWrapper}>
+              <div className={styles.itemDetail}>
+                <p className={styles.productName}>{item.product}</p>
+                <p className={styles.silver}>
+                  IMEI: <span className={styles.black}>{imei}</span>
                 </p>
-                <p>
-                  Ukuran: <span>{item.capacity}</span>
-                </p>
+                <div className={styles.productDetail}>
+                  <p className={styles.silver}>
+                    Warna: <span className={styles.black}>{item.color}</span>
+                  </p>
+                  <p className={styles.silver}>
+                    Ukuran: <span className={styles.black}>{item.capacity}</span>
+                  </p>
+                </div>
               </div>
 
               {/* input ... */}
