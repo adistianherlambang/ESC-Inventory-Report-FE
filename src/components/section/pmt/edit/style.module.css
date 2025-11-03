@@ -86,7 +86,7 @@
   cursor: pointer;
 }
 
-.radio input {
+.radio input[type="radio"] {
   appearance: none;
   width: 16px;
   height: 16px;
@@ -97,6 +97,10 @@
 .radio input[type="radio"]:checked {
   border-color: #b99bff;
   background-color: #773ff9;
+}
+
+.radio input[type="radio"]:checked::after {
+  border: solid rgb(0, 0, 0) 20px;
 }
 
 .method {
