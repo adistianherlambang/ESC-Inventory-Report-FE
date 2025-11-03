@@ -245,18 +245,6 @@ function Check({ imei }) {
 
               {/* input ... */}
               <div>
-                <div className={styles.priceContainer}>
-                  <p>Rp</p>
-                  <input
-                    type="number"
-                    placeholder="Harga"
-                    value={price.amount}
-                    onChange={(e) =>
-                      handleChange(index, "amount", e.target.value)
-                    }
-                    className={styles.input}
-                  />
-                </div>
                 {/* payType */}
                 <label>
                   <input
@@ -312,8 +300,17 @@ function Check({ imei }) {
                   value={desc}
                   onChange={(e) => setDesc(e.target.value)}
                 />
+                <div className={styles.priceContainer}>
+                  <p>Rp</p>
+                  <input
+                    type="number"
+                    placeholder="Harga"
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                    className={styles.priceInput}
+                  />
+                </div>
               </div>
-
               <button disabled={submitting} onClick={() => handleSubmit(item)}>
                 {submitting ? "Processing..." : "Submit"}
               </button>
