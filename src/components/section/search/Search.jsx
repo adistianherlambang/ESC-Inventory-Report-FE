@@ -23,7 +23,7 @@ export default function Search({ brand }) {
           />
         </svg>
         <input
-          placeholder="afiubh"
+          placeholder="Cari Stok"
           value={search}
           type="text"
           onChange={(e) => setSearch(e.target.value)}

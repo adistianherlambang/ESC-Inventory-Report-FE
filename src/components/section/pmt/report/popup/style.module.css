@@ -55,6 +55,21 @@
   text-align: center;
 }
 
+.empty {
+  background-color: #DA0909;
+  color: white;
+}
+
+.title .empty {
+  font-size: 24px;
+}
+
+.descContainer {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
 @keyframes popUp {
   from {
     transform: translateY(100%);

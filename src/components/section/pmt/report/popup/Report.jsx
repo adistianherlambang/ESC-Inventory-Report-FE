@@ -211,7 +211,7 @@ function Check({ imei }) {
   return (
     <>
       {data.length === 0 ? (
-        <p style={{ textAlign: "center" }}>⚠️ Data tidak ditemukan</p>
+        <Empty/>
       ) : (
         <div className={styles.container}>
           <p className={styles.title}>Report</p>
@@ -307,72 +307,15 @@ function Check({ imei }) {
 }
 
 function Empty() {
-  return <p style={{ textAlign: "center" }}>⚠️ Data tidak ditemukan</p>;
+  return(
+    <>
+    <div className={`${styles.container} ${styles.empty}`}>
+      <p className={`${styles.title} ${styles.empty}`}>Report</p>
+      <div className={styles.descContainer}>
+        <p className={styles.subtitle}>😭 Tidak ada data</p>
+        <p>Silahkan tunggu beberapa saat lagi</p>
+      </div>
+    </div>
+    </>
+  )
 }
-
-// function Check({imei}) {
-
-//   const [data, setData] = useState([])
-
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         const q = query(
-//           collection(db, "allproducts"),
-//           where("IMEI", "array-contains", imei)
-//         )
-//         const querySnapshot = await getDocs(q)
-//         const data = querySnapshot.docs.map((doc) => ({
-//           id: doc.id,
-//           ...doc.data(),
-//         }));
-//         const newReport = {
-
-//         }
-//         setData(data)
-//       } catch (err) {
-//         console.error(err)
-//       }
-//     }
-//     fetchData()
-//   }, [])
-
-//   return(
-//     <>
-//     {data.length === 0 ? <Empty/> :
-//       <div className={styles.container}>
-//         <p className={styles.title}>Report</p>
-//         {data.map((item) => (
-//           <div key={item.id} className={styles.wrapper}>
-//               <p>{item.product}</p>
-//               <p>Barcode: <span>{imei}</span></p>
-//               <div>
-//                 <p>Warna: <span>{item.color}</span></p>
-//                 <p>Ukuran: <spaan>{item.capacity}</spaan></p>
-//               </div>
-//               <div>
-//                 <div>
-//                   <p>Rp</p>
-//                   <input type="text" placeholder="Harga Unit"/>
-//                 </div>
-//                 <div>
-//                   <p>Metode Pembayaran : </p>
-//                   <input type="radio" value="CS" placeholder="CS"/>
-//                   <input type="radio" value="TF" placeholder="TF"/>
-//                   <input type="radio" value="GS" placeholder="GS"/>
-//                 </div>
-//                 <div>
-//                   <p>Jenis User : </p>
-//                   <input type="radio" value="CN" placeholder="CN"/>
-//                   <input type="radio" value="User" placeholder="User"/>
-//                 </div>
-//                 <input type="textbox" placeholder="Keterangan"/>
-//               </div>
-//               <button>Submit</button>
-//           </div>
-//         ))}
-//       </div>
-//     }
-//     </>
-//   )
-// }
