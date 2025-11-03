@@ -209,15 +209,14 @@ function Check({ imei }) {
     }
   };
 
-  // useEffect(() => {
-  //     if (docId && imei) {
-  //       setPrices([{ type: "", amount: "" }]);
-  //     }
-  //   }, [docId, imei]);
-  
-  //   const addPriceField = () => {
-  //     setPrices([...prices, { type: "", amount: "" }]);
-  //   };
+  const addPriceField = () => {
+    setPrices([...prices, { type: "", amount: "" }]);
+  };
+  const handleChange = (index, field, value) => {
+    const updated = [...prices];
+    updated[index][field] = value;
+    setPrices(updated);
+  };
 
   return (
     <>
@@ -242,10 +241,72 @@ function Check({ imei }) {
                   </p>
                 </div>
               </div>
-
-              {/* input ... */}
-              <div>
-                {/* payType */}
+              <div className={styles.radioContainer}>
+                <p className={styles.method}>Jenis User :</p>
+                <label className={styles.radio}>
+                  <input
+                    type="radio"
+                    name={`user-${item.id}`}
+                    value="User"
+                    onChange={(e) => setUserType(e.target.value)}
+                  />
+                  User
+                </label>
+                <label className={styles.radio}>
+                  <input
+                    type="radio"
+                    name={`user-${item.id}`}
+                    value="CN"
+                    onChange={(e) => setUserType(e.target.value)}
+                  />
+                  CN
+                </label>
+              </div>
+              {prices.map((price, index) => (
+                <div key={index} className={styles.inputContainer}>
+                  <div className={styles.radioContainer}>
+                    <p className={styles.method}>Metode Pembayaran :</p>
+                    <label className={styles.radio}>
+                      <input
+                        type="radio"
+                        name={`pay-${item.id}`}
+                        value="CS"
+                        onChange={(e) => setPayType(e.target.value)}
+                      />
+                      CS
+                    </label>
+                    <label className={styles.radio}>
+                      <input
+                        type="radio"
+                        name={`pay-${item.id}`}
+                        value="TF"
+                        onChange={(e) => setPayType(e.target.value)}
+                      />
+                      TF
+                    </label>
+                    <label className={styles.radio}>
+                      <input
+                        type="radio"
+                        name={`pay-${item.id}`}
+                        value="GS"
+                        onChange={(e) => setPayType(e.target.value)}
+                      />
+                      GS
+                    </label>
+                  </div>
+                  <div className={styles.priceContainer}>
+                    <p>Rp</p>
+                    <input
+                      type="number"
+                      placeholder="Harga"
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
+                      className={styles.priceInput}
+                    />
+                  </div>
+                </div>
+              ))}
+              {/* <div>
                 <label>
                   <input
                     type="radio"
@@ -273,43 +334,17 @@ function Check({ imei }) {
                   />{" "}
                   GS
                 </label>
-
-                {/* userType */}
-                <label>
-                  <input
-                    type="radio"
-                    name={`user-${item.id}`}
-                    value="CN"
-                    onChange={(e) => setUserType(e.target.value)}
-                  />{" "}
-                  CN
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name={`user-${item.id}`}
-                    value="User"
-                    onChange={(e) => setUserType(e.target.value)}
-                  />{" "}
-                  User
-                </label>
-
                 <input
                   type="text"
                   placeholder="Keterangan"
                   value={desc}
                   onChange={(e) => setDesc(e.target.value)}
                 />
-                <div className={styles.priceContainer}>
-                  <p>Rp</p>
-                  <input
-                    type="number"
-                    placeholder="Harga"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                    className={styles.priceInput}
-                  />
-                </div>
+              </div> */}
+              <div className={styles.button}>
+                <button onClick={addPriceField} className={styles.addPrice}>
+                  + Tambah Harga
+                </button>
               </div>
               <button disabled={submitting} onClick={() => handleSubmit(item)}>
                 {submitting ? "Processing..." : "Submit"}
