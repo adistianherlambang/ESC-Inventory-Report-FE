@@ -89,6 +89,8 @@
 .radio input {
   appearance: none;
   width: 16px;
+  height: 16px;
+  border-radius: 100px;
   border: solid #773ff9 2px;
 }
 

@@ -19,3 +19,45 @@
   gap: 32px;
   font-size: 16px;
 }
+
+.title {
+  font-family: SFProBold;
+  font-size: 24px;
+  text-decoration: underline;
+  text-align: center;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.desc {
+  text-align: center;
+  font-family: SFProRegular;
+}
+
+.buttonContainer {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  gap: 16px;
+}
+
+.button {
+  width: 100%;
+  padding: 12px;
+  text-align: center;
+}
+
+.cancel {
+  border: solid #DA0909 1px;
+  background-color: white;
+  color: #DA0909;
+}
+
+.yes {
+  background-color: #DA0909;
+  color: white;
+}
