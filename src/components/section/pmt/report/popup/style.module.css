@@ -120,6 +120,12 @@
   gap: 16px;
 }
 
+.priceContainer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
 @keyframes popUp {
   from {
     transform: translateY(100%);

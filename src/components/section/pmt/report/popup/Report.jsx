@@ -245,12 +245,18 @@ function Check({ imei }) {
 
               {/* input ... */}
               <div>
-                <input
-                  type="text"
-                  placeholder="Harga Unit"
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                />
+                <div className={styles.priceContainer}>
+                  <p>Rp</p>
+                  <input
+                    type="number"
+                    placeholder="Harga"
+                    value={price.amount}
+                    onChange={(e) =>
+                      handleChange(index, "amount", e.target.value)
+                    }
+                    className={styles.input}
+                  />
+                </div>
                 {/* payType */}
                 <label>
                   <input
