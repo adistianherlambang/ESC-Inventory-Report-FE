@@ -220,7 +220,7 @@ function Check({ imei }) {
   return (
     <>
       {data.length === 0 ? (
-        <Empty/>
+        <Empty />
       ) : (
         <div className={styles.container}>
           <p className={styles.title}>Report</p>
@@ -236,7 +236,8 @@ function Check({ imei }) {
                     Warna: <span className={styles.black}>{item.color}</span>
                   </p>
                   <p className={styles.silver}>
-                    Ukuran: <span className={styles.black}>{item.capacity}</span>
+                    Ukuran:{" "}
+                    <span className={styles.black}>{item.capacity}</span>
                   </p>
                 </div>
               </div>
@@ -262,57 +263,69 @@ function Check({ imei }) {
                 </label>
               </div>
               {addPrices.map((p, index) => (
-  <div key={index} className={styles.inputContainer}>
-    <div className={styles.radioContainer}>
-      <p className={styles.method}>Metode Pembayaran :</p>
-      <label className={styles.radio}>
-        <input
-          type="radio"
-          name={`pay-${item.id}-${index}`} // penting: beda name tiap index
-          value="CS"
-          checked={p.type === "CS"}
-          onChange={(e) => handleChange(index, "type", e.target.value)}
-        />
-        CS
-      </label>
-      <label className={styles.radio}>
-        <input
-          type="radio"
-          name={`pay-${item.id}-${index}`}
-          value="TF"
-          checked={p.type === "TF"}
-          onChange={(e) => handleChange(index, "type", e.target.value)}
-        />
-        TF
-      </label>
-      <label className={styles.radio}>
-        <input
-          type="radio"
-          name={`pay-${item.id}-${index}`}
-          value="GS"
-          checked={p.type === "GS"}
-          onChange={(e) => handleChange(index, "type", e.target.value)}
-        />
-        GS
-      </label>
-    </div>
-    <div className={styles.priceContainer}>
-      <p>Rp</p>
-      <input
-        type="number"
-        placeholder="Harga"
-        value={p.amount}
-        onChange={(e) => handleChange(index, "amount", e.target.value)}
-        className={styles.priceInput}
-      />
-    </div>
-  </div>
-))}
+                <div key={index} className={styles.inputContainer}>
+                  <div className={styles.radioContainer}>
+                    <p className={styles.method}>Metode Pembayaran :</p>
+                    <label className={styles.radio}>
+                      <input
+                        type="radio"
+                        name={`pay-${item.id}-${index}`} // penting: beda name tiap index
+                        value="CS"
+                        checked={p.type === "CS"}
+                        onChange={(e) =>
+                          handleChange(index, "type", e.target.value)
+                        }
+                      />
+                      CS
+                    </label>
+                    <label className={styles.radio}>
+                      <input
+                        type="radio"
+                        name={`pay-${item.id}-${index}`}
+                        value="TF"
+                        checked={p.type === "TF"}
+                        onChange={(e) =>
+                          handleChange(index, "type", e.target.value)
+                        }
+                      />
+                      TF
+                    </label>
+                    <label className={styles.radio}>
+                      <input
+                        type="radio"
+                        name={`pay-${item.id}-${index}`}
+                        value="GS"
+                        checked={p.type === "GS"}
+                        onChange={(e) =>
+                          handleChange(index, "type", e.target.value)
+                        }
+                      />
+                      GS
+                    </label>
+                  </div>
+                  <div className={styles.priceContainer}>
+                    <p>Rp</p>
+                    <input
+                      type="number"
+                      placeholder="Harga"
+                      value={p.amount}
+                      onChange={(e) =>
+                        handleChange(index, "amount", e.target.value)
+                      }
+                      className={styles.priceInput}
+                    />
+                  </div>
+                </div>
+              ))}
               <div className={styles.priceButton}>
                 <button onClick={addPriceField} className={styles.addPrice}>
                   + Tambah Harga
                 </button>
-                <button className={styles.button} disabled={submitting} onClick={() => handleSubmit(item)}>
+                <button
+                  className={styles.button}
+                  disabled={submitting}
+                  onClick={() => handleSubmit(item)}
+                >
                   {submitting ? "Loading..." : "Simpan"}
                 </button>
               </div>
@@ -325,15 +338,15 @@ function Check({ imei }) {
 }
 
 function Empty() {
-  return(
+  return (
     <>
-    <div className={`${styles.container} ${styles.empty}`}>
-      <p className={`${styles.title} ${styles.empty}`}>Report</p>
-      <div className={styles.descContainer}>
-        <p className={styles.subTitle}>😭 Tidak ada data</p>
-        <p className={styles.desc}>Silahkan tunggu beberapa saat lagi</p>
+      <div className={`${styles.container} ${styles.empty}`}>
+        <p className={`${styles.title} ${styles.empty}`}>Report</p>
+        <div className={styles.descContainer}>
+          <p className={styles.subTitle}>😭 Tidak ada data</p>
+          <p className={styles.desc}>Silahkan tunggu beberapa saat lagi</p>
+        </div>
       </div>
-    </div>
     </>
-  )
+  );
 }

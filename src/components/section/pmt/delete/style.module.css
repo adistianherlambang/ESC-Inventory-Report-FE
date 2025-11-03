@@ -52,12 +52,12 @@
 }
 
 .cancel {
-  border: solid #DA0909 1px;
+  border: solid #da0909 1px;
   background-color: white;
-  color: #DA0909;
+  color: #da0909;
 }
 
 .yes {
-  background-color: #DA0909;
+  background-color: #da0909;
   color: white;
 }

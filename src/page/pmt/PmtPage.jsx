@@ -2,13 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  limit,
-} from "firebase/firestore";
+import { collection, query, where, getDocs, limit } from "firebase/firestore";
 import { db } from "../../../firebase";
 
 //Component
@@ -42,9 +36,9 @@ export default function PmtPage() {
 
   const [selectedId, setSelectedId] = useState(null);
   const [selectedImei, setSelectedImei] = useState(null);
-  const [selectedProduct, setSelectedProduct] = useState("")
-  const [selectedColor, setSelectedColor] = useState("")
-  const [selectedCapacity, setSelectedCapacity] = useState("")
+  const [selectedProduct, setSelectedProduct] = useState("");
+  const [selectedColor, setSelectedColor] = useState("");
+  const [selectedCapacity, setSelectedCapacity] = useState("");
 
   const navigate = useNavigate();
 
@@ -118,9 +112,9 @@ export default function PmtPage() {
     setSelectedId(id);
     setSelectedImei(imei);
     setIsDeleting(true);
-    setSelectedProduct(product)
-    setSelectedColor(color)
-    setSelectedCapacity(capacity)
+    setSelectedProduct(product);
+    setSelectedColor(color);
+    setSelectedCapacity(capacity);
   };
 
   return (
