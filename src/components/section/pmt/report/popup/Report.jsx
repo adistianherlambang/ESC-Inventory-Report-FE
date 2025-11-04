@@ -15,6 +15,7 @@ import {
   arrayUnion,
   arrayRemove,
 } from "firebase/firestore";
+import { Html5Qrcode, Html5QrcodeScanner } from "html5-qrcode";
 
 import { pmtReport } from "../../../../../state/state";
 
@@ -92,6 +93,7 @@ function Manual() {
 function Scan() {
   return(
     <>
+
     </>
   )
 }

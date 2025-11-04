@@ -5,6 +5,11 @@ import react from "@vitejs/plugin-react-swc";
 export default defineConfig({
   plugins: [react()],
   server: {
-    allowedHosts: ['9b05dd441204.ngrok-free.app'],
+    host: "0.0.0.0",
+    allowedHosts: [
+      ".ngrok-free.app", // semua subdomain ngrok otomatis diizinkan
+      "localhost",
+      "127.0.0.1",
+    ],
   },
 });
