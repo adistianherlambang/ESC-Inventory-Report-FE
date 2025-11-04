@@ -93,8 +93,6 @@ function Scan() {}
 
 function Check({ imei }) {
   const [data, setData] = useState([]);
-  // const [price, setPrice] = useState("");
-  // const [payType, setPayType] = useState("");
   const [userType, setUserType] = useState("");
   const [desc, setDesc] = useState("");
   const [submitting, setSubmitting] = useState(false);
