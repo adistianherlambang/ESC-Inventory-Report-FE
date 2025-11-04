@@ -89,7 +89,12 @@ function Manual() {
   );
 }
 
-function Scan() {}
+function Scan() {
+  return(
+    <>
+    </>
+  )
+}
 
 function Check({ imei }) {
   const [data, setData] = useState([]);

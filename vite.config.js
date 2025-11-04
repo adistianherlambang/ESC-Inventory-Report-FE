@@ -5,6 +5,6 @@ import react from "@vitejs/plugin-react-swc";
 export default defineConfig({
   plugins: [react()],
   server: {
-    allowedHosts: ['2c5c3f996862.ngrok-free.app'],
+    allowedHosts: ['9b05dd441204.ngrok-free.app'],
   },
 });
