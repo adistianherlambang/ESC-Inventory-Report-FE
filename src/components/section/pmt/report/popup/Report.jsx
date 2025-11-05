@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import styles from "./style.module.css";
 import { db } from "../../../../../../firebase";
 import {
@@ -94,22 +94,56 @@ function Manual() {
 }
 
 function Scan() {
-  const [ab, setAb] = useState(null);
-  const { isTorchSupported, isTorchOn, setIsTorchOn } = useTorch();
+  const [isCheck, setIsCheck] = useState(false)
+  const [result, setResult] = useState(null);
 
-  const onTorchSwitch = () => {
-    setIsTorchOn(!isTorchOn);
+  // callback hasil scan
+  const handleCapture = (barcodes) => {
+    if (barcodes && barcodes.length > 0) {
+      // ambil barcode pertama (misal IMEI)
+      const code = barcodes[0].rawValue || barcodes[0].value;
+      setResult(code);
+      console.log("Detected barcode:", code);
+    }
   };
 
+  const constraints = useMemo(() => ({
+    facingMode: "environment",
+    width: { ideal: 12 },
+    height: { ideal: 720 },
+    advanced: [
+      { width: 320, height: 1280 },
+      { aspectRatio: 1 }
+    ]
+  }), []);
+
+  const submit = () => {
+    if (result) {
+      setIsCheck(true)
+    }
+  }
+
   return (
+    <>
     <div className={styles.container}>
-      <BarcodeScanner options={{ delay: 500, formats: ["code_128"] }} />
-      {isTorchSupported ? (
-        <button onClick={onTorchSwitch}>Switch Torch</button>
-      ) : null}
+      <p className={styles.title}>Report</p>
+      <div className={styles.scannerContainer}>
+        <div className={styles.scanner}>
+          <BarcodeScanner
+            options={{ delay: 500, formats: ["code_128"] }}
+            onCapture={handleCapture}
+            trackConstraints={constraints}
+          />
+        </div>
+        <p className={styles.scanResult}>IMEI : {result}</p>
+      </div>
+      <div className={`${result === null ? styles.buttonInActive : styles.button}`} onClick={submit}>Submit</div>
     </div>
+    {isCheck ? <Check imei={result}/> : <></>}
+    </>
   );
 }
+
 
 function Check({ imei }) {
   const [data, setData] = useState([]);

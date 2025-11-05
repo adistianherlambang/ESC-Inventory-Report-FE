@@ -200,6 +200,42 @@
   padding: 16px;
 }
 
+.scannerContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.scanner {
+  height: fit-content;
+  border: 4px solid #000;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.scanResult {
+  color: #B0B0B0;
+  text-align: center;
+  font-family: SFProRegular;
+}
+
+.buttonInActive {
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #773ff9;
+  border: solid #773ff9 2px;
+  padding: 16px;
+  border-radius: 8px;
+  transition: ease-in 300ms;
+}
+
 @keyframes popUp {
   from {
     transform: translateY(100%);
