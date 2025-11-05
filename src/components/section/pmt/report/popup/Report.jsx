@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef} from "react";
 import styles from "./style.module.css";
 import { db } from "../../../../../../firebase";
 import {
@@ -15,7 +15,7 @@ import {
   arrayUnion,
   arrayRemove,
 } from "firebase/firestore";
-import { Html5Qrcode, Html5QrcodeScanner } from "html5-qrcode";
+
 
 import { pmtReport } from "../../../../../state/state";
 
@@ -51,6 +51,7 @@ export default function ReportPopUp() {
         </div>
       </div>
       {manual ? <Manual /> : <></>}
+      {scan ? <Scan/> : <></>}
     </>
   );
 }
@@ -93,7 +94,6 @@ function Manual() {
 function Scan() {
   return(
     <>
-
     </>
   )
 }
