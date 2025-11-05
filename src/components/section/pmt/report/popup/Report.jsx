@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef} from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./style.module.css";
 import { db } from "../../../../../../firebase";
 import {
@@ -16,6 +16,8 @@ import {
   arrayRemove,
 } from "firebase/firestore";
 
+import { BarcodeScanner, useTorch } from "react-barcode-scanner";
+import "react-barcode-scanner/polyfill";
 
 import { pmtReport } from "../../../../../state/state";
 
@@ -51,7 +53,7 @@ export default function ReportPopUp() {
         </div>
       </div>
       {manual ? <Manual /> : <></>}
-      {scan ? <Scan/> : <></>}
+      {scan ? <Scan /> : <></>}
     </>
   );
 }
@@ -92,10 +94,21 @@ function Manual() {
 }
 
 function Scan() {
-  return(
-    <>
-    </>
-  )
+  const [ab, setAb] = useState(null);
+  const { isTorchSupported, isTorchOn, setIsTorchOn } = useTorch();
+
+  const onTorchSwitch = () => {
+    setIsTorchOn(!isTorchOn);
+  };
+
+  return (
+    <div className={styles.container}>
+      <BarcodeScanner options={{ delay: 500, formats: ["code_128"] }} />
+      {isTorchSupported ? (
+        <button onClick={onTorchSwitch}>Switch Torch</button>
+      ) : null}
+    </div>
+  );
 }
 
 function Check({ imei }) {
