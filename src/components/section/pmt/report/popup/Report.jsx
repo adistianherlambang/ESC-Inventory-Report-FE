@@ -44,12 +44,15 @@ export default function ReportPopUp() {
         <p className={styles.title}>Report</p>
         {active}
         <div className={styles.wrapper}>
-          <div className={styles.button} onClick={() => setManual(true)}>
-            Manual
+          <div className={styles.manualscan}>
+            <div className={styles.buttonms} onClick={() => setManual(true)}>
+              Manual
+            </div>
+            <div className={styles.buttonms} onClick={() => setScan(true)}>
+              Scan
+            </div>
           </div>
-          <div className={styles.button} onClick={() => setScan(true)}>
-            Scan
-          </div>
+          <div className={styles.button}>Aksesoris</div>
         </div>
       </div>
       {manual ? <Manual /> : <></>}
