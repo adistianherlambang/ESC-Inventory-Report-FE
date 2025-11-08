@@ -24,13 +24,15 @@ import { pmtReport } from "../../../../../state/state";
 export default function ReportPopUp() {
   const [manual, setManual] = useState(false);
   const [scan, setScan] = useState(false);
+  const [acc, setAcc] = useState(false)
 
   const { active } = pmtReport();
 
   const handleClose = () => {
-    if (manual || scan) {
+    if (manual || scan || acc) {
       setManual(false);
       setScan(false);
+      setAcc(false)
     }
   };
 
@@ -52,11 +54,12 @@ export default function ReportPopUp() {
               Scan
             </div>
           </div>
-          <div className={styles.button}>Aksesoris</div>
+          <div className={styles.button} onClick={() => setAcc(true)}>Aksesoris</div>
         </div>
       </div>
       {manual ? <Manual /> : <></>}
       {scan ? <Scan /> : <></>}
+      {acc ? <CheckAcc/> : <></>}
     </>
   );
 }
@@ -390,6 +393,120 @@ function Check({ imei }) {
       )}
     </>
   );
+}
+
+function CheckAcc() {
+
+  const [data, setData] = useState(null)
+  const [addPrices, setAddPrices] = useState([{ type: "", amount: "" }]);
+  const [userType, setUserType] = useState("");
+  const [productName, setProductName] = useState("")
+
+  const addPriceField = () => {
+    setAddPrices([...addPrices, { type: "", amount: "" }]);
+  };
+
+  const handleChange = (index, field, value) => {
+    const updated = [...addPrices];
+    updated[index][field] = value;
+    setAddPrices(updated);
+  };
+  
+  return(
+    <>
+    <div className={styles.container}>
+      <p className={styles.title}>Report</p>
+      <div className={styles.accProduct}>
+        <p>Nama Produk</p>
+        <input
+            type="number"
+            placeholder="Nama Produk"
+            className={styles.accInput}
+          />
+      </div>
+      <div className={styles.radioContainer}>
+        <p className={styles.method}>Jenis User :</p>
+        <label className={styles.radio}>
+          <input
+            type="radio"
+            value="User"
+            onChange={(e) => setUserType(e.target.value)}
+          />
+          User
+        </label>
+        <label className={styles.radio}>
+          <input
+            type="radio"
+            value="CN"
+            onChange={(e) => setUserType(e.target.value)}
+          />
+          CN
+        </label>
+      </div>
+      {addPrices.map((p, index) => (
+        <div key={index} className={styles.inputContainer}>
+          <div className={styles.radioContainer}>
+            <p className={styles.method}>Metode Pembayaran :</p>
+            <label className={styles.radio}>
+              <input
+                type="radio"
+                value="CS"
+                checked={p.type === "CS"}
+                onChange={(e) =>
+                  handleChange(index, "type", e.target.value)
+                }
+              />
+              CS
+            </label>
+            <label className={styles.radio}>
+              <input
+                type="radio"
+                value="TF"
+                checked={p.type === "TF"}
+                onChange={(e) =>
+                  handleChange(index, "type", e.target.value)
+                }
+              />
+              TF
+            </label>
+            <label className={styles.radio}>
+              <input
+                type="radio"
+                value="GS"
+                checked={p.type === "GS"}
+                onChange={(e) =>
+                  handleChange(index, "type", e.target.value)
+                }
+              />
+              GS
+            </label>
+          </div>
+          <div className={styles.priceContainer}>
+            <p>Rp</p>
+            <input
+              type="number"
+              placeholder="Harga"
+              value={p.amount}
+              onChange={(e) =>
+                handleChange(index, "amount", e.target.value)
+              }
+              className={styles.priceInput}
+            />
+          </div>
+          
+        </div>
+      ))}
+      <div className={styles.priceButton}>
+        <button onClick={addPriceField} className={styles.addPrice}>
+          + Tambah Harga
+        </button>
+        <button>
+          Simpan
+        </button>
+      </div>
+    </div>
+    </>
+  )
 }
 
 function Empty() {
