@@ -24,7 +24,7 @@ import { pmtReport } from "../../../../../state/state";
 export default function ReportPopUp() {
   const [manual, setManual] = useState(false);
   const [scan, setScan] = useState(false);
-  const [acc, setAcc] = useState(false)
+  const [acc, setAcc] = useState(false);
 
   const { active } = pmtReport();
 
@@ -32,7 +32,7 @@ export default function ReportPopUp() {
     if (manual || scan || acc) {
       setManual(false);
       setScan(false);
-      setAcc(false)
+      setAcc(false);
     }
   };
 
@@ -54,12 +54,14 @@ export default function ReportPopUp() {
               Scan
             </div>
           </div>
-          <div className={styles.button} onClick={() => setAcc(true)}>Aksesoris</div>
+          <div className={styles.button} onClick={() => setAcc(true)}>
+            Aksesoris
+          </div>
         </div>
       </div>
       {manual ? <Manual /> : <></>}
       {scan ? <Scan /> : <></>}
-      {acc ? <CheckAcc/> : <></>}
+      {acc ? <CheckAcc /> : <></>}
     </>
   );
 }
@@ -100,7 +102,7 @@ function Manual() {
 }
 
 function Scan() {
-  const [isCheck, setIsCheck] = useState(false)
+  const [isCheck, setIsCheck] = useState(false);
   const [result, setResult] = useState(null);
 
   // callback hasil scan
@@ -113,43 +115,47 @@ function Scan() {
     }
   };
 
-  const constraints = useMemo(() => ({
-    facingMode: "environment",
-    width: { ideal: 12 },
-    height: { ideal: 720 },
-    advanced: [
-      { width: 320, height: 1280 },
-      { aspectRatio: 1 }
-    ]
-  }), []);
+  const constraints = useMemo(
+    () => ({
+      facingMode: "environment",
+      width: { ideal: 12 },
+      height: { ideal: 720 },
+      advanced: [{ width: 320, height: 1280 }, { aspectRatio: 1 }],
+    }),
+    [],
+  );
 
   const submit = () => {
     if (result) {
-      setIsCheck(true)
+      setIsCheck(true);
     }
-  }
+  };
 
   return (
     <>
-    <div className={styles.container}>
-      <p className={styles.title}>Report</p>
-      <div className={styles.scannerContainer}>
-        <div className={styles.scanner}>
-          <BarcodeScanner
-            options={{ delay: 500, formats: ["code_128"] }}
-            onCapture={handleCapture}
-            trackConstraints={constraints}
-          />
+      <div className={styles.container}>
+        <p className={styles.title}>Report</p>
+        <div className={styles.scannerContainer}>
+          <div className={styles.scanner}>
+            <BarcodeScanner
+              options={{ delay: 500, formats: ["code_128"] }}
+              onCapture={handleCapture}
+              trackConstraints={constraints}
+            />
+          </div>
+          <p className={styles.scanResult}>IMEI : {result}</p>
         </div>
-        <p className={styles.scanResult}>IMEI : {result}</p>
+        <div
+          className={`${result === null ? styles.buttonInActive : styles.button}`}
+          onClick={submit}
+        >
+          Submit
+        </div>
       </div>
-      <div className={`${result === null ? styles.buttonInActive : styles.button}`} onClick={submit}>Submit</div>
-    </div>
-    {isCheck ? <Check imei={result}/> : <></>}
+      {isCheck ? <Check imei={result} /> : <></>}
     </>
   );
 }
-
 
 function Check({ imei }) {
   const [data, setData] = useState([]);
@@ -396,11 +402,10 @@ function Check({ imei }) {
 }
 
 function CheckAcc() {
-
-  const [data, setData] = useState(null)
+  const [data, setData] = useState(null);
   const [addPrices, setAddPrices] = useState([{ type: "", amount: "" }]);
   const [userType, setUserType] = useState("");
-  const [productName, setProductName] = useState("")
+  const [productName, setProductName] = useState("");
 
   const addPriceField = () => {
     setAddPrices([...addPrices, { type: "", amount: "" }]);
@@ -411,107 +416,96 @@ function CheckAcc() {
     updated[index][field] = value;
     setAddPrices(updated);
   };
-  
-  return(
+
+  return (
     <>
-    <div className={styles.container}>
-      <p className={styles.title}>Report</p>
-      <div className={styles.accProduct}>
-        <p>Nama Produk</p>
-        <input
+      <div className={styles.container}>
+        <p className={styles.title}>Report</p>
+        <div className={styles.accProduct}>
+          <p>Nama Produk</p>
+          <input
             type="number"
             placeholder="Nama Produk"
             className={styles.accInput}
           />
-      </div>
-      <div className={styles.radioContainer}>
-        <p className={styles.method}>Jenis User :</p>
-        <label className={styles.radio}>
-          <input
-            type="radio"
-            value="User"
-            onChange={(e) => setUserType(e.target.value)}
-          />
-          User
-        </label>
-        <label className={styles.radio}>
-          <input
-            type="radio"
-            value="CN"
-            onChange={(e) => setUserType(e.target.value)}
-          />
-          CN
-        </label>
-      </div>
-      {addPrices.map((p, index) => (
-        <div key={index} className={styles.inputContainer}>
-          <div className={styles.radioContainer}>
-            <p className={styles.method}>Metode Pembayaran :</p>
-            <label className={styles.radio}>
-              <input
-                type="radio"
-                value="CS"
-                checked={p.type === "CS"}
-                onChange={(e) =>
-                  handleChange(index, "type", e.target.value)
-                }
-              />
-              CS
-            </label>
-            <label className={styles.radio}>
-              <input
-                type="radio"
-                value="TF"
-                checked={p.type === "TF"}
-                onChange={(e) =>
-                  handleChange(index, "type", e.target.value)
-                }
-              />
-              TF
-            </label>
-            <label className={styles.radio}>
-              <input
-                type="radio"
-                value="GS"
-                checked={p.type === "GS"}
-                onChange={(e) =>
-                  handleChange(index, "type", e.target.value)
-                }
-              />
-              GS
-            </label>
-          </div>
-          <div className={styles.priceContainer}>
-            <p>Rp</p>
-            <input
-              type="number"
-              placeholder="Harga"
-              value={p.amount}
-              onChange={(e) =>
-                handleChange(index, "amount", e.target.value)
-              }
-              className={styles.priceInput}
-            />
-          </div>
-          
         </div>
-      ))}
-      <div className={styles.priceButton}>
-        <button onClick={addPriceField} className={styles.addPrice}>
-          + Tambah Harga
-        </button>
-        <button>
-          Simpan
-        </button>
+        <div className={styles.radioContainer}>
+          <p className={styles.method}>Jenis User :</p>
+          <label className={styles.radio}>
+            <input
+              type="radio"
+              value="User"
+              onChange={(e) => setUserType(e.target.value)}
+            />
+            User
+          </label>
+          <label className={styles.radio}>
+            <input
+              type="radio"
+              value="CN"
+              onChange={(e) => setUserType(e.target.value)}
+            />
+            CN
+          </label>
+        </div>
+        {addPrices.map((p, index) => (
+          <div key={index} className={styles.inputContainer}>
+            <div className={styles.radioContainer}>
+              <p className={styles.method}>Metode Pembayaran :</p>
+              <label className={styles.radio}>
+                <input
+                  type="radio"
+                  value="CS"
+                  checked={p.type === "CS"}
+                  onChange={(e) => handleChange(index, "type", e.target.value)}
+                />
+                CS
+              </label>
+              <label className={styles.radio}>
+                <input
+                  type="radio"
+                  value="TF"
+                  checked={p.type === "TF"}
+                  onChange={(e) => handleChange(index, "type", e.target.value)}
+                />
+                TF
+              </label>
+              <label className={styles.radio}>
+                <input
+                  type="radio"
+                  value="GS"
+                  checked={p.type === "GS"}
+                  onChange={(e) => handleChange(index, "type", e.target.value)}
+                />
+                GS
+              </label>
+            </div>
+            <div className={styles.priceContainer}>
+              <p>Rp</p>
+              <input
+                type="number"
+                placeholder="Harga"
+                value={p.amount}
+                onChange={(e) => handleChange(index, "amount", e.target.value)}
+                className={styles.priceInput}
+              />
+            </div>
+          </div>
+        ))}
+        <div className={styles.priceButton}>
+          <button onClick={addPriceField} className={styles.addPrice}>
+            + Tambah Harga
+          </button>
+          <button>Simpan</button>
+        </div>
       </div>
-    </div>
     </>
-  )
+  );
 }
 
 function Empty() {
   return (
-    <>
+    <> 
       <div className={`${styles.container} ${styles.empty}`}>
         <p className={`${styles.title} ${styles.empty}`}>Report</p>
         <div className={styles.descContainer}>
