@@ -54,17 +54,44 @@
         "frontend": ["React.js", "Next.js"],
         "backend": ["Node.js (Express)", "FastAPI"],
         "database": ["MongoDB"],
-        "ai_framework": ["LangChain", "OpenAI GPT-5 API", "Scikit-Learn", "TensorFlow Lite"],
+        "ai_framework": [
+          "LangChain",
+          "OpenAI GPT-5 API",
+          "Scikit-Learn",
+          "TensorFlow Lite"
+        ],
         "deployment": ["VPS"],
-        "isolated_execution": ["Python subprocess", "Virtual environment (venv)", "TemporaryDirectory untuk eksekusi kode LLM tanpa mempengaruhi OS atau file server"]
+        "isolated_execution": [
+          "Python subprocess",
+          "Virtual environment (venv)",
+          "TemporaryDirectory untuk eksekusi kode LLM tanpa mempengaruhi OS atau file server"
+        ]
       },
       "modules": [
-        { "name": "Data Cleaning", "description": "Mengunggah dan membersihkan dataset ekonomi dari BPS (Excel, CSV, JSON)" },
-        { "name": "AI Forecasting", "description": "Model AI menganalisis tren ekonomi dan memberikan rekomendasi kebijakan" },
-        { "name": "Dashboard", "description": "Visualisasi interaktif tren, indikator utama, insight AI, dan rekomendasi kebijakan" },
-        { "name": "Report Generator", "description": "Membuat BRS (Berita Resmi Statistik) dan publikasi otomatis berbasis data dan analisis AI" },
-        { "name": "Auth", "description": "Sistem login untuk multi-user jika diperlukan" },
-        { "name": "LLM Code Runner", "description": "Menjalankan kode Python dari LLM di environment terisolasi tanpa mempengaruhi server atau sistem file" }
+        {
+          "name": "Data Cleaning",
+          "description": "Mengunggah dan membersihkan dataset ekonomi dari BPS (Excel, CSV, JSON)"
+        },
+        {
+          "name": "AI Forecasting",
+          "description": "Model AI menganalisis tren ekonomi dan memberikan rekomendasi kebijakan"
+        },
+        {
+          "name": "Dashboard",
+          "description": "Visualisasi interaktif tren, indikator utama, insight AI, dan rekomendasi kebijakan"
+        },
+        {
+          "name": "Report Generator",
+          "description": "Membuat BRS (Berita Resmi Statistik) dan publikasi otomatis berbasis data dan analisis AI"
+        },
+        {
+          "name": "Auth",
+          "description": "Sistem login untuk multi-user jika diperlukan"
+        },
+        {
+          "name": "LLM Code Runner",
+          "description": "Menjalankan kode Python dari LLM di environment terisolasi tanpa mempengaruhi server atau sistem file"
+        }
       ],
       "ai_features": [
         "Natural Language Query",

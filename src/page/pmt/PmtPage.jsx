@@ -46,7 +46,8 @@ export default function PmtPage() {
 
   const logout = userStore((state) => state.logout);
   const now = new Date();
-  const date = now.toISOString().split("T")[0];
+  const wib = new Date(now.getTime() + 7 * 60 * 60 * 1000);
+  const date = wib.toISOString().split("T")[0];
 
   const formatRupiah = (value) => {
     if (typeof value !== "number") return value;

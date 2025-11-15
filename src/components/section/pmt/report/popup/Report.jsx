@@ -20,8 +20,9 @@ import { BarcodeScanner, useTorch } from "react-barcode-scanner";
 import "react-barcode-scanner/polyfill";
 
 import { pmtReport } from "../../../../../state/state";
+import { userStore } from "../../../../../state/state";
 
-export default function ReportPopUp() {
+export default function ReportPopUp({ pmtName }) {
   const [manual, setManual] = useState(false);
   const [scan, setScan] = useState(false);
   const [acc, setAcc] = useState(false);
@@ -164,6 +165,8 @@ function Check({ imei }) {
   const [submitting, setSubmitting] = useState(false);
   const [addPrices, setAddPrices] = useState([{ type: "", amount: "" }]);
 
+  const { currentUser } = userStore();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -190,8 +193,17 @@ function Check({ imei }) {
       if (!imei) throw new Error("IMEI tidak tersedia");
       if (!item || !item.id) throw new Error("Data produk tidak valid");
 
-      const targetId = "YSvrfpBbLkIE0fnGp57V"; // bisa diganti dinamis
-      const pmtRef = doc(db, "pmtdatas", targetId);
+      const q = query(
+        collection(db, "pmtdatas"),
+        where("name", "==", currentUser.name),
+      );
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) throw new Error("target tidak ada");
+
+      const targetDoc = querySnapshot.docs[0].id;
+      const pmtRef = doc(db, "pmtdatas", targetDoc);
+
       const productRef = doc(db, "allproducts", item.id);
 
       // 1) build newReport
@@ -293,7 +305,8 @@ function Check({ imei }) {
               <div className={styles.itemDetail}>
                 <p className={styles.productName}>{item.product}</p>
                 <p className={styles.silver}>
-                  IMEI: <span className={styles.black}>{imei}</span>
+                  IMEI:{" "}
+                  <span className={styles.black}>{currentUser.namec}</span>
                 </p>
                 <div className={styles.productDetail}>
                   <p className={styles.silver}>
@@ -424,7 +437,7 @@ function CheckAcc() {
         <div className={styles.accProduct}>
           <p>Nama Produk</p>
           <input
-            type="number"
+            type="text"
             placeholder="Nama Produk"
             className={styles.accInput}
           />
@@ -505,7 +518,7 @@ function CheckAcc() {
 
 function Empty() {
   return (
-    <> 
+    <>
       <div className={`${styles.container} ${styles.empty}`}>
         <p className={`${styles.title} ${styles.empty}`}>Report</p>
         <div className={styles.descContainer}>
