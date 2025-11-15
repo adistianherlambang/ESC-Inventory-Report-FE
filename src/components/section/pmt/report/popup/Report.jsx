@@ -496,7 +496,7 @@ function CheckAcc() {
           <button onClick={addPriceField} className={styles.addPrice}>
             + Tambah Harga
           </button>
-          <button>Simpan</button>
+          <button className={styles.button}>Simpan</button>
         </div>
       </div>
     </>
