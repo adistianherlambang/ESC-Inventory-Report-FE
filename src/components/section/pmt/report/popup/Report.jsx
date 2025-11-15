@@ -280,6 +280,7 @@ function Check({ imei }) {
       }
     } finally {
       setSubmitting(false);
+      window.location.reload();
     }
   };
 
@@ -419,9 +420,40 @@ function CheckAcc() {
   const [addPrices, setAddPrices] = useState([{ type: "", amount: "" }]);
   const [userType, setUserType] = useState("");
   const [productName, setProductName] = useState("");
+  const { currentUser } = userStore();
 
   const addPriceField = () => {
     setAddPrices([...addPrices, { type: "", amount: "" }]);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const q = query(
+        collection(db, "pmtdatas"),
+        where("name", "==", currentUser.name),
+      );
+      const querySnapshot = await getDocs(q);
+      if (querySnapshot.empty) throw new Error("target tidak ada");
+
+      const targetDoc = querySnapshot.docs[0].id;
+      const pmtRef = doc(db, "pmtdatas", targetDoc);
+
+      const newReport = {
+        product: productName || "",
+        type: "acc",
+        userType: userType || "",
+        price: addPrices.map((p) => ({
+          type: p.type || "cash",
+          amount: Number(p.amount) || 0,
+        })),
+        createdAt: new Date(),
+      };
+      await updateDoc(pmtRef, {
+        report: arrayUnion(newReport),
+      });
+    } catch (err) {
+      console.error(err.message);
+    }
   };
 
   const handleChange = (index, field, value) => {
@@ -440,6 +472,7 @@ function CheckAcc() {
             type="text"
             placeholder="Nama Produk"
             className={styles.accInput}
+            onChange={(e) => setProductName(e.target.value)}
           />
         </div>
         <div className={styles.radioContainer}>
@@ -509,7 +542,9 @@ function CheckAcc() {
           <button onClick={addPriceField} className={styles.addPrice}>
             + Tambah Harga
           </button>
-          <button className={styles.button}>Simpan</button>
+          <button className={styles.button} onClick={handleSubmit}>
+            Simpan
+          </button>
         </div>
       </div>
     </>

@@ -49,6 +49,7 @@ export default function EditSection({ isOpen, docId, imei, onClose, data }) {
     setLoading(false);
     alert("Harga berhasil diperbarui!");
     onClose?.();
+    window.location.reload();
   };
 
   return (

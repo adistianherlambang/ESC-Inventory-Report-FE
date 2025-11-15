@@ -57,6 +57,8 @@ export default function DeleteSection({
       });
     } catch (err) {
       console.error("Gagal hapus report:", err);
+    } finally {
+      window.location.reload();
     }
   };
 
