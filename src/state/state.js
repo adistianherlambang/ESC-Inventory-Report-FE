@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 const getUserFromSession = () => {
-  const saved = sessionStorage.getItem("user");
+  const saved = localStorage.getItem("user");
   return saved ? JSON.parse(saved) : null;
 };
 
@@ -10,7 +10,7 @@ const userStore = create((set) => ({
   brand: getUserFromSession()?.brand || null,
 
   setCurrentUser: (user) => {
-    sessionStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("user", JSON.stringify(user));
     set({
       currentUser: user,
       brand: user.brand || null, // simpan brand juga
@@ -20,7 +20,7 @@ const userStore = create((set) => ({
   cleanUser: () => set({ currentUser: null, brand: null }),
 
   logout: () => {
-    sessionStorage.removeItem("user");
+    localStorage.removeItem("user");
     set({ currentUser: null, brand: null });
   },
 }));
