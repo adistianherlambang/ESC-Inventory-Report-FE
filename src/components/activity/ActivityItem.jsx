@@ -1,6 +1,6 @@
 // components/activity/ActivityItem.jsx
 
-import styles from "../../page/pmt/style.module.css"
+import styles from "../../page/pmt/style.module.css";
 
 export default function ActivityItem({
   item,

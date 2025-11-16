@@ -1,7 +1,7 @@
 // components/activity/ActivityList.jsx
 
 import ActivityItem from "./ActivityItem";
-import styles from "../../page/pmt/style.module.css"
+import styles from "../../page/pmt/style.module.css";
 import { ActivityIcon } from "../Icon/Icon";
 
 export default function ActivityList({

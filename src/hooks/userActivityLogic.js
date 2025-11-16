@@ -42,7 +42,7 @@ export default function userActivityLogic() {
       try {
         const q = query(
           collection(db, "pmtdatas"),
-          where("name", "==", currentUser?.name)
+          where("name", "==", currentUser?.name),
         );
 
         const querySnapshot = await getDocs(q);

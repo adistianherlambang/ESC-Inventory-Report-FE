@@ -80,7 +80,6 @@ export default function PmtPage() {
           opacity: isEditing || isDeleting || active ? 0.2 : 1,
         }}
       >
-        {/* TOP */}
         <div className={styles.topContainer}>
           <Logo />
           <div onClick={logout} className={styles.logoutButton}>
