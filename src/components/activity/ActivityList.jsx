@@ -10,6 +10,8 @@ export default function ActivityList({
   formatRupiah,
   handleEdit,
   handleDelete,
+  handleEditAcc,
+  handleDeleteAcc
 }) {
   return (
     <div className={styles.activityContainer}>
@@ -31,6 +33,8 @@ export default function ActivityList({
               formatRupiah={formatRupiah}
               handleEdit={handleEdit}
               handleDelete={handleDelete}
+              handleDeleteAcc={handleDeleteAcc}
+              handleEditAcc={handleEditAcc}
             />
           ))}
         </div>

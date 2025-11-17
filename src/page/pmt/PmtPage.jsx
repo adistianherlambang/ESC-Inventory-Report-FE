@@ -36,6 +36,8 @@ export default function PmtPage() {
     setIsDeleting,
     handleEdit,
     handleDelete,
+    handleEditAcc,
+    handleDeleteAcc,
     formatRupiah,
     date,
   } = userActivityLogic();
@@ -49,11 +51,13 @@ export default function PmtPage() {
           data={editData}
           imei={selectedImei}
           onClose={() => setIsEditing("")}
+          edit={isEditing}
         />
       )}
 
       {isDeleting && (
         <DeleteSection
+
           docId={selectedId}
           imei={selectedImei}
           product={selectedProduct}
@@ -106,6 +110,8 @@ export default function PmtPage() {
           formatRupiah={formatRupiah}
           handleEdit={handleEdit}
           handleDelete={handleDelete}
+          handleDeleteAcc={handleDeleteAcc}
+          handleEditAcc={handleEditAcc}
         />
       </div>
     </>

@@ -36,7 +36,7 @@ export default function userActivityLogic() {
     }).format(value);
   };
 
-  /** FETCH DATA PMT */
+  /** FETCH DATA DARI PMT */
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -93,6 +93,17 @@ export default function userActivityLogic() {
     setSelectedCapacity(capacity);
   };
 
+  const handleEditAcc = ({ id }) => {
+    setIsEditing("acc")
+    setSelectedId(id)
+  }
+
+  const handleDeleteAcc = ({ id, product }) => {
+    setIsDeleting("acc")
+    setSelectedId(id)
+    setSelectedProduct(product)
+  }
+
   return {
     pmtData,
     loading,
@@ -112,6 +123,8 @@ export default function userActivityLogic() {
     setIsDeleting,
     handleEdit,
     handleDelete,
+    handleEditAcc,
+    handleDeleteAcc,
     formatRupiah,
     date,
   };

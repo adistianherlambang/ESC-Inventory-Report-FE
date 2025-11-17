@@ -1,5 +1,3 @@
-// components/activity/ActivityItem.jsx
-
 import styles from "../../page/pmt/style.module.css";
 
 export default function ActivityItem({
@@ -8,6 +6,8 @@ export default function ActivityItem({
   formatRupiah,
   handleEdit,
   handleDelete,
+  handleEditAcc,
+  handleDeleteAcc
 }) {
   const totalAmount = i.price.reduce((sum, p) => sum + p.amount, 0);
 
@@ -34,19 +34,16 @@ export default function ActivityItem({
           <div className={styles.buttonContainer}>
             <div
               className={styles.editButton}
-              onClick={() => handleEdit({ id: item.id, imei: i.IMEI })}
+              onClick={() => handleEditAcc({ id: item.id })}
             >
               Edit
             </div>
             <div
               className={styles.deleteButton}
               onClick={() =>
-                handleDelete({
+                handleDeleteAcc({
                   id: item.id,
-                  imei: i.IMEI,
-                  product: i.product,
-                  color: i.color,
-                  capacity: i.capacity,
+                  product: i.product
                 })
               }
             >
