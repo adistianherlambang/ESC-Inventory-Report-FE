@@ -8,7 +8,7 @@ export default function ActivityItem({
   handleEdit,
   handleDelete,
   handleEditAcc,
-  handleDeleteAcc
+  handleDeleteAcc,
 }) {
   const totalAmount = i.price.reduce((sum, p) => sum + p.amount, 0);
 
@@ -44,7 +44,7 @@ export default function ActivityItem({
               onClick={() =>
                 handleDeleteAcc({
                   id: item.id,
-                  product: i.product
+                  product: i.product,
                 })
               }
             >

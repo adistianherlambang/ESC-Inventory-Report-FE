@@ -20,9 +20,9 @@ export default function userActivityLogic() {
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedCapacity, setSelectedCapacity] = useState("");
 
-  const [allTotal, setAllTotal] = useState(0)
+  const [allTotal, setAllTotal] = useState(0);
 
-  const [idAcc, setIdAcc] = useState("")
+  const [idAcc, setIdAcc] = useState("");
 
   const { active, toogleActive, toogleDeact } = pmtReport();
 
@@ -113,17 +113,17 @@ export default function userActivityLogic() {
   };
 
   const handleEditAcc = ({ id, accId }) => {
-    setEditData(dateFiltered)
-    setIsEditing("acc")
-    setIdAcc(accId)
-    setSelectedId(id)
-  }
+    setEditData(dateFiltered);
+    setIsEditing("acc");
+    setIdAcc(accId);
+    setSelectedId(id);
+  };
 
   const handleDeleteAcc = ({ id, product }) => {
-    setIsDeleting("acc")
-    setSelectedId(id)
-    setSelectedProduct(product)
-  }
+    setIsDeleting("acc");
+    setSelectedId(id);
+    setSelectedProduct(product);
+  };
 
   return {
     pmtData,
@@ -149,6 +149,6 @@ export default function userActivityLogic() {
     formatRupiah,
     date,
     idAcc,
-    allTotal
+    allTotal,
   };
 }

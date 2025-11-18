@@ -12,7 +12,7 @@ export default function ActivityList({
   handleDelete,
   handleEditAcc,
   handleDeleteAcc,
-  total: allTotal
+  total: allTotal,
 }) {
   return (
     <div className={styles.activityContainer}>
@@ -40,6 +40,10 @@ export default function ActivityList({
           ))}
         </div>
       ))}
+      <p className={styles.activityTitle}>
+        <span style={{ color: "#B0B0B0" }}>Total: </span>
+        {allTotal}
+      </p>
     </div>
   );
 }

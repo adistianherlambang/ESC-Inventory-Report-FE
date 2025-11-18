@@ -49,9 +49,19 @@
         "frontend": ["React.js"],
         "backend": ["Express", "FastAPI"],
         "database": ["MongoDB"],
-        "ai_framework": ["Phi-2", "LoRA", "LangChain", "Sklearn", "TensorFlow Lite"],
+        "ai_framework": [
+          "Phi-2",
+          "LoRA",
+          "LangChain",
+          "Sklearn",
+          "TensorFlow Lite"
+        ],
         "deployment": ["VPS"],
-        "isolated_execution": ["Python subprocess", "venv", "TemporaryDirectory"]
+        "isolated_execution": [
+          "Python subprocess",
+          "venv",
+          "TemporaryDirectory"
+        ]
       },
       "modules": [
         { "name": "Data Cleaning" },
@@ -78,11 +88,7 @@
     "dataset": {
       "source": "Data BPS Kota Metro + Data Nasional",
       "format": ["CSV", "Excel", "JSON"],
-      "preprocessing": [
-        "Pembersihan data",
-        "Normalisasi",
-        "Agregasi"
-      ]
+      "preprocessing": ["Pembersihan data", "Normalisasi", "Agregasi"]
     },
 
     "limitations": {
@@ -105,11 +111,7 @@
         "Scraping UMKM",
         "Sandbox Python"
       ],
-      "academic_output": [
-        "Dokumen skripsi",
-        "Analisis kebutuhan",
-        "Pengujian"
-      ]
+      "academic_output": ["Dokumen skripsi", "Analisis kebutuhan", "Pengujian"]
     },
 
     "assistant_instructions": {

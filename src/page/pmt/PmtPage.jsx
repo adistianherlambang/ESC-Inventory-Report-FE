@@ -41,7 +41,7 @@ export default function PmtPage() {
     formatRupiah,
     date,
     idAcc,
-    allTotal
+    allTotal,
   } = userActivityLogic();
 
   return (
@@ -60,13 +60,13 @@ export default function PmtPage() {
 
       {isDeleting && (
         <DeleteSection
-
           docId={selectedId}
           imei={selectedImei}
           product={selectedProduct}
           capacity={selectedCapacity}
           color={selectedColor}
           onClose={() => setIsDeleting("")}
+          id={idAcc}
         />
       )}
 

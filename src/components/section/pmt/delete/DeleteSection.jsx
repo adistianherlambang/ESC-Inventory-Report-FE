@@ -19,6 +19,7 @@ export default function DeleteSection({
   product,
   capacity,
   color,
+  id,
 }) {
   const deleteReportByIMEI = async (docId, imei) => {
     try {

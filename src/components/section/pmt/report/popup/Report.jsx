@@ -206,14 +206,16 @@ function Check({ imei }) {
 
       const productRef = doc(db, "allproducts", item.id);
 
-      const now = new Date()
-      const day = String(now.getDate()).padStart(2, "0");      // 01 - 31
+      const now = new Date();
+      const day = String(now.getDate()).padStart(2, "0"); // 01 - 31
       const month = String(now.getMonth() + 1).padStart(2, "0"); // 01 - 12
-      const year = String(now.getFullYear()).slice(-2);       // 2 digit terakhir tahun, misal 25
+      const year = String(now.getFullYear()).slice(-2); // 2 digit terakhir tahun, misal 25
 
       // 5 digit random
-      const random = Math.floor(Math.random() * 1e5).toString().padStart(5, "0");
-      const id = day + month + year + random
+      const random = Math.floor(Math.random() * 1e5)
+        .toString()
+        .padStart(5, "0");
+      const id = day + month + year + random;
 
       // 1) build newReport
       const newReport = {
@@ -448,14 +450,16 @@ function CheckAcc() {
       const targetDoc = querySnapshot.docs[0].id;
       const pmtRef = doc(db, "pmtdatas", targetDoc);
 
-      const now = new Date()
-      const day = String(now.getDate()).padStart(2, "0");      // 01 - 31
+      const now = new Date();
+      const day = String(now.getDate()).padStart(2, "0"); // 01 - 31
       const month = String(now.getMonth() + 1).padStart(2, "0"); // 01 - 12
-      const year = String(now.getFullYear()).slice(-2);       // 2 digit terakhir tahun, misal 25
+      const year = String(now.getFullYear()).slice(-2); // 2 digit terakhir tahun, misal 25
 
       // 5 digit random
-      const random = Math.floor(Math.random() * 1e5).toString().padStart(5, "0");
-      const id = day + month + year + random
+      const random = Math.floor(Math.random() * 1e5)
+        .toString()
+        .padStart(5, "0");
+      const id = day + month + year + random;
 
       const newReport = {
         id: id,
@@ -474,7 +478,7 @@ function CheckAcc() {
     } catch (err) {
       console.error(err.message);
     } finally {
-      window.location.reload()
+      window.location.reload();
     }
   };
 
