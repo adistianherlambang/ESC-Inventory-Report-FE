@@ -20,6 +20,8 @@ export default function userActivityLogic() {
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedCapacity, setSelectedCapacity] = useState("");
 
+  const [idAcc, setIdAcc] = useState("")
+
   const { active, toogleActive, toogleDeact } = pmtReport();
 
   const now = new Date();
@@ -94,8 +96,9 @@ export default function userActivityLogic() {
   };
 
   const handleEditAcc = ({ id }) => {
+    setEditData(dateFiltered)
     setIsEditing("acc")
-    setSelectedId(id)
+    setIdAcc(id)
   }
 
   const handleDeleteAcc = ({ id, product }) => {
@@ -127,5 +130,6 @@ export default function userActivityLogic() {
     handleDeleteAcc,
     formatRupiah,
     date,
+    idAcc
   };
 }

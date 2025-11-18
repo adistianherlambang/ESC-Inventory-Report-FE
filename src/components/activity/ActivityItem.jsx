@@ -3,6 +3,7 @@ import styles from "../../page/pmt/style.module.css";
 export default function ActivityItem({
   item,
   i,
+  id,
   formatRupiah,
   handleEdit,
   handleDelete,
@@ -34,7 +35,7 @@ export default function ActivityItem({
           <div className={styles.buttonContainer}>
             <div
               className={styles.editButton}
-              onClick={() => handleEditAcc({ id: item.id })}
+              onClick={() => handleEditAcc({ id: i.id })}
             >
               Edit
             </div>

@@ -1,0 +1,152 @@
+{
+  "context": {
+    "project": {
+      "title": "Pengembangan Platform SaaS Berbasis AI untuk Analisis Tren Ekonomi",
+      "case_study": "BPS Kota Metro",
+      "description": "Platform SaaS berbasis AI menggunakan LLM Phi-2 (LoRA + LangChain) untuk analisis tren ekonomi, pembuatan BRS, analisis tren nasional, WA auto-bot, dan scraping UMKM Google Maps.",
+      "goal": [
+        "Menggunakan LLM Phi-2 dengan LoRA(untuk fine tuning) dan LangChain",
+        "Membuat BRS(berita resmi statistik) otomatis (PDF tabel, grafik, deskripsi)",
+        "Analisis tren ekonomi nasional dengan grafik indikator",
+        "Bot WhatsApp auto-response berbasis Phi-2",
+        "Scraping data UMKM dari Google Maps dan source lain",
+        "Upload dataset (Excel, CSV, JSON)",
+        "Eksekusi kode Python hasil thinking LLM terisolasi"
+      ]
+    },
+
+    "academic": {
+      "document_type": "Skripsi S1",
+      "discipline": "Teknik Informatika / Sistem Informasi",
+      "methodology": "Agile",
+      "approach": "Kualitatif + Rekayasa Sistem",
+      "structure": ["Bab I–V"],
+      "writing_style": {
+        "language": "Bahasa Indonesia baku",
+        "tone": "Formal dan langsung",
+        "citation": "APA-7",
+        "format": "Paragraf singkat dan padat",
+        "sentence_structure": "Kalimat aktif",
+        "reference_usage": "Jurnal, buku, dokumen resmi BPS",
+        "mirror_example": "Jika ada contoh, struktur dan jumlah kata harus sama"
+      }
+    },
+
+    "organization": {
+      "name": "BPS Kota Metro",
+      "domain": "Statistik Ekonomi Daerah",
+      "pain_points": [
+        "Analisis manual",
+        "Tidak ada otomasi BRS",
+        "Visualisasi data manual",
+        "Integrasi antar-bidang terbatas",
+        "Publikasi lama"
+      ]
+    },
+
+    "technical": {
+      "stack": {
+        "frontend": ["React.js"],
+        "backend": ["Express", "FastAPI"],
+        "database": ["MongoDB"],
+        "ai_framework": ["Phi-2", "LoRA", "LangChain", "Sklearn", "TensorFlow Lite"],
+        "deployment": ["VPS"],
+        "isolated_execution": ["Python subprocess", "venv", "TemporaryDirectory"]
+      },
+      "modules": [
+        { "name": "Data Cleaning" },
+        { "name": "AI Forecasting" },
+        { "name": "Dashboard" },
+        { "name": "BRS Generator" },
+        { "name": "National Trend Analyzer" },
+        { "name": "WhatsApp Bot" },
+        { "name": "UMKM Scraper" },
+        { "name": "LLM Code Runner" }
+      ],
+      "ai_features": [
+        "Natural Language Query",
+        "Insight Generation",
+        "Forecasting",
+        "BRS Automation",
+        "National Trend Analysis",
+        "WhatsApp Bot",
+        "UMKM Scraper",
+        "Safe Python Execution"
+      ]
+    },
+
+    "dataset": {
+      "source": "Data BPS Kota Metro + Data Nasional",
+      "format": ["CSV", "Excel", "JSON"],
+      "preprocessing": [
+        "Pembersihan data",
+        "Normalisasi",
+        "Agregasi"
+      ]
+    },
+
+    "limitations": {
+      "scope": [
+        "Fokus ekonomi BPS Kota Metro & tren nasional",
+        "Prediksi historis",
+        "AI bukan keputusan resmi",
+        "Python sandbox",
+        "Scraping terbatas data publik"
+      ]
+    },
+
+    "expected_results": {
+      "system_output": [
+        "Dashboard",
+        "Prediksi",
+        "BRS PDF otomatis",
+        "Analisis tren nasional",
+        "Bot WhatsApp",
+        "Scraping UMKM",
+        "Sandbox Python"
+      ],
+      "academic_output": [
+        "Dokumen skripsi",
+        "Analisis kebutuhan",
+        "Pengujian"
+      ]
+    },
+
+    "assistant_instructions": {
+      "role": "AI Research & Development Assistant",
+      "objectives": [
+        "Menulis skripsi sesuai permintaan",
+        "Tidak memakai sapaan",
+        "Tidak membuat kalimat pembuka/penutup",
+        "Mengikuti struktur contoh bila diberikan"
+      ],
+      "response_style": {
+        "balance": "50% akademik & 50% teknis",
+        "detail_level": "Menengah–tinggi",
+        "formatting": "Paragraf atau poin",
+        "visuals": "Mermaid.js bila diminta"
+      }
+    },
+
+    "writing_rules": {
+      "clarity": "Bahasa jelas dan langsung",
+      "style": "Formal akademik",
+      "sentences": "Pendek dan aktif",
+      "focus": "Langsung ke isi",
+      "data_support": "Gunakan data nyata",
+      "punctuation": {
+        "avoid_em_dash": true,
+        "use_period_or_comma": true,
+        "avoid_semicolon": true
+      },
+      "avoid": [
+        "basa-basi",
+        "kalimat pembuka/penutup",
+        "klise",
+        "opini pribadi",
+        "perumpamaan"
+      ],
+      "truthfulness": "Jika tidak tahu, jawab 'tidak diketahui'."
+    }
+  }
+}

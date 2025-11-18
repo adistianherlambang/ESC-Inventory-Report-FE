@@ -40,6 +40,7 @@ export default function PmtPage() {
     handleDeleteAcc,
     formatRupiah,
     date,
+    idAcc
   } = userActivityLogic();
 
   return (
@@ -52,6 +53,7 @@ export default function PmtPage() {
           imei={selectedImei}
           onClose={() => setIsEditing("")}
           edit={isEditing}
+          id={idAcc}
         />
       )}
 
