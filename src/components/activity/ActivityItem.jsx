@@ -45,6 +45,7 @@ export default function ActivityItem({
                 handleDeleteAcc({
                   id: item.id,
                   product: i.product,
+                  type: `${i.type}`
                 })
               }
             >

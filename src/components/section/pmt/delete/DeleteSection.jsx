@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./style.module.css";
 import { db } from "../../../../../firebase";
 import {
@@ -20,7 +20,13 @@ export default function DeleteSection({
   capacity,
   color,
   id,
+  productType
 }) {
+
+  useEffect (() => {
+    console.log(productType)
+  }, [])
+
   const deleteReportByIMEI = async (docId, imei) => {
     try {
       const docRef = doc(db, "pmtdatas", docId);
@@ -63,29 +69,66 @@ export default function DeleteSection({
     }
   };
 
-  return (
-    <div className={styles.container}>
-      <p className={styles.title}>Batalkan laporan?</p>
-      <div className={styles.wrapper}>
-        <p className={styles.desc}>
-          Tindakan ini akan menghapus data laporan dan mengembalikan stok IMEI
-          ke daftar produk.Apakah Anda yakin ingin melanjutkan?
-        </p>
-        <div className={styles.buttonContainer}>
-          <button
-            className={`${styles.button} ${styles.cancel}`}
-            onClick={onClose}
-          >
-            Batalkan
-          </button>
-          <button
-            className={`${styles.button} ${styles.yes}`}
-            onClick={() => deleteReportByIMEI(docId, imei)}
-          >
-            Hapus
-          </button>
+  const deleteReportById = async (id, productType) => {
+    try {
+    } catch (err) {
+      console.error("Gagal: ", err)
+    } finally {
+      window.location.reload()
+    }
+  }
+
+  if (productType === "acc") {
+    return (
+      <div className={styles.container}>
+        <p className={styles.title}>Batalkan laporan?</p>
+        <div className={styles.wrapper}>
+          <p className={styles.desc}>
+            Tindakan ini akan menghapus data laporan dan mengembalikan stok IMEI
+            ke daftar produk.Apakah Anda yakin ingin melanjutkan?
+          </p>
+          <div className={styles.buttonContainer}>
+            <button
+              className={`${styles.button} ${styles.cancel}`}
+              onClick={onClose}
+            >
+              Batalkan
+            </button>
+            <button
+              className={`${styles.button} ${styles.yes}`}
+              onClick={() => deleteReportByIMEI(docId, imei)}
+            >
+              Hapus
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <div className={styles.container}>
+        <p className={styles.title}>Batalkan laporan? {productType}</p>
+        <div className={styles.wrapper}>
+          <p className={styles.desc}>
+            Tindakan ini akan menghapus data laporan dan mengembalikan stok IMEI
+            ke daftar produk.Apakah Anda yakin ingin melanjutkan?
+          </p>
+          <div className={styles.buttonContainer}>
+            <button
+              className={`${styles.button} ${styles.cancel}`}
+              onClick={onClose}
+            >
+              Batalkan
+            </button>
+            <button
+              className={`${styles.button} ${styles.yes}`}
+              onClick={() => deleteReportByIMEI(docId, imei)}
+            >
+              Hapus
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 }

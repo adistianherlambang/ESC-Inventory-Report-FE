@@ -23,6 +23,7 @@ export default function userActivityLogic() {
   const [allTotal, setAllTotal] = useState(0);
 
   const [idAcc, setIdAcc] = useState("");
+  const [productType, setProductType] = useState("")
 
   const { active, toogleActive, toogleDeact } = pmtReport();
 
@@ -93,6 +94,7 @@ export default function userActivityLogic() {
     }, 0);
 
     setAllTotal(totalAmount);
+    
   }, [pmtData, date]);
 
   /** HANDLERS */
@@ -119,10 +121,11 @@ export default function userActivityLogic() {
     setSelectedId(id);
   };
 
-  const handleDeleteAcc = ({ id, product }) => {
+  const handleDeleteAcc = ({ id, product, type }) => {
     setIsDeleting("acc");
     setSelectedId(id);
     setSelectedProduct(product);
+    setProductType(type)
   };
 
   return {
@@ -150,5 +153,6 @@ export default function userActivityLogic() {
     date,
     idAcc,
     allTotal,
+    productType
   };
 }

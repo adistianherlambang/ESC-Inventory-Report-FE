@@ -42,6 +42,7 @@ export default function PmtPage() {
     date,
     idAcc,
     allTotal,
+    productType
   } = userActivityLogic();
 
   return (
@@ -55,6 +56,7 @@ export default function PmtPage() {
           onClose={() => setIsEditing("")}
           edit={isEditing}
           id={idAcc}
+          productType={productType}
         />
       )}
 
@@ -99,6 +101,7 @@ export default function PmtPage() {
           <div key={item.id} className={styles.top}>
             <div className={styles.pmtContainer}>
               <p>Bismillah, {item.name}👋</p>
+              {productType}
               <p className={styles.pmt}>PMT {item.brand}</p>
             </div>
             <Search brand={item.brand} />
