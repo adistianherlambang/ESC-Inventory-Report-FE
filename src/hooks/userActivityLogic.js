@@ -20,6 +20,8 @@ export default function userActivityLogic() {
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedCapacity, setSelectedCapacity] = useState("");
 
+  const [allTotal, setAllTotal] = useState(0)
+
   const [idAcc, setIdAcc] = useState("")
 
   const { active, toogleActive, toogleDeact } = pmtReport();
@@ -76,6 +78,21 @@ export default function userActivityLogic() {
       .filter((item) => item.report.length > 0);
 
     setDateFiltered(filtered);
+    // filtered is an array of items, each with a `report` array.
+    // Compute totalAmount by summing each report's price amounts safely.
+    const totalAmount = (filtered || []).reduce((sumItems, item) => {
+      const reports = item.report || [];
+      const sumReports = reports.reduce((sumReport, report) => {
+        const sumPrice = (report.price || []).reduce(
+          (sumP, p) => sumP + (p.amount || 0),
+          0,
+        );
+        return sumReport + sumPrice;
+      }, 0);
+      return sumItems + sumReports;
+    }, 0);
+
+    setAllTotal(totalAmount);
   }, [pmtData, date]);
 
   /** HANDLERS */
@@ -95,10 +112,11 @@ export default function userActivityLogic() {
     setSelectedCapacity(capacity);
   };
 
-  const handleEditAcc = ({ id }) => {
+  const handleEditAcc = ({ id, accId }) => {
     setEditData(dateFiltered)
     setIsEditing("acc")
-    setIdAcc(id)
+    setIdAcc(accId)
+    setSelectedId(id)
   }
 
   const handleDeleteAcc = ({ id, product }) => {
@@ -130,6 +148,7 @@ export default function userActivityLogic() {
     handleDeleteAcc,
     formatRupiah,
     date,
-    idAcc
+    idAcc,
+    allTotal
   };
 }

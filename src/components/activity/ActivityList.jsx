@@ -11,7 +11,8 @@ export default function ActivityList({
   handleEdit,
   handleDelete,
   handleEditAcc,
-  handleDeleteAcc
+  handleDeleteAcc,
+  total: allTotal
 }) {
   return (
     <div className={styles.activityContainer}>
@@ -27,7 +28,7 @@ export default function ActivityList({
         <div key={item.id} className={styles.activityWrapper}>
           {item.report.map((i) => (
             <ActivityItem
-              key={i.product}
+              key={i.id}
               item={item}
               i={i}
               formatRupiah={formatRupiah}

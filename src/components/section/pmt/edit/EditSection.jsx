@@ -25,7 +25,37 @@ export default function EditSection({ isOpen, docId, imei, onClose, data, edit, 
   };
 
   const handleSave = async () => {
+    console.lod(docId)
     if (!docId || !imei) return;
+    setLoading(true);
+    const docRef = doc(db, "pmtdatas", docId);
+    const snap = await getDoc(docRef);
+    if (!snap.exists()) return;
+
+    const data = snap.data();
+    const updatedReports = data.report.map((r) =>
+      r.IMEI === imei
+        ? {
+            ...r,
+            userType: user,
+            price: prices.map((p) => ({
+              type: p.type,
+              amount: Number(p.amount),
+            })),
+          }
+        : r,
+    );
+
+    await updateDoc(docRef, { report: updatedReports });
+    setLoading(false);
+    alert("Harga berhasil diperbarui!");
+    onClose?.();
+    window.location.reload();
+  };
+
+  const handleSaveAcc = async () => {
+    console.log(id + docId)
+    if (!docId || !id) return;
     setLoading(true);
     const docRef = doc(db, "pmtdatas", docId);
     const snap = await getDoc(docRef);
@@ -142,11 +172,11 @@ export default function EditSection({ isOpen, docId, imei, onClose, data, edit, 
                   Batal
                 </button>
                 <button
-                  onClick={handleSave}
+                  onClick={handleSaveAcc}
                   disabled={loading}
                   className={styles.save}
                 >
-                  {loading ? "Menyimpan..." : "Simpan"}
+                  {loading ? "Menyimpan..." : "Simpan Acc"}
                 </button>
               </div>
             </div>

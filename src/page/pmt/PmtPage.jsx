@@ -40,7 +40,8 @@ export default function PmtPage() {
     handleDeleteAcc,
     formatRupiah,
     date,
-    idAcc
+    idAcc,
+    allTotal
   } = userActivityLogic();
 
   return (
@@ -114,6 +115,7 @@ export default function PmtPage() {
           handleDelete={handleDelete}
           handleDeleteAcc={handleDeleteAcc}
           handleEditAcc={handleEditAcc}
+          total={allTotal}
         />
       </div>
     </>

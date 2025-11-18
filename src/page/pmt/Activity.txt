@@ -20,13 +20,13 @@ export default function Activity({
       </div>
       {dateFiltered.map((item) => (
         <div key={item.id} className={styles.activityWrapper}>
-          {item.report.map((i) => {
+          {item.report.map((i, reportIndex) => {
             const totalAmount = i.price.reduce(
               (sum, item) => sum + item.amount,
               0,
             );
             return (
-              <div key={i.product} className={styles.activity}>
+              <div key={`${item.id}-${reportIndex}-${i.product}`} className={styles.activity}>
                 <div className={styles.productContainer}>
                   <p className={styles.productName}>{i.product}</p>
                   <div className={styles.productDetail}>
@@ -35,8 +35,8 @@ export default function Activity({
                   </div>
                 </div>
                 <div className={styles.priceContainer}>
-                  {i.price.map((r) => (
-                    <div key={r.amount} className={styles.price}>
+                  {i.price.map((r, priceIndex) => (
+                    <div key={`${item.id}-${reportIndex}-${priceIndex}-${r.type}-${r.amount}`} className={styles.price}>
                       <p className={styles.priceAmount}>
                         {formatRupiah(r.amount)}
                       </p>
