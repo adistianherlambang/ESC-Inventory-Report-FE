@@ -35,7 +35,11 @@ export default function ActivityItem({
           <div className={styles.buttonContainer}>
             <div
               className={styles.editButton}
-              onClick={() => handleEditAcc({ id: item.id, accId: i.id })}
+              onClick={() => 
+                handleEditAcc({ 
+                  id: item.id, 
+                  accId: i.id 
+                })}
             >
               Edit
             </div>
@@ -45,7 +49,8 @@ export default function ActivityItem({
                 handleDeleteAcc({
                   id: item.id,
                   product: i.product,
-                  type: `${i.type}`
+                  type: i.type,
+                  accId: i.id
                 })
               }
             >

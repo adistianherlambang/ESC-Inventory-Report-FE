@@ -47,7 +47,7 @@ export default function PmtPage() {
 
   return (
     <>
-      {isEditing && (
+      {/* {isEditing && (
         <EditSection
           isOpen={isEditing}
           docId={selectedId}
@@ -58,8 +58,19 @@ export default function PmtPage() {
           id={idAcc}
           productType={productType}
         />
-      )}
+      )} */}
 
+      <EditSection
+        isOpen={isEditing}
+        docId={selectedId}
+        data={editData}
+        imei={selectedImei}
+        onClose={() => setIsEditing("")}
+        edit={isEditing}
+        id={idAcc}
+        productType={productType}
+      />
+      
       {isDeleting && (
         <DeleteSection
           docId={selectedId}
@@ -68,6 +79,7 @@ export default function PmtPage() {
           capacity={selectedCapacity}
           color={selectedColor}
           onClose={() => setIsDeleting("")}
+          productType={productType}
           id={idAcc}
         />
       )}
@@ -101,7 +113,6 @@ export default function PmtPage() {
           <div key={item.id} className={styles.top}>
             <div className={styles.pmtContainer}>
               <p>Bismillah, {item.name}👋</p>
-              {productType}
               <p className={styles.pmt}>PMT {item.brand}</p>
             </div>
             <Search brand={item.brand} />

@@ -23,9 +23,9 @@ export default function DeleteSection({
   productType
 }) {
 
-  useEffect (() => {
-    console.log(productType)
-  }, [])
+  // useEffect (() => {
+  //   console.log(id)
+  // }, [])
 
   const deleteReportByIMEI = async (docId, imei) => {
     try {
@@ -69,8 +69,16 @@ export default function DeleteSection({
     }
   };
 
-  const deleteReportById = async (id, productType) => {
+  const deleteReportById = async (id) => {
     try {
+      const docRef = doc(db, "pmtdatas", docId)
+      const snap = await getDoc(docRef)
+      if(!snap.exists()) return
+
+      const data = snap.data()
+      const updatedReport = (data.report || []).filter((r) => r.id !== id)
+      await updateDoc(docRef, { report: updatedReport })
+
     } catch (err) {
       console.error("Gagal: ", err)
     } finally {
@@ -84,8 +92,7 @@ export default function DeleteSection({
         <p className={styles.title}>Batalkan laporan?</p>
         <div className={styles.wrapper}>
           <p className={styles.desc}>
-            Tindakan ini akan menghapus data laporan dan mengembalikan stok IMEI
-            ke daftar produk.Apakah Anda yakin ingin melanjutkan?
+            Tindakan ini akan menghapus data laporan yang dipilih secara permanen. Apakah Anda yakin ingin melanjutkan?
           </p>
           <div className={styles.buttonContainer}>
             <button
@@ -96,7 +103,7 @@ export default function DeleteSection({
             </button>
             <button
               className={`${styles.button} ${styles.yes}`}
-              onClick={() => deleteReportByIMEI(docId, imei)}
+              onClick={() => deleteReportById(id)}
             >
               Hapus
             </button>

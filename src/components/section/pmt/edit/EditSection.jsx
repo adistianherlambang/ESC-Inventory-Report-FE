@@ -33,7 +33,7 @@ export default function EditSection({
   };
 
   const handleSave = async () => {
-    console.lod(docId);
+    console.log(docId);
     if (!docId || !imei) return;
     setLoading(true);
     const docRef = doc(db, "pmtdatas", docId);
@@ -92,8 +92,8 @@ export default function EditSection({
 
   if (edit == "acc") {
     return (
-      <div className={`${styles.container} ${!isOpen ? styles.hide : ""}`}>
-        {data
+      <div className={`${styles.container} ${isOpen ? styles.show : styles.hide}`}>
+        {(data || [])
           .flatMap((item) => item.report)
           .filter((r) => r.id === id)
           .map((r) => (
@@ -194,8 +194,8 @@ export default function EditSection({
     );
   } else {
     return (
-      <div className={`${styles.container} ${!isOpen ? styles.hide : ""}`}>
-        {data
+      <div className={`${styles.container} ${isOpen ? styles.show : styles.hide}`}>
+        {(data || [])
           .flatMap((item) => item.report)
           .filter((r) => r.IMEI === imei)
           .map((r) => (

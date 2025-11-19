@@ -121,11 +121,12 @@ export default function userActivityLogic() {
     setSelectedId(id);
   };
 
-  const handleDeleteAcc = ({ id, product, type }) => {
+  const handleDeleteAcc = ({ id, product, type, accId }) => {
     setIsDeleting("acc");
     setSelectedId(id);
     setSelectedProduct(product);
     setProductType(type)
+    setIdAcc(accId)
   };
 
   return {
