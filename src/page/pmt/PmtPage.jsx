@@ -47,19 +47,6 @@ export default function PmtPage() {
 
   return (
     <>
-      {/* {isEditing && (
-        <EditSection
-          isOpen={isEditing}
-          docId={selectedId}
-          data={editData}
-          imei={selectedImei}
-          onClose={() => setIsEditing("")}
-          edit={isEditing}
-          id={idAcc}
-          productType={productType}
-        />
-      )} */}
-
       <EditSection
         isOpen={isEditing}
         docId={selectedId}

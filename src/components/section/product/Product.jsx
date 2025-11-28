@@ -57,6 +57,10 @@ export default function Product({ search, brand }) {
         <Empty />
       </div>
     );
+  if(filtered.length == 0) 
+    return (
+      <Empty />
+    )
   if (!product) return null;
   if (product)
     return (
