@@ -1,38 +1,39 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { db } from "../../../firebase";
+import { getDoc, getDocs, collection, where, query } from "firebase/firestore";
+
+import Loader from "../../components/item/loader/Loader";
+import Empty from "../../components/item/Empty/Empty";
 
 export default function BrandPage() {
   const { label } = useParams();
   const [product, setProduct] = useState([]);
   const [imeiInput, setImeiInput] = useState("");
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async() => {
       try {
-        const res = await axios.get(
-          `http://localhost:3000/product/getbybrand?brand=${label.toLowerCase()}`,
-        );
-        setProduct(res.data);
-      } catch (err) {
-        console.error(err.message);
+        const q = query(
+          collection(db, "allproducts"),
+          where("brand", "==", label.toLowerCase())
+        )
+        const querySnapshot = await getDocs(q)
+        const data = querySnapshot.docs.map((d) => ({
+          id: d.id,
+          ...d.data(),
+        }));
+        setProduct(data)
+      } catch(err) {
+        console.error(err.message)
+      } finally {
+        setLoading(false)
       }
-    };
-    fetchData();
-  }, [label]);
-
-  const handleAddImei = async (id) => {
-    try {
-      const res = await axios.post(
-        `http://localhost:3000/product/add-imei/${id}`,
-        { imei: imeiInput },
-      );
-      setProduct(product.map((p) => (p._id === id ? res.data : p)));
-      setImeiInput("");
-    } catch (err) {
-      console.error(err.message);
     }
-  };
+    fetchData()
+  }, [])
 
   return (
     <div>

@@ -11,7 +11,7 @@ import FLPage from "./page/fl/FLPage";
 import Login from "./page/login/Login";
 import AdminPage from "./page/admin/AdminPage";
 import PmtPage from "./page/pmt/PmtPage";
-import BrandPage from "./page/admin/BrandPage";
+import BrandPage from "./page/brand/BrandPage";
 
 //state
 import { userStore } from "./state/state";
