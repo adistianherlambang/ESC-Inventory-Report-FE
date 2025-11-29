@@ -6,6 +6,7 @@ import { getDoc, getDocs, collection, where, query } from "firebase/firestore";
 
 import Loader from "../../components/item/loader/Loader";
 import Empty from "../../components/item/Empty/Empty";
+import Search from "../../components/section/search/Search";
 
 import styles from "./style.module.css"
 
@@ -54,20 +55,7 @@ export default function BrandPage() {
         <p className={styles.topTitle}>{label}</p>
       </div>
       <div className={styles.container}>
-        <h1>Brand: {label}</h1>
-        {product.map((item, index) => (
-          <div key={index}>
-            <p>
-              {item.product} ({item.IMEI.length} IMEI)
-            </p>
-            <input
-              value={imeiInput}
-              onChange={(e) => setImeiInput(e.target.value)}
-              placeholder="Tambah IMEI"
-            />
-            <button onClick={() => handleAddImei(item._id)}>Tambah</button>
-          </div>
-        ))}
+        <Search brand={label.toLowerCase()}/>
       </div>
     </div>
   );

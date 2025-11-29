@@ -53,19 +53,6 @@ export default function PmtPage() {
 
   return (
     <>
-      {/* {isEditing && (
-        <EditSection
-          isOpen={isEditing}
-          docId={selectedId}
-          data={editData}
-          imei={selectedImei}
-          onClose={() => setIsEditing("")}
-          edit={isEditing}
-          id={idAcc}
-          productType={productType}
-        />
-      )} */}
-
       <EditSection
         isOpen={isEditing}
         docId={selectedId}
@@ -92,7 +79,6 @@ export default function PmtPage() {
 
       {active && <ReportPopUp />}
       <Report />
-
       <div
         className={styles.container}
         onClick={() => {
@@ -120,11 +106,10 @@ export default function PmtPage() {
               <p>Bismillah, {item.name}👋</p>
               <p className={styles.pmt}>FrontLiner</p>
             </div>
-            {/* <Search brand={item.brand} /> */}
           </div>
         ))}
 
-        <div className={styles.brandButton}>
+        <div className={styles.brandButton} style={{pointerEvents: isEditing || isDeleting || active ? "none" : "auto",}}>
           <BrandButton label="Samsung"/>
           <BrandButton label="Xiaomi"/>
           <BrandButton label="Vivo"/>
