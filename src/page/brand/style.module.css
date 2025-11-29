@@ -1,0 +1,27 @@
+.top {
+  display: flex;
+  border-bottom: solid black 1px;
+  align-items: center;
+  padding: 1.5rem;
+}
+
+.backButton {
+  width: 18px;
+  height: 18px;
+}
+
+.topTitle {
+  font-size: 16px;
+  text-align: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.container {
+  padding: 1.5rem;
+  gap: 48px;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 10rem;
+}
