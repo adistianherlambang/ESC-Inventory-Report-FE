@@ -7,6 +7,8 @@ export default function userActivityLogic() {
   const { currentUser } = userStore();
 
   const [pmtData, setPmtData] = useState([]);
+  const [flData, setFLData] = useState([]); 
+
   const [loading, setLoading] = useState(true);
   const [dateFiltered, setDateFiltered] = useState([]);
 
@@ -41,61 +43,85 @@ export default function userActivityLogic() {
     }).format(value);
   };
 
-  /** FETCH DATA DARI PMT */
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const q = query(
-          collection(db, "pmtdatas"),
-          where("name", "==", currentUser?.name),
-        );
+  if (currentUser?.role == "pmt") {
+    /** FETCH DATA DARI PMT */
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const q = query(
+            collection(db, "pmtdatas"),
+            where("name", "==", currentUser?.name),
+          );
 
-        const querySnapshot = await getDocs(q);
-        const data = querySnapshot.docs.map((d) => ({
-          id: d.id,
-          ...d.data(),
-        }));
+          const querySnapshot = await getDocs(q);
+          const data = querySnapshot.docs.map((d) => ({
+            id: d.id,
+            ...d.data(),
+          }));
 
-        setPmtData(data);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [currentUser?.name, isEditing]);
+          setPmtData(data);
+        } catch (err) {
+          console.error(err);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchData();
+    }, [currentUser?.name, isEditing]);
 
-  /** FILTER DATA BY DATE */
-  useEffect(() => {
-    const filtered = pmtData
-      .map((item) => ({
-        ...item,
-        report: item.report.filter((r) => {
-          const reportDate = r.createdAt?.toDate()?.toLocaleDateString("en-CA");
-          return reportDate === date;
-        }),
-      }))
-      .filter((item) => item.report.length > 0);
+    /** FILTER DATA BY DATE */
+    useEffect(() => {
+      const filtered = pmtData
+        .map((item) => ({
+          ...item,
+          report: item.report.filter((r) => {
+            const reportDate = r.createdAt?.toDate()?.toLocaleDateString("en-CA");
+            return reportDate === date;
+          }),
+        }))
+        .filter((item) => item.report.length > 0);
 
-    setDateFiltered(filtered);
-    // filtered is an array of items, each with a `report` array.
-    // Compute totalAmount by summing each report's price amounts safely.
-    const totalAmount = (filtered || []).reduce((sumItems, item) => {
-      const reports = item.report || [];
-      const sumReports = reports.reduce((sumReport, report) => {
-        const sumPrice = (report.price || []).reduce(
-          (sumP, p) => sumP + (p.amount || 0),
-          0,
-        );
-        return sumReport + sumPrice;
+      setDateFiltered(filtered);
+      // filtered is an array of items, each with a `report` array.
+      // Compute totalAmount by summing each report's price amounts safely.
+      const totalAmount = (filtered || []).reduce((sumItems, item) => {
+        const reports = item.report || [];
+        const sumReports = reports.reduce((sumReport, report) => {
+          const sumPrice = (report.price || []).reduce(
+            (sumP, p) => sumP + (p.amount || 0),
+            0,
+          );
+          return sumReport + sumPrice;
+        }, 0);
+        return sumItems + sumReports;
       }, 0);
-      return sumItems + sumReports;
-    }, 0);
 
-    setAllTotal(totalAmount);
-    
-  }, [pmtData, date]);
+      setAllTotal(totalAmount);
+      
+    }, [pmtData, date]);
+  } else if (currentUser?.role == "fl") {
+    useEffect(() => {
+      const fetchData = async() => {
+        try {
+          const q = query(
+            collection(db, "fldatas"),
+            where("name", "==", currentUser?.name),
+          )
+          const querySnapshot = await getDocs(q)
+          const data = querySnapshot.docs.map((i) => ({
+            id: i.id,
+            ...i.data()
+          }))
+          setFLData(data)
+        } catch (err) {
+          console.error(err)
+        } finally {
+          setLoading(false)
+        }
+      }
+      fetchData()
+    }, currentUser.name)
+  }
 
   /** HANDLERS */
   const handleEdit = ({ id, imei }) => {
@@ -131,6 +157,7 @@ export default function userActivityLogic() {
 
   return {
     pmtData,
+    flData,
     loading,
     dateFiltered,
     isEditing,

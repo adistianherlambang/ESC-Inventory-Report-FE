@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const size = 80;
+const size = 112;
+const style = {
+  flex: "1 1 112px"
+}
 
 const Samsung = () => {
   return (

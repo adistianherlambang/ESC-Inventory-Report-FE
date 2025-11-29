@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import userActivityLogic from "../../hooks/userActivityLogic";
 
 // Components
@@ -11,6 +11,7 @@ import Loader from "../../components/item/loader/Loader";
 import Search from "../../components/section/search/Search";
 import Logo from "../../../public/Logo";
 import { LogoutIcon } from "../../../public/Icon";
+import BrandButton from "../../components/brandButton/brandButton";
 
 import { userStore } from "../../state/state";
 import styles from "./style.module.css";
@@ -21,6 +22,7 @@ export default function PmtPage() {
 
   const {
     pmtData,
+    flData,
     loading,
     dateFiltered,
     isEditing,
@@ -45,6 +47,9 @@ export default function PmtPage() {
     allTotal,
     productType
   } = userActivityLogic();
+
+  useEffect(() => {
+  }, [])
 
   return (
     <>
@@ -109,16 +114,27 @@ export default function PmtPage() {
             Logout
           </div>
         </div>
-
-        {pmtData.map((item) => (
+        {flData.map((item) => (
           <div key={item.id} className={styles.top}>
             <div className={styles.pmtContainer}>
-              <p>Bismillah, {item.name}</p>
-              <p className={styles.pmt}>PMT {item.brand}</p>
+              <p>Bismillah, {item.name}👋</p>
+              <p className={styles.pmt}>FrontLiner</p>
             </div>
-            <Search brand={item.brand} />
+            {/* <Search brand={item.brand} /> */}
           </div>
         ))}
+
+        <div className={styles.brandButton}>
+          <BrandButton label="Samsung"/>
+          <BrandButton label="Xiaomi"/>
+          <BrandButton label="Vivo"/>
+          <BrandButton label="Oppo"/>
+          <BrandButton label="Infinix"/>
+          <BrandButton label="Realme"/>
+          <BrandButton label="Tecno"/>
+          <BrandButton label="Iphone"/>
+          <BrandButton label="Nokia"/>
+        </div>
 
         {loading && <Loader />}
 

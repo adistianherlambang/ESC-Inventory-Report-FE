@@ -8,6 +8,7 @@ const getUserFromSession = () => {
 const userStore = create((set) => ({
   currentUser: getUserFromSession(),
   brand: getUserFromSession()?.brand || null,
+  role: getUserFromSession()?.role || null,
 
   setCurrentUser: (user) => {
     localStorage.setItem("user", JSON.stringify(user));
