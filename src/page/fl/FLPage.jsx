@@ -45,11 +45,10 @@ export default function PmtPage() {
     date,
     idAcc,
     allTotal,
-    productType
+    productType,
   } = userActivityLogic();
 
-  useEffect(() => {
-  }, [])
+  useEffect(() => {}, []);
 
   return (
     <>
@@ -63,7 +62,7 @@ export default function PmtPage() {
         id={idAcc}
         productType={productType}
       />
-      
+
       {isDeleting && (
         <DeleteSection
           docId={selectedId}
@@ -109,16 +108,21 @@ export default function PmtPage() {
           </div>
         ))}
 
-        <div className={styles.brandButton} style={{pointerEvents: isEditing || isDeleting || active ? "none" : "auto",}}>
-          <BrandButton label="Samsung"/>
-          <BrandButton label="Xiaomi"/>
-          <BrandButton label="Vivo"/>
-          <BrandButton label="Oppo"/>
-          <BrandButton label="Infinix"/>
-          <BrandButton label="Realme"/>
-          <BrandButton label="Tecno"/>
-          <BrandButton label="Iphone"/>
-          <BrandButton label="Nokia"/>
+        <div
+          className={styles.brandButton}
+          style={{
+            pointerEvents: isEditing || isDeleting || active ? "none" : "auto",
+          }}
+        >
+          <BrandButton label="Samsung" />
+          <BrandButton label="Xiaomi" />
+          <BrandButton label="Vivo" />
+          <BrandButton label="Oppo" />
+          <BrandButton label="Infinix" />
+          <BrandButton label="Realme" />
+          <BrandButton label="Tecno" />
+          <BrandButton label="Iphone" />
+          <BrandButton label="Nokia" />
         </div>
 
         {loading && <Loader />}

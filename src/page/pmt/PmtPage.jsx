@@ -42,7 +42,7 @@ export default function PmtPage() {
     date,
     idAcc,
     allTotal,
-    productType
+    productType,
   } = userActivityLogic();
 
   return (
@@ -57,7 +57,7 @@ export default function PmtPage() {
         id={idAcc}
         productType={productType}
       />
-      
+
       {isDeleting && (
         <DeleteSection
           docId={selectedId}

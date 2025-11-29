@@ -20,9 +20,8 @@ export default function DeleteSection({
   capacity,
   color,
   id,
-  productType
+  productType,
 }) {
-
   // useEffect (() => {
   //   console.log(id)
   // }, [])
@@ -71,20 +70,19 @@ export default function DeleteSection({
 
   const deleteReportById = async (id) => {
     try {
-      const docRef = doc(db, "pmtdatas", docId)
-      const snap = await getDoc(docRef)
-      if(!snap.exists()) return
+      const docRef = doc(db, "pmtdatas", docId);
+      const snap = await getDoc(docRef);
+      if (!snap.exists()) return;
 
-      const data = snap.data()
-      const updatedReport = (data.report || []).filter((r) => r.id !== id)
-      await updateDoc(docRef, { report: updatedReport })
-
+      const data = snap.data();
+      const updatedReport = (data.report || []).filter((r) => r.id !== id);
+      await updateDoc(docRef, { report: updatedReport });
     } catch (err) {
-      console.error("Gagal: ", err)
+      console.error("Gagal: ", err);
     } finally {
-      window.location.reload()
+      window.location.reload();
     }
-  }
+  };
 
   if (productType === "acc") {
     return (
@@ -92,7 +90,8 @@ export default function DeleteSection({
         <p className={styles.title}>Batalkan laporan?</p>
         <div className={styles.wrapper}>
           <p className={styles.desc}>
-            Tindakan ini akan menghapus data laporan yang dipilih secara permanen. Apakah Anda yakin ingin melanjutkan?
+            Tindakan ini akan menghapus data laporan yang dipilih secara
+            permanen. Apakah Anda yakin ingin melanjutkan?
           </p>
           <div className={styles.buttonContainer}>
             <button

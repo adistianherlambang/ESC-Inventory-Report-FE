@@ -7,7 +7,7 @@ export default function userActivityLogic() {
   const { currentUser } = userStore();
 
   const [pmtData, setPmtData] = useState([]);
-  const [flData, setFLData] = useState([]); 
+  const [flData, setFLData] = useState([]);
 
   const [loading, setLoading] = useState(true);
   const [dateFiltered, setDateFiltered] = useState([]);
@@ -25,7 +25,7 @@ export default function userActivityLogic() {
   const [allTotal, setAllTotal] = useState(0);
 
   const [idAcc, setIdAcc] = useState("");
-  const [productType, setProductType] = useState("")
+  const [productType, setProductType] = useState("");
 
   const { active, toogleActive, toogleDeact } = pmtReport();
 
@@ -75,7 +75,9 @@ export default function userActivityLogic() {
         .map((item) => ({
           ...item,
           report: item.report.filter((r) => {
-            const reportDate = r.createdAt?.toDate()?.toLocaleDateString("en-CA");
+            const reportDate = r.createdAt
+              ?.toDate()
+              ?.toLocaleDateString("en-CA");
             return reportDate === date;
           }),
         }))
@@ -97,30 +99,29 @@ export default function userActivityLogic() {
       }, 0);
 
       setAllTotal(totalAmount);
-      
     }, [pmtData, date]);
   } else if (currentUser?.role == "fl") {
     useEffect(() => {
-      const fetchData = async() => {
+      const fetchData = async () => {
         try {
           const q = query(
             collection(db, "fldatas"),
             where("name", "==", currentUser?.name),
-          )
-          const querySnapshot = await getDocs(q)
+          );
+          const querySnapshot = await getDocs(q);
           const data = querySnapshot.docs.map((i) => ({
             id: i.id,
-            ...i.data()
-          }))
-          setFLData(data)
+            ...i.data(),
+          }));
+          setFLData(data);
         } catch (err) {
-          console.error(err)
+          console.error(err);
         } finally {
-          setLoading(false)
+          setLoading(false);
         }
-      }
-      fetchData()
-    }, currentUser.name)
+      };
+      fetchData();
+    }, currentUser.name);
   }
 
   /** HANDLERS */
@@ -151,8 +152,8 @@ export default function userActivityLogic() {
     setIsDeleting("acc");
     setSelectedId(id);
     setSelectedProduct(product);
-    setProductType(type)
-    setIdAcc(accId)
+    setProductType(type);
+    setIdAcc(accId);
   };
 
   return {
@@ -181,6 +182,6 @@ export default function userActivityLogic() {
     date,
     idAcc,
     allTotal,
-    productType
+    productType,
   };
 }

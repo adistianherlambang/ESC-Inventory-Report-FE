@@ -26,7 +26,10 @@ export default function Activity({
               0,
             );
             return (
-              <div key={`${item.id}-${reportIndex}-${i.product}`} className={styles.activity}>
+              <div
+                key={`${item.id}-${reportIndex}-${i.product}`}
+                className={styles.activity}
+              >
                 <div className={styles.productContainer}>
                   <p className={styles.productName}>{i.product}</p>
                   <div className={styles.productDetail}>
@@ -36,7 +39,10 @@ export default function Activity({
                 </div>
                 <div className={styles.priceContainer}>
                   {i.price.map((r, priceIndex) => (
-                    <div key={`${item.id}-${reportIndex}-${priceIndex}-${r.type}-${r.amount}`} className={styles.price}>
+                    <div
+                      key={`${item.id}-${reportIndex}-${priceIndex}-${r.type}-${r.amount}`}
+                      className={styles.price}
+                    >
                       <p className={styles.priceAmount}>
                         {formatRupiah(r.amount)}
                       </p>
@@ -58,20 +64,20 @@ export default function Activity({
                     Edit
                   </div>
                   <div
-                      className={styles.deleteButton}
-                      onClick={() =>
-                        handleDelete({
-                          id: item.id,
-                          imei: i.IMEI,
-                          product: i.product,
-                          color: i.color,
-                          capacity: i.capacity,
-                          type: i.type,
-                        })
-                      }
-                    >
-                      Batalkan
-                    </div>
+                    className={styles.deleteButton}
+                    onClick={() =>
+                      handleDelete({
+                        id: item.id,
+                        imei: i.IMEI,
+                        product: i.product,
+                        color: i.color,
+                        capacity: i.capacity,
+                        type: i.type,
+                      })
+                    }
+                  >
+                    Batalkan
+                  </div>
                 </div>
               </div>
             );
