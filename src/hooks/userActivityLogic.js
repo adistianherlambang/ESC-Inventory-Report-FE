@@ -22,6 +22,9 @@ export default function userActivityLogic() {
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedCapacity, setSelectedCapacity] = useState("");
 
+  //stock
+  const [addStock, setAddStock] = useState(false)
+
   const [allTotal, setAllTotal] = useState(0);
 
   const [idAcc, setIdAcc] = useState("");
@@ -183,6 +186,10 @@ export default function userActivityLogic() {
     setProductType(type);
     setIdAcc(accId);
   };
+
+  const handleAddStock = () => {
+
+  }
 
   return {
     pmtData,

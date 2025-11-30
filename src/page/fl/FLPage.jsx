@@ -8,7 +8,7 @@ import DeleteSection from "../../components/section/fl/delete/DeleteSection";
 import Report from "../../components/section/fl/report/button/Report";
 import ReportPopUp from "../../components/section/fl/report/popup/Report";
 import Loader from "../../components/item/loader/Loader";
-import Search from "../../components/section/search/Search";
+import Search from "../../components/section/fl/product/search/Search";
 import Logo from "../../../public/Logo";
 import { LogoutIcon } from "../../../public/Icon";
 import BrandButton from "../../components/brandButton/brandButton";

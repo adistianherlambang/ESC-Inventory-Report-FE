@@ -6,7 +6,7 @@ import { getDoc, getDocs, collection, where, query } from "firebase/firestore";
 
 import Loader from "../../components/item/loader/Loader";
 import Empty from "../../components/item/Empty/Empty";
-import Search from "../../components/section/search/Search";
+import Search from "../../components/section/fl/product/search/Search";
 import StockButton from "../../components/section/fl/stock/button/Stock";
 import Stock from "../../components/section/fl/stock/popup/Stock";
 
