@@ -1,60 +1,33 @@
 import React, { useState } from "react";
-import { doc, getDoc, updateDoc, Timestamp } from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../../firebase";
 
 export default function Add() {
   const [loading, setLoading] = useState(false);
 
-  // ID dokumen target
-  const docId = "YSvrfpBbLkIE0fnGp57V";
-
-  const handleAddReport = async () => {
+  async function handleAddReport() {
     try {
       setLoading(true);
 
-      const docRef = doc(db, "pmtdatas", docId);
-      const snap = await getDoc(docRef);
+      // generate 10 produk baru
+      const newItems = generateRandomSamsungProducts();
 
-      if (!snap.exists()) {
-        alert("❌ Dokumen tidak ditemukan!");
-        setLoading(false);
-        return;
-      }
+      // collection allproducts
+      const ref = collection(db, "allproducts");
 
-      const data = snap.data();
+      // simpan satu per satu sebagai dokumen baru
+      const saves = Object.values(newItems).map((item) => addDoc(ref, item));
 
-      // Buat report baru
-      const newReport = {
-        IMEI: Math.floor(Math.random() * 1000000000000).toString(),
-        brand: "samsung",
-        product: "samsung a07",
-        color: "black",
-        capacity: "8/128",
-        userType: "CN",
-        createdAt: Timestamp.now(),
-        price: [
-          {
-            type: "cash",
-            amount: 15000000,
-          },
-        ],
-      };
+      await Promise.all(saves);
 
-      // Duplikasikan array report dan tambahkan yang baru
-      const updatedReports = data.report
-        ? [...data.report, newReport]
-        : [newReport];
-
-      await updateDoc(docRef, { report: updatedReports });
-
-      alert("✅ Report Samsung S10 Ultra berhasil ditambahkan!");
-    } catch (error) {
-      console.error("Error saat menambahkan report:", error);
-      alert("❌ Gagal menambahkan report.");
+      alert("Berhasil menambahkan 10 produk Samsung!");
+    } catch (err) {
+      console.error(err);
+      alert("Gagal menambahkan produk.");
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   return (
     <button
@@ -75,4 +48,54 @@ export default function Add() {
       {loading ? "Menambahkan..." : "+ Tambah Samsung S10 Ultra"}
     </button>
   );
+}
+
+
+
+// ======================================================
+//  RANDOM PRODUCT GENERATOR
+// ======================================================
+
+function generateRandomSamsungProducts() {
+  const names = [
+    "Samsung A14", "Samsung A16", "Samsung A25", "Samsung A34",
+    "Samsung A54", "Samsung S21", "Samsung S22", "Samsung S23",
+    "Samsung S24", "Samsung S25 Ultra"
+  ];
+
+  const capacities = ["4/64", "6/128", "8/128", "12/256", "12/512"];
+  const colors = ["black", "white", "blue", "green", "silver"];
+
+  const result = {};
+
+  for (let i = 0; i < 10; i++) {
+    const id = generateId();
+    result[id] = {
+      product: names[Math.floor(Math.random() * names.length)],
+      brand: "samsung",
+      IMEI: [generateRandomIMEI()],
+      capacity: capacities[Math.floor(Math.random() * capacities.length)],
+      color: colors[Math.floor(Math.random() * colors.length)],
+    };
+  }
+
+  return result;
+}
+
+function generateId() {
+  const chars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let id = "";
+  for (let i = 0; i < 20; i++) {
+    id += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return id;
+}
+
+function generateRandomIMEI() {
+  let imei = "";
+  for (let i = 0; i < 15; i++) {
+    imei += Math.floor(Math.random() * 10);
+  }
+  return imei;
 }
