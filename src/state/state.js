@@ -28,6 +28,12 @@ const userStore = create((set) => ({
 
 const pmtReport = create((set) => ({
   active: false,
+  stock: false,
+  //////
+  setStockActive: (value) => set({ active: value }),
+  toogleStockActive: () => set(() => ({ active: true })),
+  toogleStockDeact: () => set(() => ({ active: false })),
+  //////
   setActive: (value) => set({ active: value }),
   toogleActive: () => set(() => ({ active: true })),
   toogleDeact: () => set(() => ({ active: false })),
