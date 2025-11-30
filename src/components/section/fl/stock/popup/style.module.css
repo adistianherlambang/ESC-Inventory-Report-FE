@@ -16,7 +16,6 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
-  font-size: 16px;
 }
 
 .show {
@@ -25,6 +24,39 @@
 
 .hide {
   animation: popDown 300ms ease-out forwards;
+}
+
+.itemContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  font-family: SFProRegular;
+}
+
+.title {
+  font-family: SFProBold;
+  font-size: 24px;
+  text-decoration: underline;
+  text-align: center;
+}
+
+.button {
+  font-family: SFProBold;
+  background-color: #773ff9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  padding: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.addPrice {
+  padding: 16px;
+  border: solid #773ff9 2px;
+  color: #773ff9;
+  background-color: white;
 }
 
 @keyframes popUp {

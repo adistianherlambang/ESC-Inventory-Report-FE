@@ -8,7 +8,10 @@ function Stock() {
 
   return (
     <div className={`${styles.container} ${stock ? styles.show : styles.hide}`}>
-      a
+      <p className={styles.title}>Sudah ada di daftar?</p>
+      <div className={styles.itemContainer}>
+        <div className={styles.button}>Ya, sudah</div>
+      </div>
     </div>
   )
 }
