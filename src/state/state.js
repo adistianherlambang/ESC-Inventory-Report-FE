@@ -30,9 +30,9 @@ const pmtReport = create((set) => ({
   active: false,
   stock: false,
   //////
-  setStockActive: (value) => set({ active: value }),
-  toogleStockActive: () => set(() => ({ active: true })),
-  toogleStockDeact: () => set(() => ({ active: false })),
+  setStockActive: (value) => set({ stock: value }),
+  toogleStockActive: () => set(() => ({ stock: true })),
+  toogleStockDeact: () => set(() => ({ stock: false })),
   //////
   setActive: (value) => set({ active: value }),
   toogleActive: () => set(() => ({ active: true })),

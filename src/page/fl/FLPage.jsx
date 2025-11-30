@@ -121,8 +121,10 @@ export default function FLPage() {
           <BrandButton label="Iphone" />
           <BrandButton label="Nokia" />
         </div>
-        
-        {loading ? <Loader/> :
+
+        {loading ? (
+          <Loader />
+        ) : (
           <ActivityList
             date={date}
             dateFiltered={dateFiltered}
@@ -133,7 +135,7 @@ export default function FLPage() {
             handleEditAcc={handleEditAcc}
             total={allTotal}
           />
-        }
+        )}
       </div>
     </>
   );

@@ -50,17 +50,22 @@ export default function Add() {
   );
 }
 
-
-
 // ======================================================
 //  RANDOM PRODUCT GENERATOR
 // ======================================================
 
 function generateRandomSamsungProducts() {
   const names = [
-    "Samsung A14", "Samsung A16", "Samsung A25", "Samsung A34",
-    "Samsung A54", "Samsung S21", "Samsung S22", "Samsung S23",
-    "Samsung S24", "Samsung S25 Ultra"
+    "Samsung A14",
+    "Samsung A16",
+    "Samsung A25",
+    "Samsung A34",
+    "Samsung A54",
+    "Samsung S21",
+    "Samsung S22",
+    "Samsung S23",
+    "Samsung S24",
+    "Samsung S25 Ultra",
   ];
 
   const capacities = ["4/64", "6/128", "8/128", "12/256", "12/512"];
