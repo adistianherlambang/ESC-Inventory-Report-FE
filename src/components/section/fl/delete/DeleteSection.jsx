@@ -22,9 +22,6 @@ export default function DeleteSection({
   id,
   productType,
 }) {
-  // useEffect (() => {
-  //   console.log(id)
-  // }, [])
 
   const deleteReportByIMEI = async (docId, imei) => {
     try {

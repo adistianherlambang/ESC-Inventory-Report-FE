@@ -27,7 +27,7 @@ export default function BrandPage() {
   return (
     <>
       <StockButton />
-      {stock && <Stock />}
+      <Stock/>
       <div onClick={() => toogleStockDeact()}
       style={{
           transition: "ease-in 300ms",
