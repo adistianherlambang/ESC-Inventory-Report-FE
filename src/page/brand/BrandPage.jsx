@@ -7,6 +7,7 @@ import { getDoc, getDocs, collection, where, query } from "firebase/firestore";
 import Loader from "../../components/item/loader/Loader";
 import Empty from "../../components/item/Empty/Empty";
 import Search from "../../components/section/search/Search";
+import StockButton from "../../components/section/fl/stock/button/Stock";
 
 import styles from "./style.module.css";
 
@@ -20,6 +21,10 @@ export default function BrandPage() {
 
   return (
     <>
+    <StockButton/>
+      <div>
+        asdad
+      </div>
       <div className={styles.top}>
         <div className={styles.backButton} onClick={handleBack}>
           <svg
