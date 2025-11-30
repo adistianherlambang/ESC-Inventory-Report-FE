@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const size = 112;
-const style = {
-  flex: "1 1 112px",
-};
+const width = window.innerWidth
+const size = width < 700 ? width/4 : 192
 
 const Samsung = () => {
   return (

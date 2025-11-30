@@ -93,7 +93,7 @@
 }
 
 .productName {
-  font-size: 18px;
+  font-size: 14px;
 }
 
 .productDetail {
@@ -160,4 +160,16 @@
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
+}
+
+.brandWidthContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.brandWidth {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

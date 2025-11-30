@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import userActivityLogic from "../../hooks/userActivityLogic";
 
 // Components
@@ -19,6 +19,8 @@ import styles from "./style.module.css";
 export default function FLPage() {
   const logout = userStore((state) => state.logout);
   const { currentUser } = userStore();
+
+  const screenWidth = window.innerWidth;
 
   const {
     flData,
@@ -105,22 +107,39 @@ export default function FLPage() {
           </div>
         ))}
 
-        <div
-          className={styles.brandButton}
-          style={{
-            pointerEvents: isEditing || isDeleting || active ? "none" : "auto",
-          }}
-        >
-          <BrandButton label="Samsung" />
-          <BrandButton label="Xiaomi" />
-          <BrandButton label="Vivo" />
-          <BrandButton label="Oppo" />
-          <BrandButton label="Infinix" />
-          <BrandButton label="Realme" />
-          <BrandButton label="Tecno" />
-          <BrandButton label="Iphone" />
-          <BrandButton label="Nokia" />
-        </div>
+        {screenWidth > 700 ?
+          <div
+            className={styles.brandButton}
+          >
+            <BrandButton label="Samsung" />
+            <BrandButton label="Xiaomi" />
+            <BrandButton label="Vivo" />
+            <BrandButton label="Oppo" />
+            <BrandButton label="Infinix" />
+            <BrandButton label="Realme" />
+            <BrandButton label="Tecno" />
+            <BrandButton label="Iphone" />
+            <BrandButton label="Nokia" />
+          </div>
+          : 
+          <div className={styles.brandWidthContainer}>
+            <div className={styles.brandWidth}>
+              <BrandButton label="Samsung" />
+              <BrandButton label="Xiaomi" />
+              <BrandButton label="Vivo" />
+            </div>
+            <div className={styles.brandWidth}>
+              <BrandButton label="Oppo" />
+              <BrandButton label="Infinix" />
+              <BrandButton label="Realme" />
+            </div>
+            <div className={styles.brandWidth}>
+              <BrandButton label="Tecno" />
+              <BrandButton label="Iphone" />
+              <BrandButton label="Nokia" />
+            </div>
+          </div>
+        }
 
         {loading ? (
           <Loader />

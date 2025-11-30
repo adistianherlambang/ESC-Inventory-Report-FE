@@ -41,7 +41,7 @@
 }
 
 .activityContainer {
-  padding: 36px 36px;
+  padding: 24px 24px;
   background-color: #f1f1f1;
   border-radius: 16px;
   display: flex;
@@ -93,7 +93,7 @@
 }
 
 .productName {
-  font-size: 18px;
+  font-size: 14px;
 }
 
 .productDetail {
