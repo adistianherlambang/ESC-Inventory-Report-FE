@@ -12,40 +12,14 @@ import styles from "./style.module.css";
 
 export default function BrandPage() {
   const { label } = useParams();
-  const [product, setProduct] = useState([]);
-  const [imeiInput, setImeiInput] = useState("");
-  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const q = query(
-          collection(db, "allproducts"),
-          where("brand", "==", label.toLowerCase()),
-        );
-        const querySnapshot = await getDocs(q);
-        const data = querySnapshot.docs.map((d) => ({
-          id: d.id,
-          ...d.data(),
-        }));
-        setProduct(data);
-      } catch (err) {
-        console.error(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
   const handleBack = () => {
     navigate("/");
   };
 
   return (
-    <div>
+    <>
       <div className={styles.top}>
         <div className={styles.backButton} onClick={handleBack}>
           <svg
@@ -68,6 +42,6 @@ export default function BrandPage() {
       <div className={styles.container}>
         <Search brand={label.toLowerCase()} />
       </div>
-    </div>
+    </>
   );
 }
