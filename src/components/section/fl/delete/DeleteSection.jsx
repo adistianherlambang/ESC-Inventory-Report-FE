@@ -28,7 +28,7 @@ export default function DeleteSection({
 
   const deleteReportByIMEI = async (docId, imei) => {
     try {
-      const docRef = doc(db, "pmtdatas", docId);
+      const docRef = doc(db, "fldatas", docId);
       const snap = await getDoc(docRef);
 
       if (!snap.exists()) {
@@ -70,7 +70,7 @@ export default function DeleteSection({
 
   const deleteReportById = async (id) => {
     try {
-      const docRef = doc(db, "pmtdatas", docId);
+      const docRef = doc(db, "fldatas", docId);
       const snap = await getDoc(docRef);
       if (!snap.exists()) return;
 

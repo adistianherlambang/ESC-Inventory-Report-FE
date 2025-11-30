@@ -36,7 +36,7 @@ export default function EditSection({
     console.log(docId);
     if (!docId || !imei) return;
     setLoading(true);
-    const docRef = doc(db, "pmtdatas", docId);
+    const docRef = doc(db, "fldatas", docId);
     const snap = await getDoc(docRef);
     if (!snap.exists()) return;
 
@@ -65,7 +65,7 @@ export default function EditSection({
     console.log(id + docId);
     if (!docId || !id) return;
     setLoading(true);
-    const docRef = doc(db, "pmtdatas", docId);
+    const docRef = doc(db, "fldatas", docId);
     const snap = await getDoc(docRef);
     if (!snap.exists()) return;
 

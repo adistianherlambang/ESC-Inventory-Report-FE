@@ -9,6 +9,7 @@ import {
   deleteDoc,
   doc,
   updateDoc,
+  setDoc,
   query,
   where,
   serverTimestamp,
@@ -239,7 +240,7 @@ function Check({ imei }) {
       // 2) Pastikan dokumen fldatas/{targetId} ada — jika tidak, buat dulu dengan struktur report: []
       const pmtSnap = await getDoc(pmtRef);
       if (!pmtSnap.exists()) {
-        console.warn(`fldatas/${targetId} tidak ada — akan dibuat baru.`);
+        console.warn(`fldatas/${targetDoc} tidak ada — akan dibuat baru.`);
         await setDoc(pmtRef, { report: [] }); // buat dokumen awal
       }
 
@@ -470,7 +471,7 @@ function CheckAcc() {
           type: p.type || "cash",
           amount: Number(p.amount) || 0,
         })),
-        createdAt: new Date(),
+        createdAt: serverTimestamp(),
       };
       await updateDoc(pmtRef, {
         report: arrayUnion(newReport),
