@@ -27,15 +27,15 @@ export default function BrandPage() {
   return (
     <>
       <StockButton />
-      <Stock/>
-      <div onClick={() => toogleStockDeact()}
-      style={{
+      <Stock />
+      <div
+        onClick={() => toogleStockDeact()}
+        style={{
           transition: "ease-in 300ms",
           opacity: stock ? 0.2 : 1,
-        }}>
-        <div
-          className={styles.top}
-        >
+        }}
+      >
+        <div className={styles.top}>
           <div className={styles.backButton} onClick={handleBack}>
             <svg
               width="10"

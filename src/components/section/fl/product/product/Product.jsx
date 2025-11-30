@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./style.module.css";
 
 import { collection, query, where, getDocs } from "firebase/firestore";
-import { db } from "../../../../../../firebase"
+import { db } from "../../../../../../firebase";
 
 import Loader from "../../../../item/loader/Loader";
 import Empty from "../../../../item/Empty/Empty";
@@ -57,7 +57,13 @@ export default function Product({ search, brand }) {
         <Empty />
       </div>
     );
-  if (filtered.length == 0) return <Empty />;
+  if (filtered.length == 0)
+    return (
+      <>
+        <Empty />
+        <div className={styles.addNewProduct}>Tambahkan Stok Baru</div>
+      </>
+    );
   if (!product) return null;
   if (product)
     return (

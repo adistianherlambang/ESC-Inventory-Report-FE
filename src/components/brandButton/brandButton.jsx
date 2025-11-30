@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const width = window.innerWidth
-const size = width < 700 ? width/4 : 192
+const width = window.innerWidth;
+const size = width < 700 ? width / 4 : 192;
 
 const Samsung = () => {
   return (

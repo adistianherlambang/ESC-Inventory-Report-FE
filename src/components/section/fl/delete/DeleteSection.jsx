@@ -22,7 +22,6 @@ export default function DeleteSection({
   id,
   productType,
 }) {
-
   const deleteReportByIMEI = async (docId, imei) => {
     try {
       const docRef = doc(db, "fldatas", docId);

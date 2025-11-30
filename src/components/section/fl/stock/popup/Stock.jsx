@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./style.module.css"
+import styles from "./style.module.css";
 
 import { pmtReport } from "../../../../../state/state";
 
@@ -13,7 +13,7 @@ function Stock() {
         <div className={styles.button}>Ya, sudah</div>
       </div>
     </div>
-  )
+  );
 }
 
 export default Stock;

@@ -23,7 +23,7 @@ export default function userActivityLogic() {
   const [selectedCapacity, setSelectedCapacity] = useState("");
 
   //stock
-  const [addStock, setAddStock] = useState(false)
+  const [addStock, setAddStock] = useState(false);
 
   const [allTotal, setAllTotal] = useState(0);
 
@@ -188,10 +188,12 @@ export default function userActivityLogic() {
   };
 
   const handleAddStock = () => {
-
-  }
+    setAddStock(true);
+  };
 
   return {
+    handleAddStock,
+    addStock,
     pmtData,
     flData,
     loading,

@@ -107,10 +107,8 @@ export default function FLPage() {
           </div>
         ))}
 
-        {screenWidth > 700 ?
-          <div
-            className={styles.brandButton}
-          >
+        {screenWidth > 700 ? (
+          <div className={styles.brandButton}>
             <BrandButton label="Samsung" />
             <BrandButton label="Xiaomi" />
             <BrandButton label="Vivo" />
@@ -121,7 +119,7 @@ export default function FLPage() {
             <BrandButton label="Iphone" />
             <BrandButton label="Nokia" />
           </div>
-          : 
+        ) : (
           <div className={styles.brandWidthContainer}>
             <div className={styles.brandWidth}>
               <BrandButton label="Samsung" />
@@ -139,7 +137,7 @@ export default function FLPage() {
               <BrandButton label="Nokia" />
             </div>
           </div>
-        }
+        )}
 
         {loading ? (
           <Loader />
