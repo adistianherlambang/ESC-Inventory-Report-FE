@@ -17,4 +17,10 @@
   justify-content: center;
   align-items: center;
   display: flex;
+  transition: 300ms ease;
+}
+
+.wrapper:hover {
+  background-color: #7746ff;
+  cursor: pointer;
 }

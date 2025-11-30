@@ -122,6 +122,34 @@ export default function userActivityLogic() {
       };
       fetchData();
     }, currentUser.name);
+
+    useEffect(() => {
+      const filtered = flData
+        .map((item) => ({
+          ...item,
+          report: item.report.filter((r) => {
+            const reportDate = r.createdAt
+              ?.toDate()
+              ?.toLocaleDateString("en-CA");
+            return reportDate === date;
+          }),
+        }))
+        .filter((item) => item.report.length > 0);
+      setDateFiltered(filtered);
+      const totalAmount = (filtered || []).reduce((sumItems, item) => {
+        const reports = item.report || [];
+        const sumReports = reports.reduce((sumReport, report) => {
+          const sumPrice = (report.price || []).reduce(
+            (sumP, p) => sumP + (p.amount || 0),
+            0,
+          );
+          return sumReport + sumPrice;
+        }, 0);
+        return sumItems + sumReports;
+      }, 0);
+
+      setAllTotal(totalAmount);
+    }, [flData, date]);
   }
 
   /** HANDLERS */
