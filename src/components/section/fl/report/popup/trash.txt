@@ -1,0 +1,36 @@
+
+              {/* <div>
+                <label>
+                  <input
+                    type="radio"
+                    name={`pay-${item.id}`}
+                    value="CS"
+                    onChange={(e) => setPayType(e.target.value)}
+                  />{" "}
+                  CS
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name={`pay-${item.id}`}
+                    value="TF"
+                    onChange={(e) => setPayType(e.target.value)}
+                  />{" "}
+                  TF
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name={`pay-${item.id}`}
+                    value="GS"
+                    onChange={(e) => setPayType(e.target.value)}
+                  />{" "}
+                  GS
+                </label>
+                <input
+                  type="text"
+                  placeholder="Keterangan"
+                  value={desc}
+                  onChange={(e) => setDesc(e.target.value)}
+                />
+              </div> */}

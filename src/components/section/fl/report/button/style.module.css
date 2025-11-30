@@ -1,0 +1,20 @@
+.container {
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  z-index: 2;
+  position: fixed;
+  bottom: 0;
+  margin-bottom: 16px;
+}
+
+.wrapper {
+  background-color: #5e25fc;
+  width: 80px;
+  height: 80px;
+  border-radius: 100px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}

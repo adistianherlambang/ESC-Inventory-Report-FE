@@ -3,10 +3,10 @@ import userActivityLogic from "../../hooks/userActivityLogic";
 
 // Components
 import ActivityList from "../../components/activity/ActivityList";
-import EditSection from "../../components/section/pmt/edit/EditSection";
-import DeleteSection from "../../components/section/pmt/delete/DeleteSection";
-import Report from "../../components/section/pmt/report/button/Report";
-import ReportPopUp from "../../components/section/pmt/report/popup/Report";
+import EditSection from "../../components/section/fl/edit/EditSection";
+import DeleteSection from "../../components/section/fl/delete/DeleteSection";
+import Report from "../../components/section/fl/report/button/Report";
+import ReportPopUp from "../../components/section/fl/report/popup/Report";
 import Loader from "../../components/item/loader/Loader";
 import Search from "../../components/section/search/Search";
 import Logo from "../../../public/Logo";
@@ -16,12 +16,11 @@ import BrandButton from "../../components/brandButton/brandButton";
 import { userStore } from "../../state/state";
 import styles from "./style.module.css";
 
-export default function PmtPage() {
+export default function FLPage() {
   const logout = userStore((state) => state.logout);
   const { currentUser } = userStore();
 
   const {
-    pmtData,
     flData,
     loading,
     dateFiltered,
@@ -47,8 +46,6 @@ export default function PmtPage() {
     allTotal,
     productType,
   } = userActivityLogic();
-
-  useEffect(() => {}, []);
 
   return (
     <>
