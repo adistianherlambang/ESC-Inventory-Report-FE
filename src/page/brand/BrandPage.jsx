@@ -7,8 +7,8 @@ import { getDoc, getDocs, collection, where, query } from "firebase/firestore";
 import Loader from "../../components/item/loader/Loader";
 import Empty from "../../components/item/Empty/Empty";
 import Search from "../../components/section/fl/product/search/Search";
-import StockButton from "../../components/section/fl/stock/button/Stock";
-import Stock from "../../components/section/fl/stock/popup/Stock";
+import AddStock from "../../components/section/fl/stock/popup/AddStock";
+import NewStock from "../../components/section/fl/stock/popup/NewStock";
 
 import styles from "./style.module.css";
 
@@ -24,17 +24,13 @@ export default function BrandPage() {
     navigate("/");
   };
 
+  useEffect(() => {
+    console.log("stock")
+  }, [])
+
   return (
     <>
-      <StockButton />
-      <Stock />
-      <div
-        onClick={() => toogleStockDeact()}
-        style={{
-          transition: "ease-in 300ms",
-          opacity: stock ? 0.2 : 1,
-        }}
-      >
+      <div>
         <div className={styles.top}>
           <div className={styles.backButton} onClick={handleBack}>
             <svg

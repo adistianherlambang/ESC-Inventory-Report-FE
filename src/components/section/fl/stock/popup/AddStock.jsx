@@ -3,17 +3,18 @@ import styles from "./style.module.css";
 
 import { pmtReport } from "../../../../../state/state";
 
-function Stock() {
+function AddStock() {
   const { stock, toogleStockActive } = pmtReport();
 
   return (
     <div className={`${styles.container} ${stock ? styles.show : styles.hide}`}>
-      <p className={styles.title}>Sudah ada di daftar?</p>
+      <p className={styles.title}>Update Stok</p>
       <div className={styles.itemContainer}>
-        <div className={styles.button}>Ya, sudah</div>
+        <div className={styles.button}>Manual</div>
+        <div className={styles.button}>Scan</div>
       </div>
     </div>
   );
 }
 
-export default Stock;
+export default AddStock;

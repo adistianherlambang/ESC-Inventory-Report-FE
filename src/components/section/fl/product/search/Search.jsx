@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from "react";
 import styles from "./style.module.css";
 import Product from "../product/Product";
+import AddStock from "../../stock/popup/AddStock";
+import { pmtReport } from "../../../../../state/state";
 
 export default function Search({ brand }) {
   const [search, setSearch] = useState("");
+  const { stock, toogleStockActive, toogleStockDeact } = pmtReport();
 
   return (
-    <div className={styles.container}>
+    <>
+    {stock && <AddStock />}
+    <div className={styles.container} onClick={stock ? toogleStockDeact : null}
+            style={{
+              transition: "ease-in 300ms",
+              opacity: stock ? 0.2 : 1,
+            }}>
       <div className={styles.input}>
         <svg
           width="21"
@@ -33,5 +42,6 @@ export default function Search({ brand }) {
         <Product brand={brand} search={search} />
       </div>
     </div>
+    </>
   );
 }

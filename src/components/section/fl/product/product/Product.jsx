@@ -6,6 +6,9 @@ import { db } from "../../../../../../firebase";
 
 import Loader from "../../../../item/loader/Loader";
 import Empty from "../../../../item/Empty/Empty";
+import AddStock from "../../stock/popup/AddStock";
+
+import { pmtReport } from "../../../../../state/state";
 
 export default function Product({ search, brand }) {
   const [product, setProduct] = useState([]);
@@ -45,6 +48,12 @@ export default function Product({ search, brand }) {
     item.product.toLowerCase().includes((search || "").toLowerCase()),
   );
 
+  const { stock, toogleStockActive, toogleStockDeact } = pmtReport();
+  const handleAddStock = () => {
+    toogleStockActive();
+    console.log(stock)
+  };
+  
   if (loading)
     return (
       <div className={styles.loading}>
@@ -69,7 +78,7 @@ export default function Product({ search, brand }) {
     return (
       <>
         {filtered.map((item) => (
-          <div key={item.id} className={styles.container}>
+          <div key={item.id} className={styles.container} style={{cursor: 'pointer'}} onClick={handleAddStock}>
             <p>{item.product}</p>
             <div className={styles.type}>
               <p>

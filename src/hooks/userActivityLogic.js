@@ -124,7 +124,7 @@ export default function userActivityLogic() {
         }
       };
       fetchData();
-    }, currentUser.name);
+    }, [currentUser?.name, isEditing]);
 
     useEffect(() => {
       const filtered = flData
