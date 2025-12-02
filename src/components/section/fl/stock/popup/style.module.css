@@ -59,6 +59,21 @@
   background-color: white;
 }
 
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.input {
+  background-color: #f6f6f6;
+  box-sizing: border-box;
+  border: 1px solid #000;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+}
+
 @keyframes popUp {
   from {
     transform: translateY(100%);
