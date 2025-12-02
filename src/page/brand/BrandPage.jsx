@@ -25,8 +25,8 @@ export default function BrandPage() {
   };
 
   useEffect(() => {
-    console.log("stock")
-  }, [])
+    console.log("stock");
+  }, []);
 
   return (
     <>
@@ -41,8 +41,8 @@ export default function BrandPage() {
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
+                fillRule="evenodd"
+                clipRule="evenodd"
                 d="M2.50513 8.8061L9.84372 16.1447L8.37621 17.6122L0.303866 9.53985C0.109301 9.34523 0 9.0813 0 8.8061C0 8.5309 0.109301 8.26697 0.303866 8.07234L8.37621 0L9.84372 1.46751L2.50513 8.8061Z"
                 fill="#773FF9"
               />

@@ -51,9 +51,9 @@ export default function Product({ search, brand }) {
   const { stock, toogleStockActive, toogleStockDeact } = pmtReport();
   const handleAddStock = () => {
     toogleStockActive();
-    console.log(stock)
+    console.log(stock);
   };
-  
+
   if (loading)
     return (
       <div className={styles.loading}>
@@ -77,8 +77,23 @@ export default function Product({ search, brand }) {
   if (product)
     return (
       <>
+        <AddStock/>
+        <div style={{
+                  transition: "ease-in 300ms",
+                  opacity: stock ? 0.2 : 1,
+                }}>
+
+        </div>
         {filtered.map((item) => (
-          <div key={item.id} className={styles.container} style={{cursor: 'pointer'}} onClick={handleAddStock}>
+          <div
+            style={{
+                  transition: "ease-in 300ms",
+                  opacity: stock ? 0.2 : 1,
+                }}
+            key={item.id}
+            className={styles.container}
+            onClick={handleAddStock}
+          >
             <p>{item.product}</p>
             <div className={styles.type}>
               <p>
