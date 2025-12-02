@@ -55,8 +55,8 @@ export default function Product({ search, brand }) {
     toogleStockActive();
     console.log(stock);
     setSelectedId(id);
-    setData(data)
-    stock ? toogleStockDeact() : null
+    setData(data);
+    stock ? toogleStockDeact() : null;
   };
 
   if (loading)
@@ -82,7 +82,7 @@ export default function Product({ search, brand }) {
   if (product)
     return (
       <>
-        <AddStock id={selectedId} data={data}/>
+        <AddStock id={selectedId} data={data} />
         <div
           style={{
             transition: "ease-in 300ms",
