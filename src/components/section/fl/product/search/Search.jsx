@@ -10,12 +10,10 @@ export default function Search({ brand }) {
 
   return (
     <>
-      <div
-        className={styles.container}
-        onClick={stock ? toogleStockDeact : null}
-      >
+      <div className={styles.container}>
         <div
           className={styles.input}
+          onClick={stock ? toogleStockDeact : null}
           style={{
             transition: "ease-in 300ms",
             opacity: stock ? 0.2 : 1,

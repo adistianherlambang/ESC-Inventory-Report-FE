@@ -14,6 +14,8 @@ export default function Product({ search, brand }) {
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [selectedId, setSelectedId] = useState("");
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -49,9 +51,12 @@ export default function Product({ search, brand }) {
   );
 
   const { stock, toogleStockActive, toogleStockDeact } = pmtReport();
-  const handleAddStock = () => {
+  const handleAddStock = (id, data) => {
     toogleStockActive();
     console.log(stock);
+    setSelectedId(id);
+    setData(data)
+    stock ? toogleStockDeact() : null
   };
 
   if (loading)
@@ -77,7 +82,7 @@ export default function Product({ search, brand }) {
   if (product)
     return (
       <>
-        <AddStock />
+        <AddStock id={selectedId} data={data}/>
         <div
           style={{
             transition: "ease-in 300ms",
@@ -92,7 +97,7 @@ export default function Product({ search, brand }) {
             }}
             key={item.id}
             className={styles.container}
-            onClick={handleAddStock}
+            onClick={() => handleAddStock(item.id, item)}
           >
             <p>{item.product}</p>
             <div className={styles.type}>
