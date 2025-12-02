@@ -16,7 +16,7 @@ import { pmtReport } from "../../../../../state/state";
 function AddStock({ id, data }) {
   const { stock, toogleStockActive } = pmtReport();
   const [open, setOpen] = useState("");
-  const [imei, setImei] = useState([])
+  const [imei, setImei] = useState([]);
 
   useEffect(() => {
     if (stock == false) setOpen("");
@@ -24,7 +24,13 @@ function AddStock({ id, data }) {
 
   return (
     <>
-      <Manual open={open} id={id} imei={imei} setImei={setImei} setOpen={setOpen}/>
+      <Manual
+        open={open}
+        id={id}
+        imei={imei}
+        setImei={setImei}
+        setOpen={setOpen}
+      />
       <div
         className={`${styles.container} ${stock ? styles.show : styles.hide}`}
         onClick={open ? () => setOpen("") : null}
@@ -49,14 +55,14 @@ function Manual({ open, setOpen, id, imei, setImei }) {
 
   const handleSubmit = (e) => {
     setSubmit(true);
-    setImei([...imei, input])
+    setImei([...imei, input]);
     e.preventDefault();
-    setOpen("")
+    setOpen("");
   };
 
   return (
     <>
-      <Update/>
+      <Update />
       <div
         className={`${styles.container} ${open == "manual" && stock ? styles.show : styles.hide}`}
         style={{ zIndex: 3 }}
@@ -79,11 +85,7 @@ function Manual({ open, setOpen, id, imei, setImei }) {
 }
 
 function Update() {
-  return(
-    <>
-    a
-    </>
-  )
+  return <>a</>;
 }
 
 export default AddStock;
