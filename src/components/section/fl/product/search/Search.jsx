@@ -14,10 +14,13 @@ export default function Search({ brand }) {
         className={styles.container}
         onClick={stock ? toogleStockDeact : null}
       >
-        <div className={styles.input} style={{
-          transition: "ease-in 300ms",
-          opacity: stock ? 0.2 : 1,
-        }}>
+        <div
+          className={styles.input}
+          style={{
+            transition: "ease-in 300ms",
+            opacity: stock ? 0.2 : 1,
+          }}
+        >
           <svg
             width="21"
             height="21"

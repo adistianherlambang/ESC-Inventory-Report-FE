@@ -77,19 +77,19 @@ export default function Product({ search, brand }) {
   if (product)
     return (
       <>
-        <AddStock/>
-        <div style={{
-                  transition: "ease-in 300ms",
-                  opacity: stock ? 0.2 : 1,
-                }}>
-
-        </div>
+        <AddStock />
+        <div
+          style={{
+            transition: "ease-in 300ms",
+            opacity: stock ? 0.2 : 1,
+          }}
+        ></div>
         {filtered.map((item) => (
           <div
             style={{
-                  transition: "ease-in 300ms",
-                  opacity: stock ? 0.2 : 1,
-                }}
+              transition: "ease-in 300ms",
+              opacity: stock ? 0.2 : 1,
+            }}
             key={item.id}
             className={styles.container}
             onClick={handleAddStock}
