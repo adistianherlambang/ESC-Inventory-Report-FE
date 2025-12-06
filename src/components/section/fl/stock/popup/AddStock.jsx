@@ -16,24 +16,37 @@ import { pmtReport } from "../../../../../state/state";
 function AddStock({ id, data }) {
   const { stock, toogleStockActive } = pmtReport();
   const [open, setOpen] = useState("");
-  const [imei, setImei] = useState([])
+  const [imei, setImei] = useState([]);
+  const [submit, setSubmit] = useState(false)
 
   useEffect(() => {
     if (!stock) setOpen("");
-    console.log(data.product)
+    console.log(data.product);
   });
 
   return (
     <>
-      {open == "manual" ? <Manual open={open} id={id} imei={imei} setImei={setImei} setOpen={setOpen} data={data}/> : <></>} 
+      {open == "manual" ? (
+        <Manual
+          open={open}
+          id={id}
+          imei={imei}
+          setImei={setImei}
+          setOpen={setOpen}
+          data={data}
+          setSubmit={setSubmit}
+          submit={submit}
+        />
+      ) : (
+        <></>
+      )}
       <div
         className={styles.container}
-        style={open ? {display: "none"} : {}}
+        style={open ? { display: "none" } : {}}
         onClick={open ? () => setOpen("") : null}
       >
-        <p className={styles.title}>Update Stok {id}</p>
+        <p className={styles.title}>Update Stok</p>
         <div className={styles.itemContainer}>
-          {imei}
           <div className={styles.button} onClick={() => setOpen("manual")}>
             Manual
           </div>
@@ -44,28 +57,29 @@ function AddStock({ id, data }) {
   );
 }
 
-function Manual({ open, setOpen, id, imei, setImei, data }) {
+function Manual({ open, setOpen, id, imei, setImei, data, setSubmit, submit }) {
   const { stock, toogleStockActive } = pmtReport();
   const [input, setInput] = useState("");
-  const [submit, setSubmit] = useState(false);
 
   const handleSubmit = (e) => {
     setSubmit(true);
-    setImei([...imei, input])
+    
+    setImei([...imei, input]);
     e.preventDefault();
   };
 
   useEffect(() => {
-    if (!stock) setSubmit(false)
-  })
+    if (!stock) setSubmit(false);
+  });
 
   return (
     <>
-      <Update open={submit} id={id} data={data}/>
+      {submit ? <Update id={id} data={data} imei={imei} setOpen={setOpen} setSubmit={setSubmit}/> : <></>}
       <div
         className={styles.container}
-        style={{ zIndex: 3 }}
+        style={{...(submit ? { display: "none" } : {})}}
       >
+        <p className={styles.title}>Update Stok</p>
         <form className={styles.wrapper} onSubmit={handleSubmit}>
           <input
             type="text"
@@ -83,19 +97,25 @@ function Manual({ open, setOpen, id, imei, setImei, data }) {
   );
 }
 
-function Update({open, id, imei, data}) {
+function Update({ open, id, imei, data, setOpen, setSubmit }) {
   const { stock, toogleStockActive } = pmtReport();
 
-  return(
+  const handleAddImei = () => {
+    setOpen("")
+    setSubmit(false)
+  }
+
+  return (
     <>
-      <div
-        className={`${styles.container} ${open && stock ? styles.show : styles.hide}`}
-        style={{ zIndex: 4 }}
-      >
-        {id}
+      <div className={styles.container}>
+        <p className={styles.title}>Update Stok</p>
+        {imei}
+        <div className={styles.button} onClick={handleAddImei}>
+          tambah
+        </div>
       </div>
     </>
-  )
+  );
 }
 
 export default AddStock;

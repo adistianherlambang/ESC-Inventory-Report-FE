@@ -479,7 +479,7 @@ function CheckAcc() {
     } catch (err) {
       console.error(err.message);
     } finally {
-      window.location.reload()
+      window.location.reload();
     }
   };
 
