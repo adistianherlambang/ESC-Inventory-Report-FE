@@ -51,11 +51,11 @@ export default function Product({ search, brand }) {
   );
 
   const { stock, toogleStockActive, toogleStockDeact } = pmtReport();
-  const handleAddStock = (id, data) => {
+  const handleAddStock = (id, item) => {
     toogleStockActive();
     console.log(stock);
     setSelectedId(id);
-    setData(data);
+    setData(item);
     stock ? toogleStockDeact() : null;
   };
 
@@ -82,7 +82,7 @@ export default function Product({ search, brand }) {
   if (product)
     return (
       <>
-        <AddStock id={selectedId} data={data} />
+        {stock ?<AddStock id={selectedId} data={data} /> : <></>}
         <div
           style={{
             transition: "ease-in 300ms",

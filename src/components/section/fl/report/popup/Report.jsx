@@ -471,7 +471,7 @@ function CheckAcc() {
           type: p.type || "cash",
           amount: Number(p.amount) || 0,
         })),
-        createdAt: serverTimestamp(),
+        createdAt: new Date(),
       };
       await updateDoc(pmtRef, {
         report: arrayUnion(newReport),
@@ -479,7 +479,7 @@ function CheckAcc() {
     } catch (err) {
       console.error(err.message);
     } finally {
-      window.location.reload();
+      window.location.reload()
     }
   };
 
