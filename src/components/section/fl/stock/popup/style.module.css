@@ -1,6 +1,6 @@
 .container {
   width: 100%;
-  max-height: 90vh;
+  max-height: 40rem;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   background-color: white;
@@ -73,6 +73,28 @@
   padding: 12px;
   border-radius: 8px;
   text-align: center;
+}
+
+.subtitle {
+  font-size: 16px;
+  font-family: SFProBold;
+}
+
+.imeiContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.imei {
+  display: flex;
+}
+
+.type {
+  display: flex;
+  font-family: SFProRegular;
+  font-size: 14px;
+  gap: 16px;
 }
 
 @keyframes popUp {
