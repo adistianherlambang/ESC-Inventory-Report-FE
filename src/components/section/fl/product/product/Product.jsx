@@ -9,6 +9,7 @@ import Empty from "../../../../item/Empty/Empty";
 import AddStock from "../../stock/popup/AddStock";
 
 import { pmtReport } from "../../../../../state/state";
+import NewStock from "../../stock/popup/NewStock";
 
 export default function Product({ search, brand }) {
   const [product, setProduct] = useState([]);
@@ -59,6 +60,11 @@ export default function Product({ search, brand }) {
     stock ? toogleStockDeact() : null;
   };
 
+  const handleNewStock = (brand) => {
+    toogleStockActive()
+    stock ? toogleStockDeact() : null
+  }
+
   if (loading)
     return (
       <div className={styles.loading}>
@@ -74,8 +80,9 @@ export default function Product({ search, brand }) {
   if (filtered.length == 0)
     return (
       <>
+        {stock ? <NewStock brand={brand}/> : <></>}
         <Empty />
-        <div className={styles.addNewProduct}>Tambahkan Stok Baru</div>
+        <div onClick={handleNewStock} className={styles.addNewProduct}>Tambahkan Stok Baru</div>
       </>
     );
   if (!product) return null;
