@@ -1,70 +1,159 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import userActivityLogic from "../../hooks/userActivityLogic";
+
+// Components
+import ActivityList from "../../components/activity/ActivityList";
+import EditSection from "../../components/section/fl/edit/EditSection";
+import DeleteSection from "../../components/section/fl/delete/DeleteSection";
+import Report from "../../components/section/fl/report/button/Report";
+import ReportPopUp from "../../components/section/fl/report/popup/Report";
+import Loader from "../../components/item/loader/Loader";
+import Search from "../../components/section/fl/product/search/Search";
+import Logo from "../../../public/Logo";
+import { LogoutIcon } from "../../../public/Icon";
 import BrandButton from "../../components/brandButton/brandButton";
+
 import { userStore } from "../../state/state";
-import axios from "axios";
-import { replace, useNavigate } from "react-router-dom";
-
-//components
-
 import styles from "./style.module.css";
 
 export default function AdminPage() {
-  const [product, setProduct] = useState([]);
-  const [user, setUser] = useState([]);
   const logout = userStore((state) => state.logout);
+  const { currentUser } = userStore();
 
-  const navigate = useNavigate();
+  const screenWidth = window.innerWidth;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios("http://localhost:3000/product/getall");
-        const data = res.data;
-        setProduct(data);
-      } catch (err) {
-        console.error("gagal fetch data :", err);
-      }
-    };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios("http://localhost:3000/user/");
-        const data = res.data;
-        setUser(data);
-      } catch (errr) {
-        console.error("gagal fetch data: ", err);
-      }
-    };
-    fetchData();
-  }, []);
+  const {
+    flData,
+    loading,
+    dateFiltered,
+    isEditing,
+    isDeleting,
+    editData,
+    selectedId,
+    selectedImei,
+    selectedProduct,
+    selectedColor,
+    selectedCapacity,
+    active,
+    toogleDeact,
+    setIsEditing,
+    setIsDeleting,
+    handleEdit,
+    handleDelete,
+    handleEditAcc,
+    handleDeleteAcc,
+    formatRupiah,
+    date,
+    idAcc,
+    allTotal,
+    productType,
+  } = userActivityLogic();
 
   return (
-    <div>
-      <p>Admin Page</p>
-      <button onClick={logout}>Logout</button>
-      {user.map((item, index))}
-      <BrandButton label="Samsung" />
-      {/* <BrandButton label="Xiaomi"/>
-      <BrandButton label="Vivo"/>
-      <BrandButton label="Oppo"/>
-      <BrandButton label="Realme"/>
-      <BrandButton label="Tecno"/>
-      <BrandButton label="Infinix"/>
-      <BrandButton label="Itel"/>
-      <BrandButton label="Iphone"/>
-      <BrandButton label="Nokia"/> */}
-      {product &&
-        product.map((item, index) => (
-          <div key={item._id}>
-            <p>
-              {item.brand} - {item.product} {item.IMEI.join(", ")} ===={" "}
-              {item.IMEI.length}
-            </p>
+    <>
+      <EditSection
+        isOpen={isEditing}
+        docId={selectedId}
+        data={editData}
+        imei={selectedImei}
+        onClose={() => setIsEditing("")}
+        edit={isEditing}
+        id={idAcc}
+        productType={productType}
+      />
+
+      {isDeleting && (
+        <DeleteSection
+          docId={selectedId}
+          imei={selectedImei}
+          product={selectedProduct}
+          capacity={selectedCapacity}
+          color={selectedColor}
+          onClose={() => setIsDeleting("")}
+          productType={productType}
+          id={idAcc}
+        />
+      )}
+
+      {active && <ReportPopUp />}
+      <Report />
+      <div
+        className={styles.container}
+        onClick={() => {
+          if (isEditing || isDeleting || active) {
+            toogleDeact();
+            setIsEditing("");
+            setIsDeleting("");
+          }
+        }}
+        style={{
+          transition: "ease-in 300ms",
+          opacity: isEditing || isDeleting || active ? 0.2 : 1,
+        }}
+      >
+        <div className={styles.topContainer}>
+          <Logo />
+          <div onClick={logout} className={styles.logoutButton}>
+            <LogoutIcon />
+            Logout
+          </div>
+        </div>
+        {flData.map((item) => (
+          <div key={item.id} className={styles.top}>
+            <div className={styles.pmtContainer}>
+              <p>Bismillah, {item.name}👋</p>
+              <p className={styles.pmt}>FrontLiner</p>
+            </div>
           </div>
         ))}
-    </div>
+
+        {screenWidth > 700 ? (
+          <div className={styles.brandButton}>
+            <BrandButton label="Samsung" />
+            <BrandButton label="Xiaomi" />
+            <BrandButton label="Vivo" />
+            <BrandButton label="Oppo" />
+            <BrandButton label="Infinix" />
+            <BrandButton label="Realme" />
+            <BrandButton label="Tecno" />
+            <BrandButton label="Iphone" />
+            <BrandButton label="Nokia" />
+          </div>
+        ) : (
+          <div className={styles.brandWidthContainer}>
+            <div className={styles.brandWidth}>
+              <BrandButton label="Samsung" />
+              <BrandButton label="Xiaomi" />
+              <BrandButton label="Vivo" />
+            </div>
+            <div className={styles.brandWidth}>
+              <BrandButton label="Oppo" />
+              <BrandButton label="Infinix" />
+              <BrandButton label="Realme" />
+            </div>
+            <div className={styles.brandWidth}>
+              <BrandButton label="Tecno" />
+              <BrandButton label="Iphone" />
+              <BrandButton label="Nokia" />
+            </div>
+          </div>
+        )}
+
+        {loading ? (
+          <Loader />
+        ) : (
+          <ActivityList
+            date={date}
+            dateFiltered={dateFiltered}
+            formatRupiah={formatRupiah}
+            handleEdit={handleEdit}
+            handleDelete={handleDelete}
+            handleDeleteAcc={handleDeleteAcc}
+            handleEditAcc={handleEditAcc}
+            total={allTotal}
+          />
+        )}
+      </div>
+    </>
   );
 }

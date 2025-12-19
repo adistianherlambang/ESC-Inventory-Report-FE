@@ -29,7 +29,7 @@ function AddStock({ id, data }) {
 
   return (
     <>
-      {open == "manual" ? (
+      {open === "manual" ? (
         <Manual
           open={open}
           id={id}
@@ -40,9 +40,18 @@ function AddStock({ id, data }) {
           setSubmit={setSubmit}
           submit={submit}
         />
-      ) : (
-        <></>
-      )}
+      ) : open === "scan" ? (
+        <Scan
+          open={open}
+          id={id}
+          imei={imei}
+          setImei={setImei}
+          setOpen={setOpen}
+          data={data}
+          setSubmit={setSubmit}
+          submit={submit}
+        />
+      ) : null}
       <div
         className={styles.container}
         style={open ? { display: "none" } : {}}
@@ -53,7 +62,9 @@ function AddStock({ id, data }) {
           <div className={styles.button} onClick={() => setOpen("manual")}>
             Manual
           </div>
-          <div className={styles.button}>Scan</div>
+          <div className={styles.button} onClick={() => setOpen("scan")}>
+            Scan
+          </div>
         </div>
       </div>
     </>
@@ -127,12 +138,14 @@ function Scan({ open, setOpen, id, imei, setImei, data, setSubmit, submit }) {
   const handleSubmit = () => {
     if (result) {
       setSubmit(true)
+      setImei([...imei, result]);
     }
   };
 
   return (
     <>
-      <div className={styles.container}>
+      {submit ? <Update id={id} data={data} imei={imei} setOpen={setOpen} setSubmit={setSubmit}/> : <></>}
+      <div className={styles.container} style={{...(submit ? { display: "none" } : {})}}>
         <p className={styles.title}>Report</p>
         <div className={styles.scannerContainer}>
           <div className={styles.scanner}>

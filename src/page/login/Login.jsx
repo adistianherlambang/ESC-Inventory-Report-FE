@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { userStore } from "../../state/state";
 
 import styles from "./style.module.css";
-import { useStore } from "zustand";
 import { collection, query, where, getDocs, limit } from "firebase/firestore";
 import { db } from "../../../firebase";
 
@@ -17,10 +16,12 @@ export default function Login() {
   const user = userStore((state) => state.currentUser);
 
   useEffect(() => {
-    if (user) {
+    // Only redirect away from /login when we have a valid logged-in user
+    // with a role. This prevents a redirect loop between "/" and "/login"
+    // when the stored user is missing a role or is incomplete.
+    if (user?.role) {
       navigate("/", { replace: true });
     }
-    console.log(user);
   }, []);
 
   const handleLogin = async (e) => {
@@ -39,7 +40,15 @@ export default function Login() {
         const data = { id: doc.id, ...doc.data() };
         alert(`login Sukses: ${JSON.stringify(data)}`);
         setCurrentUser(data);
-        navigate("/");
+        // Do a replace navigation after login to avoid filling history
+        // and to be consistent with the effect logic above.
+        if (data?.role) {
+          navigate("/", { replace: true });
+        } else {
+          // If the user doc doesn't contain a role, stay on the login page
+          // and surface the issue so the developer can correct the user doc.
+          alert("Login sukses, tetapi role pengguna belum diatur.");
+        }
       } else {
         alert("user gaada");
       }

@@ -8,6 +8,7 @@ export default function userActivityLogic() {
 
   const [pmtData, setPmtData] = useState([]);
   const [flData, setFLData] = useState([]);
+  const [adminData, setAdminData] = useState([])
 
   const [loading, setLoading] = useState(true);
   const [dateFiltered, setDateFiltered] = useState([]);
@@ -87,8 +88,6 @@ export default function userActivityLogic() {
         .filter((item) => item.report.length > 0);
 
       setDateFiltered(filtered);
-      // filtered is an array of items, each with a `report` array.
-      // Compute totalAmount by summing each report's price amounts safely.
       const totalAmount = (filtered || []).reduce((sumItems, item) => {
         const reports = item.report || [];
         const sumReports = reports.reduce((sumReport, report) => {
@@ -153,6 +152,10 @@ export default function userActivityLogic() {
 
       setAllTotal(totalAmount);
     }, [flData, date]);
+  } else if (currentUser?.role == "admin") {
+    useEffect(() => {
+      
+    })
   }
 
   /** HANDLERS */
