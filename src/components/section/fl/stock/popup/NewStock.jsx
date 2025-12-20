@@ -166,12 +166,13 @@ function Scan({ open, brand, setOpen, imei, setImei, setSubmit, submit }) {
 }
 
 function Update({ open, brand, imei, setOpen, setSubmit }) {
-  const { stock, toogleStockActive } = pmtReport();
+  const { stock, toogleStockActive, toogleStockDeact } = pmtReport();
   const [data, setData] = useState({
     brand: brand.toLowerCase(),
-    product: ""
+    product: "",
+    capacity: "",
+    color: ""
   })
-
 
   const handleAddImei = () => {
     setOpen("")
@@ -196,10 +197,9 @@ function Update({ open, brand, imei, setOpen, setSubmit }) {
       <div className={styles.container}>
         <p className={styles.title}>Tambahkan Stok</p>
         <div className={styles.itemContainer}>
-          <form>
+          <div style={{display: "flex", flexDirection: "column", gap: "1rem"}}>
             <div style={{display: "flex", flexDirection: "column", gap: '0.5rem'}}>
               <label htmlFor="input">Nama Produk</label>
-              {data.product}
               <input
                 type="text"
                 placeholder="Masukkan Nama Produk"
@@ -211,7 +211,54 @@ function Update({ open, brand, imei, setOpen, setSubmit }) {
                 required
               />
             </div>
-          </form>
+            <div style={{display: "flex", gap: "1rem"}}>
+              <div style={{width: "100%", display: "flex", flexDirection: "column", gap: '0.5rem'}}>
+                <label htmlFor="input">Kapasitas</label>
+                <input
+                  type="text"
+                  placeholder="Kapasitas"
+                  className={styles.input}
+                  style={{textAlign: "left"}}
+                  name="capacity"
+                  value={data.capacity}
+                  onChange={(e) => setData({...data, capacity: e.target.value})}
+                  required
+                />
+              </div>
+              <div style={{width: "100%", display: "flex", flexDirection: "column", gap: '0.5rem'}}>
+                <label htmlFor="input">Warna</label>
+                <input
+                  type="text"
+                  placeholder="Warna"
+                  className={styles.input}
+                  style={{textAlign: "left"}}
+                  name="color"
+                  value={data.color}
+                  onChange={(e) => setData({...data, color: e.target.value})}
+                  required
+                />
+              </div>
+            </div>
+            <div className={styles.imeiContainer}>
+              {imei.map((item) => (
+                <div key={item} className={styles.imei}>
+                  <p style={{color: "#B0B0B0"}}>Barcode:</p>
+                  <p>{item}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className={styles.itemContainer}>
+          <div className={styles.button} onClick={handleAddImei} style={{boxSizing: "border-box", border: "solid #773ff9 1px", backgroundColor: "white", color: "#773ff9"}}>
+            Tambahkan Item
+          </div>
+          <div className={styles.button} onClick={handleSubmit}>
+            Submit
+          </div>
+          <div className={styles.button} onClick={toogleStockDeact()}>
+            Batalkan
+          </div>
         </div>
       </div>
       {/* <div className={styles.container}>
