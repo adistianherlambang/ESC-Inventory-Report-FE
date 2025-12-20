@@ -83,6 +83,7 @@ export default function Product({ search, brand }) {
         {stock ? <NewStock brand={brand}/> : <></>}
         <Empty />
         <div onClick={handleNewStock} className={styles.addNewProduct}>Tambahkan Stok Baru</div>
+        <div style={{height: "100%", backgroundColor: "blue", width: "100%"}}></div>
       </>
     );
   if (!product) return null;
