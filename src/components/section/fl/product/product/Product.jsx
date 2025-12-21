@@ -92,7 +92,6 @@ export default function Product({ search, brand }) {
   if (product)
     return (
       <>
-        {stock ? <AddStock id={selectedId} data={data} /> : <></>}
         <div
           style={{
             transition: "ease-in 300ms",
@@ -121,6 +120,7 @@ export default function Product({ search, brand }) {
             <p>Stok : {item.IMEI?.length || 0}</p>
           </div>
         ))}
+        {stock && <PopUp><AddStock id={selectedId} data={data}/></PopUp>}
       </>
     );
 }
