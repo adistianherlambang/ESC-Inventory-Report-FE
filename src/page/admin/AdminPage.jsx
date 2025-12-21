@@ -7,6 +7,7 @@ import EditSection from "../../components/section/fl/edit/EditSection";
 import DeleteSection from "../../components/section/fl/delete/DeleteSection";
 import Report from "../../components/section/fl/report/button/Report";
 import ReportPopUp from "../../components/section/fl/report/popup/Report";
+import PopUp from "../../components/popUp/popUp";
 import Loader from "../../components/item/loader/Loader";
 import Search from "../../components/section/fl/product/search/Search";
 import Logo from "../../../public/Logo";
@@ -75,7 +76,7 @@ export default function AdminPage() {
         />
       )}
 
-      {active && <ReportPopUp />}
+      {active && <PopUp onClose={toogleDeact}><ReportPopUp /></PopUp>}
       <Report />
       <div
         className={styles.container}
