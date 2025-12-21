@@ -24,7 +24,7 @@ function NewStock({ brand }) {
 
   useEffect(() => {
     if (!stock) setOpen("");
-  });
+  }, [stock]);
 
   return (
     <>
@@ -81,7 +81,7 @@ function Manual({ open, brand, setOpen, imei, setImei, setSubmit, submit }) {
 
   useEffect(() => {
     if (!stock) setSubmit(false);
-  });
+  }, [stock]);
 
   return (
     <>
@@ -181,13 +181,17 @@ function Update({ open, brand, imei, setOpen, setSubmit }) {
 
   const handleSubmit = async () => {
     try {
-      const docRef = doc(db, "allproducts", `${id}`)
+      const docRef = collection(db, "allproducts")
       await addDoc(docRef, {
-        IMEI: arrayUnion(...imei)
-      })
+        brand: data.brand,
+        product: data.product,
+        capacity: data.capacity,
+        color: data.color,
+        IMEI: imei,
+      });
     } catch (err) {
       console.error(err.message)
-    } finally {
+    } finally{
       window.location.reload()
     }
   }
@@ -255,9 +259,6 @@ function Update({ open, brand, imei, setOpen, setSubmit }) {
           </div>
           <div className={styles.button} onClick={handleSubmit}>
             Submit
-          </div>
-          <div className={styles.button} onClick={toogleStockDeact()}>
-            Batalkan
           </div>
         </div>
       </div>

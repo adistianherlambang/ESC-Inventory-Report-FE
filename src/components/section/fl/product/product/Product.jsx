@@ -10,6 +10,7 @@ import AddStock from "../../stock/popup/AddStock";
 
 import { pmtReport } from "../../../../../state/state";
 import NewStock from "../../stock/popup/NewStock";
+import PopUp from "../../../../popUp/popUp";
 
 export default function Product({ search, brand }) {
   const [product, setProduct] = useState([]);
@@ -80,10 +81,11 @@ export default function Product({ search, brand }) {
   if (filtered.length == 0)
     return (
       <>
-        {stock ? <NewStock brand={brand}/> : <></>}
-        <Empty />
-        <div onClick={handleNewStock} className={styles.addNewProduct}>Tambahkan Stok Baru</div>
-        <div style={{height: "100%", backgroundColor: "blue", width: "100%"}}></div>
+        <div style={{opacity: stock ? "0.3" : "1", transition: "opacity 300ms ease"}}>
+          <Empty />
+          <div onClick={handleNewStock} className={styles.addNewProduct}>Tambahkan Stok Baru</div>
+        </div>
+        {stock && <PopUp><NewStock brand={brand}/></PopUp>}
       </>
     );
   if (!product) return null;

@@ -1,38 +1,20 @@
-import { useEffect, useRef } from "react";
-import { userStore } from "../../state/state";
+import { useState, useEffect } from "react";
+import { pmtReport } from "../../state/state";
 
-export default function StockPopup({ children }) {
-  const popupRef = useRef(null);
-  const stock = userStore((state) => state.stock)
-  const toogleStockDeact = userStore((state) => state.toogleStockDeact)
+export default function PopUp({ children }) {
 
-  useEffect(() => {
-    if (!stock) return;
+  const { stock, toogleStockActive, toogleStockDeact } = pmtReport();
 
-    const handleOutside = (e) => {
-      if (popupRef.current && !popupRef.current.contains(e.target)) {
-        toogleStockDeact();
-      }
-    };
-
-    document.addEventListener("pointerdown", handleOutside);
-    return () => {
-      document.removeEventListener("pointerdown", handleOutside);
-    };
-  }, [stock, toogleStockDeact]);
-
-  if (!stock) return null;
-
-  return (
-    <div
-      ref={popupRef}
-      style={{
-        position: "fixed",
-        height: "fit-content",
-        width: "fit-content"
-      }}
-    >
+  return(
+    <div>
       {children}
+      <div style={{
+        zIndex: "1",
+        position: "fixed",
+        height: "100vh",
+        width: "100vw",
+        
+      }} onClick={stock ? toogleStockDeact: null}></div>
     </div>
-  );
+  )
 }
