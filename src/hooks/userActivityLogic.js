@@ -159,20 +159,22 @@ export default function userActivityLogic() {
   }
 
   /** HANDLERS */
-  const handleEdit = ({ id, imei }) => {
+  const handleEdit = ({ id, imei, accId }) => {
     setEditData(dateFiltered);
     setIsEditing("handphone");
     setSelectedId(id);
     setSelectedImei(imei);
+    setIdAcc(accId);
   };
 
-  const handleDelete = ({ id, imei, product, color, capacity }) => {
+  const handleDelete = ({ id, imei, product, color, capacity, accId }) => {
     setSelectedId(id);
     setSelectedImei(imei);
     setIsDeleting("handphone");
     setSelectedProduct(product);
     setSelectedColor(color);
     setSelectedCapacity(capacity);
+    setIdAcc(accId);
   };
 
   const handleEditAcc = ({ id, accId }) => {

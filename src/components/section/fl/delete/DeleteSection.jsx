@@ -10,6 +10,7 @@ import {
   updateDoc,
   where,
   arrayUnion,
+  deleteDoc,
 } from "firebase/firestore";
 
 export default function DeleteSection({
@@ -22,7 +23,7 @@ export default function DeleteSection({
   id,
   productType,
 }) {
-  const deleteReportByIMEI = async (docId, imei) => {
+  const deleteReportByIMEI = async (docId, imei, id) => {
     try {
       const docRef = doc(db, "fldatas", docId);
       const snap = await getDoc(docRef);
@@ -57,6 +58,9 @@ export default function DeleteSection({
       await updateDoc(productRef, {
         IMEI: arrayUnion(String(imei)),
       });
+
+      //delete selling
+      await deleteDoc(doc(db, "selling", id))
     } catch (err) {
       console.error("Gagal hapus report:", err);
     } finally {
@@ -73,6 +77,8 @@ export default function DeleteSection({
       const data = snap.data();
       const updatedReport = (data.report || []).filter((r) => r.id !== id);
       await updateDoc(docRef, { report: updatedReport });
+      //hapus data dari admin
+      await deleteDoc(doc(db, "selling", id))
     } catch (err) {
       console.error("Gagal: ", err);
     } finally {
@@ -109,7 +115,7 @@ export default function DeleteSection({
   } else {
     return (
       <div className={styles.container}>
-        <p className={styles.title}>Batalkan laporan? {productType}</p>
+        <p className={styles.title}>Batalkan laporan?</p>
         <div className={styles.wrapper}>
           <p className={styles.desc}>
             Tindakan ini akan menghapus data laporan dan mengembalikan stok IMEI
@@ -124,7 +130,7 @@ export default function DeleteSection({
             </button>
             <button
               className={`${styles.button} ${styles.yes}`}
-              onClick={() => deleteReportByIMEI(docId, imei)}
+              onClick={() => deleteReportByIMEI(docId, imei, id)}
             >
               Hapus
             </button>

@@ -88,7 +88,7 @@ export default function ActivityItem({
           <div className={styles.buttonContainer}>
             <div
               className={styles.editButton}
-              onClick={() => handleEdit({ id: item.id, imei: i.IMEI })}
+              onClick={() => handleEdit({ id: item.id, imei: i.IMEI, accId: i.id })}
             >
               Edit
             </div>
@@ -101,10 +101,11 @@ export default function ActivityItem({
                   product: i.product,
                   color: i.color,
                   capacity: i.capacity,
+                  accId: i.id
                 })
               }
             >
-              Batalkan
+              Batakan
             </div>
           </div>
         </div>

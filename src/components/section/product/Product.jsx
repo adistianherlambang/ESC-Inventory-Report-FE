@@ -11,6 +11,7 @@ export default function Product({ search, brand }) {
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [visibleCount, setVisibleCount] = useState(3);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -41,6 +42,10 @@ export default function Product({ search, brand }) {
     }
   }, [brand]);
 
+  useEffect(() => {
+    setVisibleCount(3);
+  }, [search, brand]);
+
   const filtered = product.filter((item) =>
     item.product.toLowerCase().includes((search || "").toLowerCase()),
   );
@@ -62,7 +67,7 @@ export default function Product({ search, brand }) {
   if (product)
     return (
       <>
-        {filtered.map((item) => (
+        {filtered.slice(0, visibleCount).map((item) => (
           <div key={item.id} className={styles.container}>
             <p>{item.product}</p>
             <div className={styles.type}>
@@ -76,6 +81,19 @@ export default function Product({ search, brand }) {
             <p>Stok : {item.IMEI?.length || 0}</p>
           </div>
         ))}
+        {filtered.length > visibleCount && (
+        <div className={styles.moreWrapper}>
+          <button
+            className={styles.more}
+            onClick={() => setVisibleCount((prev) => prev + 5)}
+          >
+            <svg width="18" height="10" viewBox="0 0 18 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16.8 0.799805L8.80005 8.79981L0.800047 0.799804" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+            Tampilkan lebih banyak
+          </button>
+        </div>
+      )}
       </>
     );
 }

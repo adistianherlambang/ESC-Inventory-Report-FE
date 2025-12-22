@@ -55,6 +55,17 @@ export default function EditSection({
     );
 
     await updateDoc(docRef, { report: updatedReports });
+
+    const sellingRef = doc(db, "selling", id)
+    
+    await updateDoc(sellingRef, {
+      userType: user,
+      price: prices.map((p) => ({
+        type: p.type,
+        amount: Number(p.amount),
+      }))
+    })
+
     setLoading(false);
     alert("Harga berhasil diperbarui!");
     onClose?.();
@@ -84,6 +95,20 @@ export default function EditSection({
     );
 
     await updateDoc(docRef, { report: updatedReports });
+
+    
+    await updateDoc(docRef, { report: updatedReports });
+
+    const sellingRef = doc(db, "selling", id)
+    
+    await updateDoc(sellingRef, {
+      userType: user,
+      price: prices.map((p) => ({
+        type: p.type,
+        amount: Number(p.amount),
+      }))
+    })
+
     setLoading(false);
     alert("Harga berhasil diperbarui!");
     onClose?.();
@@ -100,7 +125,7 @@ export default function EditSection({
           .filter((r) => r.id === id)
           .map((r) => (
             <div key={r.id} className={styles.itemContainer}>
-              <p className={styles.title}>Edit</p>
+              <p className={styles.title}>Edit{id}</p>
               <div className={styles.radioContainer}>
                 <p className={styles.method}>Jenis User :</p>
                 <label className={styles.radio}>
@@ -204,7 +229,7 @@ export default function EditSection({
           .filter((r) => r.IMEI === imei)
           .map((r) => (
             <div key={r.IMEI} className={styles.itemContainer}>
-              <p className={styles.title}>Edit</p>
+              <p className={styles.title}>Edit{id}</p>
 
               <div className={styles.itemDetail}>
                 <p className={styles.productName}>{r.product}</p>

@@ -14,6 +14,7 @@ import {
   serverTimestamp,
   arrayUnion,
   arrayRemove,
+  setDoc
 } from "firebase/firestore";
 
 import { BarcodeScanner, useTorch } from "react-barcode-scanner";
@@ -249,6 +250,16 @@ function Check({ imei }) {
       });
       console.log("Added to pmtdatas report");
 
+      // -------------------------
+      // 3b) Tambahkan ke collection "selling"
+      const sellingRef = doc(collection(db, "selling"), id);
+      await setDoc(sellingRef, { 
+        ...newReport,
+        name: currentUser.name
+      });
+      console.log("Added to selling collection");
+      // -------------------------
+
       // 4) Hapus IMEI dari produk sumber. Pastikan tipe sama.
       await updateDoc(productRef, {
         IMEI: arrayRemove(String(imei)),
@@ -475,6 +486,15 @@ function CheckAcc() {
       await updateDoc(pmtRef, {
         report: arrayUnion(newReport),
       });
+
+      // Tambahkan ke collection "selling"
+      const sellingRef = doc(collection(db, "selling"), id);
+      await setDoc(sellingRef, { 
+        ...newReport,
+        name: currentUser.name
+      });
+      console.log("Added to selling collection");
+      
     } catch (err) {
       console.error(err.message);
     } finally {

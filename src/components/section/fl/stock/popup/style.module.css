@@ -42,8 +42,9 @@
 }
 
 .button {
-  font-family: SFProBold;
   background-color: #773ff9;
+  font-family: SFProBold;
+  background-color: ç;
   display: flex;
   align-items: center;
   justify-content: center;
