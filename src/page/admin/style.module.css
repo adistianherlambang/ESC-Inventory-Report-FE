@@ -66,15 +66,24 @@
   color: white;
 }
 
+.itemContainer {
+  background-color: #ffffff;
+  padding: 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border-radius: 1rem;
+}
+
 /* CekStok */
 
 .tableWrapper {
   width: 100%;
+
   overflow-x: auto;
   border-radius: 0.75rem;
-  /* hide scrollbar tapi tetap bisa scroll */
-  scrollbar-width: none;        /* Firefox */
-  -ms-overflow-style: none;     /* IE */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .tableWrapper::-webkit-scrollbar {
@@ -88,13 +97,13 @@
   font-family: system-ui, -apple-system, sans-serif;
 }
 
-.table tbody tr:nth-child(even) {
+/* .table tbody tr:nth-child(even) {
   background-color: #f9fafb;
 }
 
 .table tbody tr:nth-child(odd) {
   background-color: #ffffff;
-}
+} */
 
 .thead {
   background-color: #f3f4f6;
@@ -119,7 +128,7 @@
 
 .td {
   padding: 12px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 0.5px solid #a9a9a9;
   text-align: center;
 }
 
@@ -133,6 +142,37 @@
 
 .search {
   background-color: white;
+  border-bottom: 0.5px solid #a9a9a9;
   padding: 6px;
   font-family: SFProRegular;
+}
+
+.topStock {
+  display: flex;
+  justify-content: space-between;
+}
+
+.downloadBtn {
+  padding: 8px 16px;
+  background-color: #773ff9;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: SFProMedium, system-ui, -apple-system, sans-serif;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.downloadBtn:hover {
+  background-color: #8c6ee6;
+}
+
+.downloadBtn:active {
+  transform: scale(0.97);
+}
+
+.downloadBtn:disabled {
+  background-color: #c7b9f8;
+  cursor: not-allowed;
 }
