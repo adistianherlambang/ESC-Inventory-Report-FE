@@ -606,13 +606,13 @@ function History() {
             </tbody>
             
             <tr>
-              <td colSpan="5">Jumlah Unit Terjual: {history.length}</td>
+              <td className={styles.td} style={{textAlign: "left"}} colSpan="5">Jumlah Unit Terjual: {history.length}</td>
             </tr>
             <tr>
-              <td colSpan="5">Total penjualan per brand: {history.filter((item) => item.brand == "samsung").length}</td>
+              <td className={styles.td} style={{textAlign: "left"}} colSpan="5">Total penjualan per brand: {history.filter((item) => item.brand == "samsung").length}</td>
             </tr>
             <tr>
-              <td colSpan="5">Total pemasukan per tipe pembayaran: CS = {history.flatMap(item => item.price).filter(f => f.type == "CS").reduce((sum, i) => sum + i.amount, 0)} | TF = {history.flatMap(item => item.price).filter(f => f.type == "TF").reduce((sum, i) => sum + i.amount, 0)} | GS {history.flatMap(item => item.price).filter(f => f.type == "GS").reduce((sum, i) => sum + i.amount, 0)}</td>
+              <td className={styles.td} style={{textAlign: "left"}} colSpan="5">Total pemasukan per tipe pembayaran: CS = {history.flatMap(item => item.price).filter(f => f.type == "CS").reduce((sum, i) => sum + i.amount, 0)} | TF = {history.flatMap(item => item.price).filter(f => f.type == "TF").reduce((sum, i) => sum + i.amount, 0)} | GS {history.flatMap(item => item.price).filter(f => f.type == "GS").reduce((sum, i) => sum + i.amount, 0)}</td>
             </tr>
 
           </table>
