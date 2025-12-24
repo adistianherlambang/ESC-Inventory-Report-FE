@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, act } from "react";
 import { userStore } from "../../state/state";
 import styles from "./style.module.css"
 import Logo from "../../../public/Logo";
@@ -9,13 +9,19 @@ import { Row, Col, Card } from "antd";
 import * as XLSX from "xlsx-js-style";
 import { saveAs } from "file-saver";
 import { LineChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Line, ResponsiveContainer } from "recharts";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+// import DatePicker from "react-datepicker";
+// import "react-datepicker/dist/react-datepicker.css";
+import { DatePicker, Space } from 'antd';
 
 import Empty from "../../components/item/Empty/Empty";
 import Loader from "../../components/item/loader/Loader";
 
+import userActivityLogic from "../../hooks/userActivityLogic";
+import PopUp from "../../components/popUp/popUp";
+
 export default function AdminPage() {
+
+  const { active, toogleDeact } = userActivityLogic()
   
   const user = userStore((state) => state.currentUser)
   const logout = userStore((state) => state.logout)
@@ -31,6 +37,9 @@ export default function AdminPage() {
 
   return(
     <>
+    {!active ? <></> :
+      <div className={styles.overlay} onClick={toogleDeact}></div>
+    }
     <div className={styles.container}>
       <div className={styles.top}>
         <div className={styles.topContainer}>
@@ -385,6 +394,9 @@ function History() {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [month, setMonth] = useState("");
+
+  const [open, setOpen] = useState(false)
+  
   const brand = ["samsung", "xiaomi", "vivo", "oppo", "infinix", "realme", "tecno", "iphone", "nokia"]
 
   useEffect(() => {
@@ -464,140 +476,128 @@ function History() {
   };
 
   const months = generateMonths(new Date().getFullYear());
+
+  const formatRupiah = (value) => {
+    if(typeof value !== "number") return value
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+    }).format(value)
+  }
+
+  const { active, toogleDeact, toogleActive } = userActivityLogic()
+
+  const { RangePicker } = DatePicker;
   
   return(
     <>
-    <div
-      style={{
-        padding: 20,
-        background: "#ffffff",
-        borderRadius: 12,
-        boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
-      }}
-    >
-      <h2
-        style={{
-          marginBottom: 16,
-          fontSize: 22,
-          fontWeight: 600,
-          color: "#1f2937",
-        }}
-      >
-        Riwayat Penjualan
-      </h2>
+    <div className={styles.itemContainer}>
+      <div>
+        <div>
+          <p style={{fontSize: "1.5rem"}}>Histori Penjualan</p>
+          <p style={{fontFamily: "SFProRegular", color: "#b3b3b3"}}>Rekap data transaksi penjualan berdasarkan periode waktu</p>
+        </div>
+        {/* FILTER */}
+        {/* <div className={styles.filterContainer}>
+          <DatePicker
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+            disabled={!!month}
+            placeholderText="Tanggal awal"
+            customInput={<input className={styles.inputDate} />}
+          />
 
-      {/* FILTER */}
-      <div
-        style={{
-          display: "flex",
-          gap: 12,
-          marginBottom: 20,
-          flexWrap: "wrap",
-          alignItems: "center",
-        }}
-      >
-        <DatePicker
-          selected={startDate}
-          onChange={(date) => setStartDate(date)}
-          disabled={!!month}
-          placeholderText="Tanggal awal"
-          customInput={
-            <input
-              style={{
-                padding: "10px 14px",
-                borderRadius: 10,
-                border: "1px solid #e5e7eb",
-                fontSize: 14,
-                background: "#fff",
-                cursor: "pointer",
+          <DatePicker
+            selected={endDate}
+            onChange={(date) => setEndDate(date)}
+            disabled={!!month}
+            placeholderText="Tanggal akhir"
+            customInput={<input className={styles.inputDate} />}
+          />
+          {(startDate || endDate || month) && (
+            <button
+              className={styles.resetBtn}
+              onClick={() => {
+                setStartDate(null);
+                setEndDate(null);
+                setMonth("");
               }}
-            />
-          }
-        />
+            >
+              Reset
+            </button>
+          )}
+        </div> */}
+        {active &&
+          <div className={styles.popupContainer}>
+            <p className={styles.popupTitle}>Filter</p>
+            <div className={styles.itemContainer}>
+              <Space vertical size={12}>
+                <RangePicker placeholder={["Tanggal Mulai", "Tanggal Akhir"]} className={styles.inputDate}/>
+                <RangePicker picker="week" />
+                <RangePicker picker="month" />
+                <RangePicker picker="quarter" />
+                <RangePicker
+                  picker="year"
+                  id={{
+                    start: 'startInput',
+                    end: 'endInput',
+                  }}
+                  onFocus={(_, info) => {
+                    console.log('Focus:', info.range);
+                  }}
+                  onBlur={(_, info) => {
+                    console.log('Blur:', info.range);
+                  }}
+                />
+              </Space>
+              {/* <DatePicker
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                disabled={!!month}
+                placeholderText="Tanggal awal"
+                customInput={<input className={styles.inputDate} />}
+              />
 
-        <DatePicker
-          selected={endDate}
-          onChange={(date) => setEndDate(date)}
-          disabled={!!month}
-          placeholderText="Tanggal akhir"
-          customInput={
-            <input
-              style={{
-                padding: "10px 14px",
-                borderRadius: 10,
-                border: "1px solid #e5e7eb",
-                fontSize: 14,
-                background: "#fff",
-                cursor: "pointer",
-              }}
-            />
-          }
-        />
-        <select value={month} onChange={(e) => setMonth(e.target.value)}>
-          <option value="">Pilih Bulan</option>
-
-          {months.map((m) => (
-            <option key={m.value} value={m.value}>
-              {m.label}
-            </option>
-          ))}
-        </select>
-
-        {(startDate || endDate || month) && (
-          <button
-            onClick={() => {
-              setStartDate("");
-              setEndDate("");
-              setMonth("");
-            }}
-            style={{
-              padding: "8px 14px",
-              borderRadius: 8,
-              border: "none",
-              background: "#ef4444",
-              color: "#fff",
-              fontSize: 14,
-              fontWeight: 500,
-              cursor: "pointer",
-            }}
-          >
-            Reset
-          </button>
-        )}
+              <DatePicker
+                selected={endDate}
+                onChange={(date) => setEndDate(date)}
+                disabled={!!month}
+                placeholderText="Tanggal akhir"
+                customInput={<input className={styles.inputDate} />}
+              /> */}
+            </div>
+            {/* {(startDate || endDate || month) && (
+              <button
+                className={styles.resetBtn}
+                onClick={() => {
+                  setStartDate(null);
+                  setEndDate(null);
+                  setMonth("");
+                }}
+              >
+                Reset
+              </button>
+            )} */}
+          </div>
+        }
+        <div className={styles.button}>Download Excel</div>
+        <div onClick={toogleActive} className={styles.button}>Filter</div>
       </div>
 
       {/* TABLE */}
       {loading ? (
-        <Loader/>
+        <Loader />
       ) : history.length === 0 ? (
-        <Empty/>
+        <Empty />
       ) : (
-        <div style={{ overflowX: "auto" }}>
-          <table
-            style={{
-              width: "100%",
-              borderCollapse: "collapse",
-              fontSize: 14,
-            }}
-          >
-            <thead>
-              <tr
-                style={{
-                  background: "#f9fafb",
-                  borderBottom: "1px solid #e5e7eb",
-                }}
-              >
-                {["No", "Produk", "Brand", "IMEI", "Harga", "Tanggal"].map(
+        <div className={styles.tableWrapper}>
+          <table className={styles.table}>
+            <thead className={styles.thead}>
+              <tr>
+                {["No", "Produk", "Brand", "Kapasitas", "Tipe Pembayaran", "Total Harga", "Tanggal"].map(
                   (head) => (
-                    <th
-                      key={head}
-                      style={{
-                        padding: 10,
-                        textAlign: "left",
-                        fontWeight: 600,
-                        color: "#374151",
-                      }}
-                    >
+                    <th key={head} className={styles.th}>
                       {head}
                     </th>
                   )
@@ -607,23 +607,36 @@ function History() {
 
             <tbody>
               {history.map((item, index) => (
-                <tr
-                  key={item.id}
-                  style={{
-                    borderBottom: "1px solid #e5e7eb",
-                  }}
-                >
-                  <td style={{ padding: 10 }}>{index + 1}</td>
-                  <td style={{ padding: 10 }}>{item.product}</td>
-                  <td style={{ padding: 10 }}>{item.brand}</td>
-                  <td style={{ padding: 10 }}>{item.IMEI}</td>
-                  <td style={{ padding: 10 }}>
-                    {item.price?.reduce(
+                <tr key={item.id} className={styles.tr}>
+                  <td className={styles.td}>{index + 1}</td>
+                  <td className={styles.td}>{item.product}</td>
+                  <td className={styles.td}>{item.brand}</td>
+                  <td className={styles.td}>{item.capacity}</td>
+                  <td className={styles.td}>
+                    <div style={{ display: "flex", gap: "4px" }}>
+                      {item.price?.map((p, i) => (
+                        <div
+                          key={i}
+                          className={styles.paymentType}
+                          style={{
+                            backgroundColor: p.type == "TF" ? "#E2FBEB" : p.type == "CS" ? "#E8F8FF" : "#FEE9FA",
+                            color: p.type == "TF" ? "#2FB264" : p.type == "CS" ? "#748FC8" : "#AD5D89",
+                          }}
+                        >
+                          {p.type} {formatRupiah(p.amount)}
+                        </div>
+                      ))}
+                    </div>
+                  </td>
+                  <td className={styles.td}>
+                    {formatRupiah(
+                      item.price?.reduce(
                       (sum, p) => sum + Number(p.amount || 0),
                       0
+                    )
                     )}
                   </td>
-                  <td style={{ padding: 10 }}>
+                  <td className={styles.td}>
                     {item.createdAt?.toDate
                       ? item.createdAt.toDate().toLocaleDateString("id-ID")
                       : new Date(item.createdAt).toLocaleDateString("id-ID")}
