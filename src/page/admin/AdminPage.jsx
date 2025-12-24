@@ -301,7 +301,7 @@ function Stok() {
           <p style={{fontFamily: "SFProRegular", color: "#b3b3b3"}}>Informasi stok terkini berdasarkan data gudang</p>
         </div>
         <button
-          className={styles.downloadBtn}
+          className={styles.button}
           onClick={handleDownloadExcel}
         >
           Download Excel
@@ -492,66 +492,57 @@ function History() {
   
   return(
     <>
+    {/* FILTER */}
+    {active &&
+      <div className={styles.popupContainer}>
+        <p className={styles.popupTitle}>Filter</p>
+        <div className={styles.popupItemContainer}>
+          <div className={styles.popupItemWrapper}>
+            <p>Range Tanggal</p>
+            <Space direction="vertical" size={12}>
+              <RangePicker
+                placeholder={["Tanggal Mulai", "Tanggal Akhir"]}
+                className={styles.inputDate}
+                value={tempRange}
+                onChange={(dates) => setTempRange(dates)}
+                disabled={!!month}
+              />
+            </Space>
+          </div>
+        </div>
+        <div className={styles.popupItemWrapper}>
+          {(startDate || endDate || month) &&(
+            <div className={styles.popupButton} style={{backgroundColor: "#DA0909"}}
+            onClick={() => {
+              setStartDate(null);
+              setEndDate(null);
+              setMonth("");
+              setTempRange(null)
+              toogleDeact()
+            }}>Reset Filter</div>
+          )}
+          <div className={styles.popupButton}
+            onClick={() => {
+              if (!tempRange) return;
+              setStartDate(tempRange[0]);
+              setEndDate(tempRange[1]);
+              toogleDeact()
+            }}
+          >Filter</div>
+        </div>
+      </div>
+    }
+    {/*KOMPONEN*/}
     <div className={styles.itemContainer}>
-      <div>
+      <div className={styles.topStock}>
         <div>
           <p style={{fontSize: "1.5rem"}}>Histori Penjualan</p>
           <p style={{fontFamily: "SFProRegular", color: "#b3b3b3"}}>Rekap data transaksi penjualan berdasarkan periode waktu</p>
         </div>
-        {/* FILTER */}
-        {active &&
-          <div className={styles.popupContainer}>
-            <p className={styles.popupTitle}>Filter</p>
-            <div className={styles.popupItemContainer}>
-              <div className={styles.popupItemWrapper}>
-                <p>Range Tanggal</p>
-                <Space direction="vertical" size={12}>
-                  <RangePicker
-                    placeholder={["Tanggal Mulai", "Tanggal Akhir"]}
-                    className={styles.inputDate}
-                    value={tempRange}
-                    onChange={(dates) => setTempRange(dates)}
-                    disabled={!!month}
-                  />
-                </Space>
-              </div>
-            </div>
-            <div className={styles.popupItemWrapper}>
-              {(startDate || endDate || month) &&(
-                <div className={styles.popupButton} style={{backgroundColor: "#DA0909"}}
-                onClick={() => {
-                  setStartDate(null);
-                  setEndDate(null);
-                  setMonth("");
-                  setTempRange(null)
-                  toogleDeact()
-                }}>Reset Filter</div>
-              )}
-              <div className={styles.popupButton}
-                onClick={() => {
-                  if (!tempRange) return;
-                  setStartDate(tempRange[0]);
-                  setEndDate(tempRange[1]);
-                  toogleDeact()
-                }}
-              >Filter</div>
-            </div>
-            {/* {(startDate || endDate || month) && (
-              <button
-                className={styles.resetBtn}
-                onClick={() => {
-                  setStartDate(null);
-                  setEndDate(null);
-                  setMonth("");
-                }}
-              >
-                Reset
-              </button>
-            )} */}
-          </div>
-        }
-        <div className={styles.button}>Download Excel</div>
-        <div onClick={toogleActive} className={styles.button}>Filter</div>
+        <div style={{display: "flex", gap: "1rem"}}>
+          <div onClick={toogleActive} className={styles.button}>Download Excel</div>
+          <div onClick={toogleActive} className={styles.button}>Filter</div>
+        </div>
       </div>
 
       {/* TABLE */}
@@ -613,6 +604,17 @@ function History() {
                 </tr>
               ))}
             </tbody>
+            
+            <tr>
+              <td colSpan="5">Jumlah Unit Terjual: {history.length}</td>
+            </tr>
+            <tr>
+              <td colSpan="5">Total penjualan per brand: {history.filter((item) => item.brand == "samsung").length}</td>
+            </tr>
+            <tr>
+              <td colSpan="5">Total pemasukan per tipe pembayaran: CS = {history.flatMap(item => item.price).filter(f => f.type == "CS").reduce((sum, i) => sum + i.amount, 0)} | TF = {history.flatMap(item => item.price).filter(f => f.type == "TF").reduce((sum, i) => sum + i.amount, 0)} | GS {history.flatMap(item => item.price).filter(f => f.type == "GS").reduce((sum, i) => sum + i.amount, 0)}</td>
+            </tr>
+
           </table>
         </div>
       )}

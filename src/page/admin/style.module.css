@@ -154,6 +154,7 @@
   justify-content: space-between;
 }
 
+
 .downloadBtn {
   padding: 8px 16px;
   background-color: #773ff9;
@@ -166,27 +167,21 @@
   transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
-.downloadBtn:hover {
-  background-color: #8c6ee6;
-}
-
-.downloadBtn:active {
-  transform: scale(0.97);
-}
-
-.downloadBtn:disabled {
-  background-color: #c7b9f8;
-  cursor: not-allowed;
-}
-
 .button {
   display: flex;
-  padding: 8px;
+  padding: 8px 16px;
   justify-content: center;
   align-items: center;
   background-color: #773ff9;
+  width: max-content;
+  height: max-content;
   color: white;
   border-radius: 8px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #8c6ee6;
 }
 
 .paymentType {
