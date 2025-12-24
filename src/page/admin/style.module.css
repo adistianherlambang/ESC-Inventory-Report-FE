@@ -235,6 +235,13 @@
   font-size: 14px;
   font-family: SFProRegular;
   font-size: 14px;
+  width: 100%;
+}
+
+.popupItemWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .popupTitle {
@@ -244,12 +251,24 @@
 }
 
 .inputDate {
-  
   border-radius: 1rem;
   width: 100%;
   padding: 1rem;
   font-size: 12px;
   cursor: pointer;
+}
+
+.popupButton {
+  background-color: #773ff9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  padding: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: SFProBold;
+  font-size: 1rem;
 }
 
 @keyframes Overlay {

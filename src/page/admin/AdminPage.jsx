@@ -394,6 +394,7 @@ function History() {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [month, setMonth] = useState("");
+  const [tempRange, setTempRange] = useState(null); 
 
   const [open, setOpen] = useState(false)
   
@@ -487,7 +488,6 @@ function History() {
   }
 
   const { active, toogleDeact, toogleActive } = userActivityLogic()
-
   const { RangePicker } = DatePicker;
   
   return(
@@ -499,73 +499,42 @@ function History() {
           <p style={{fontFamily: "SFProRegular", color: "#b3b3b3"}}>Rekap data transaksi penjualan berdasarkan periode waktu</p>
         </div>
         {/* FILTER */}
-        {/* <div className={styles.filterContainer}>
-          <DatePicker
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
-            disabled={!!month}
-            placeholderText="Tanggal awal"
-            customInput={<input className={styles.inputDate} />}
-          />
-
-          <DatePicker
-            selected={endDate}
-            onChange={(date) => setEndDate(date)}
-            disabled={!!month}
-            placeholderText="Tanggal akhir"
-            customInput={<input className={styles.inputDate} />}
-          />
-          {(startDate || endDate || month) && (
-            <button
-              className={styles.resetBtn}
-              onClick={() => {
-                setStartDate(null);
-                setEndDate(null);
-                setMonth("");
-              }}
-            >
-              Reset
-            </button>
-          )}
-        </div> */}
         {active &&
           <div className={styles.popupContainer}>
             <p className={styles.popupTitle}>Filter</p>
-            <div className={styles.itemContainer}>
-              <Space vertical size={12}>
-                <RangePicker placeholder={["Tanggal Mulai", "Tanggal Akhir"]} className={styles.inputDate}/>
-                <RangePicker picker="week" />
-                <RangePicker picker="month" />
-                <RangePicker picker="quarter" />
-                <RangePicker
-                  picker="year"
-                  id={{
-                    start: 'startInput',
-                    end: 'endInput',
-                  }}
-                  onFocus={(_, info) => {
-                    console.log('Focus:', info.range);
-                  }}
-                  onBlur={(_, info) => {
-                    console.log('Blur:', info.range);
-                  }}
-                />
-              </Space>
-              {/* <DatePicker
-                selected={startDate}
-                onChange={(date) => setStartDate(date)}
-                disabled={!!month}
-                placeholderText="Tanggal awal"
-                customInput={<input className={styles.inputDate} />}
-              />
-
-              <DatePicker
-                selected={endDate}
-                onChange={(date) => setEndDate(date)}
-                disabled={!!month}
-                placeholderText="Tanggal akhir"
-                customInput={<input className={styles.inputDate} />}
-              /> */}
+            <div className={styles.popupItemContainer}>
+              <div className={styles.popupItemWrapper}>
+                <p>Range Tanggal</p>
+                <Space direction="vertical" size={12}>
+                  <RangePicker
+                    placeholder={["Tanggal Mulai", "Tanggal Akhir"]}
+                    className={styles.inputDate}
+                    value={tempRange}
+                    onChange={(dates) => setTempRange(dates)}
+                    disabled={!!month}
+                  />
+                </Space>
+              </div>
+            </div>
+            <div className={styles.popupItemWrapper}>
+              {(startDate || endDate || month) &&(
+                <div className={styles.popupButton} style={{backgroundColor: "#DA0909"}}
+                onClick={() => {
+                  setStartDate(null);
+                  setEndDate(null);
+                  setMonth("");
+                  setTempRange(null)
+                  toogleDeact()
+                }}>Reset Filter</div>
+              )}
+              <div className={styles.popupButton}
+                onClick={() => {
+                  if (!tempRange) return;
+                  setStartDate(tempRange[0]);
+                  setEndDate(tempRange[1]);
+                  toogleDeact()
+                }}
+              >Filter</div>
             </div>
             {/* {(startDate || endDate || month) && (
               <button
