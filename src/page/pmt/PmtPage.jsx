@@ -17,6 +17,7 @@ import styles from "./style.module.css";
 
 export default function PmtPage() {
   const logout = userStore((state) => state.logout);
+  const user = userStore((state) => state.currentUser)
 
   const {
     pmtData,

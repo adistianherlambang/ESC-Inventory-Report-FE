@@ -213,16 +213,16 @@ function Beranda() {
                   <path
                     d="M17.25 21.75H11.25M8.75 13.25H15.25M8.75 9.75H15.25M8.75 6.25H15.25M20.25 0.75H18.75V6.25H23.25V3.75C23.25 2.95435 22.9339 2.19129 22.3713 1.62868C21.8087 1.06607 21.0456 0.75 20.25 0.75Z"
                     stroke="#773FF9"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
                   <path
                     d="M13.5 17.25H3.75C2.95435 17.25 2.19129 17.5661 1.62868 18.1287C1.06607 18.6913 0.75 19.4544 0.75 20.25V23.25H11.25V19.5C11.25 18.9033 11.4871 18.331 11.909 17.909C12.331 17.4871 12.9033 17.25 13.5 17.25ZM13.5 17.25C14.0967 17.25 14.669 17.4871 15.091 17.909C15.5129 18.331 15.75 18.9033 15.75 19.5V20.25C15.75 20.6478 15.908 21.0294 16.1893 21.3107C16.4706 21.592 16.8522 21.75 17.25 21.75C17.6478 21.75 18.0294 21.592 18.3107 21.3107C18.592 21.0294 18.75 20.6478 18.75 20.25V0.75H8.25C7.45435 0.75 6.69129 1.06607 6.12868 1.62868C5.56607 2.19129 5.25 2.95435 5.25 3.75V17.25"
                     stroke="#773FF9"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
                 </svg>
               </div>
@@ -277,23 +277,23 @@ function Beranda() {
                 <path
                   d="M10.4209 23.168H10.579"
                   stroke="#773FF9"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
                 <path
                   d="M13.667 1H7.33313L8.12505 4.16692H12.8751L13.667 1Z"
                   stroke="#773FF9"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
                 <path
                   d="M18.4169 1H2.58308C1.70908 1 1 1.70908 1 2.58308V27.9169C1 28.7909 1.70908 29.5 2.58308 29.5H18.4169C19.2909 29.5 20 28.7909 20 27.9169V2.58308C20 1.70908 19.2909 1 18.4169 1Z"
                   stroke="#773FF9"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </svg>
             </div>
@@ -1240,6 +1240,14 @@ function Employee() {
     e.preventDefault()
     try {
       await addDoc(collection(db, "users"), uploadData)
+      if (uploadData.brand) {
+        const data = {
+          brand: uploadData.brand,
+          name: uploadData.name,
+          report: []
+        }
+        await addDoc(collection(db, "pmtdatas"), data)
+      }
       setUploadData({ name: "", role: "", brand: "", unique: "" });
       toogleDeact()
     } catch(err) {

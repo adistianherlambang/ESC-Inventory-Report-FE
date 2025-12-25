@@ -9,6 +9,8 @@ import { db } from "../../../firebase";
 import FirestoreExport from "./File";
 import Add from "./Add";
 
+import Logo from "../../../public/Logo";
+
 export default function Login() {
   const [unique, setUnique] = useState("");
   const navigate = useNavigate();
@@ -16,9 +18,6 @@ export default function Login() {
   const user = userStore((state) => state.currentUser);
 
   useEffect(() => {
-    // Only redirect away from /login when we have a valid logged-in user
-    // with a role. This prevents a redirect loop between "/" and "/login"
-    // when the stored user is missing a role or is incomplete.
     if (user?.role) {
       navigate("/", { replace: true });
     }
@@ -40,13 +39,10 @@ export default function Login() {
         const data = { id: doc.id, ...doc.data() };
         alert(`login Sukses: ${JSON.stringify(data)}`);
         setCurrentUser(data);
-        // Do a replace navigation after login to avoid filling history
-        // and to be consistent with the effect logic above.
+
         if (data?.role) {
           navigate("/", { replace: true });
         } else {
-          // If the user doc doesn't contain a role, stay on the login page
-          // and surface the issue so the developer can correct the user doc.
           alert("Login sukses, tetapi role pengguna belum diatur.");
         }
       } else {
@@ -60,9 +56,9 @@ export default function Login() {
   return (
     <div className={styles.container}>
       <div className={styles.top}>
-        SuperApp
-        <FirestoreExport />
-        <Add />
+        <Logo />
+        {/* <FirestoreExport />
+        <Add /> */}
       </div>
       <div className={styles.bottom}>
         <p className={styles.title}>

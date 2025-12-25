@@ -97,8 +97,8 @@ export default function Product({ search, brand }) {
                 <path
                   d="M16.8 0.799805L8.80005 8.79981L0.800047 0.799804"
                   stroke="white"
-                  stroke-width="1.6"
-                  stroke-linecap="round"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
                 />
               </svg>
               Tampilkan lebih banyak
