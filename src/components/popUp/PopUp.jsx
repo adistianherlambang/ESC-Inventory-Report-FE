@@ -4,7 +4,7 @@ import userActivityLogic from "../../hooks/userActivityLogic";
 
 export default function PopUp({ children, onClose }) {
   const { toogleStockDeact } = pmtReport();
-  const { active, toogleDeact } = userActivityLogic()
+  const { active, toogleDeact } = userActivityLogic();
 
   // Overlay click: call provided onClose, otherwise fallback to toogleStockDeact
   const handleOverlayClick = () => {

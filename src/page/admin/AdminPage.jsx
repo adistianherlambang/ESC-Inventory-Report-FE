@@ -1,17 +1,35 @@
 import { useState, useEffect, act } from "react";
 import { userStore } from "../../state/state";
-import styles from "./style.module.css"
+import styles from "./style.module.css";
 import Logo from "../../../public/Logo";
 import { LogoutIcon } from "../../../public/Icon";
 import { db } from "../../../firebase";
-import { getDocs, collection, doc, where, query, Timestamp } from "firebase/firestore";
+import {
+  getDocs,
+  collection,
+  doc,
+  where,
+  query,
+  Timestamp,
+  deleteDoc,
+  addDoc,
+} from "firebase/firestore";
 import { Row, Col, Card } from "antd";
 import * as XLSX from "xlsx-js-style";
 import { saveAs } from "file-saver";
-import { LineChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Line, ResponsiveContainer } from "recharts";
+import {
+  LineChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  Line,
+  ResponsiveContainer,
+} from "recharts";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
-import { DatePicker, Space } from 'antd';
+import { DatePicker, Space } from "antd";
 
 import Empty from "../../components/item/Empty/Empty";
 import Loader from "../../components/item/loader/Loader";
@@ -20,66 +38,88 @@ import userActivityLogic from "../../hooks/userActivityLogic";
 import PopUp from "../../components/popUp/popUp";
 
 export default function AdminPage() {
+  const { active, toogleDeact } = userActivityLogic();
 
-  const { active, toogleDeact } = userActivityLogic()
-  
-  const user = userStore((state) => state.currentUser)
-  const logout = userStore((state) => state.logout)
+  const user = userStore((state) => state.currentUser);
+  const logout = userStore((state) => state.logout);
 
-  const [selectedNav, setSelectedNav] = useState("Beranda")
+  const [selectedNav, setSelectedNav] = useState("Beranda");
 
   const nav = [
     "Beranda",
     "Cek Stok",
     "Histori Penjualan",
-    "Manajemen Karyawan"
-  ]
+    "Manajemen Karyawan",
+  ];
 
-  return(
+  return (
     <>
-    {!active ? <></> :
-      <div className={styles.overlay} onClick={toogleDeact}></div>
-    }
-    <div className={styles.container}>
-      <div className={styles.top}>
-        <div className={styles.topContainer}>
-          <Logo />
-          <div onClick={logout} className={styles.logoutButton}>
-            <LogoutIcon />
-            Logout
+      {!active ? (
+        <></>
+      ) : (
+        <div className={styles.overlay} onClick={toogleDeact}></div>
+      )}
+      <div className={styles.container}>
+        <div className={styles.top}>
+          <div className={styles.topContainer}>
+            <Logo />
+            <div onClick={logout} className={styles.logoutButton}>
+              <LogoutIcon />
+              Logout
+            </div>
+          </div>
+          <div className={styles.pmtContainer}>
+            <p>Bismillah, {user.name}👋</p>
+            <p className={styles.pmt}>Admin</p>
           </div>
         </div>
-        <div className={styles.pmtContainer}>
-          <p>Bismillah, {user.name}👋</p>
-          <p className={styles.pmt}>Admin</p>
+        <div className={styles.sliderContainer}>
+          {nav.map((item, index) => (
+            <div
+              key={index}
+              className={styles.slider}
+              onClick={() => setSelectedNav(item)}
+              style={
+                selectedNav == item
+                  ? { backgroundColor: "#773ff9", color: "white" }
+                  : {}
+              }
+            >
+              {item}
+            </div>
+          ))}
+        </div>
+        <div>
+          {selectedNav == "Beranda" ? <Beranda /> : <></>}
+          {selectedNav == "Cek Stok" ? <Stok /> : <></>}
+          {selectedNav == "Histori Penjualan" ? <History /> : <></>}
+          {selectedNav == "Manajemen Karyawan" ? <Employee /> : <></>}
         </div>
       </div>
-      <div className={styles.sliderContainer}>
-        {nav.map((item, index) => (
-          <div key={index} className={styles.slider} onClick={() => setSelectedNav(item)} style={selectedNav == item ? {backgroundColor: "#773ff9", color: "white"} : {}}>{item}</div>
-        ))}
-      </div>
-      <div>
-        {selectedNav == "Beranda" ? <Beranda/> : <></>}
-        {selectedNav == "Cek Stok" ? <Stok/> : <></>}
-        {selectedNav == "Histori Penjualan" ? <History/> : <></>}
-      </div>
-    </div>
     </>
-  )
+  );
 }
 
 function Beranda() {
+  const [selling, setSelling] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const q = collection(db, "selling");
+        const snap = await getDocs(q);
 
-      } catch(err) {
-        console.error(err.message)
+        const data = snap.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setSelling(data);
+      } catch (err) {
+        console.error(err.message);
       }
-    }
-  })
+    };
+    fetchData();
+  });
 
   const data = [
     { name: "Jan", sales: 4000 },
@@ -88,53 +128,309 @@ function Beranda() {
     { name: "Apr", sales: 2780 },
   ];
 
-  return(
+  const formatRupiah = (value) => {
+    if (typeof value !== "number") return value;
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+    }).format(value);
+  };
+
+  const now = new Date();
+  const wib = new Date(now.getTime() + 7 * 60 * 60 * 1000);
+  const wibYesterday = new Date(wib);
+  wibYesterday.setDate(wibYesterday.getDate() - 1);
+  const yesterday = wibYesterday.toISOString().split("T")[0];
+  const date = wib.toISOString().split("T")[0];
+
+  const dateFilter = selling.filter((r) => {
+    const reportDate = r.createdAt?.toDate()?.toLocaleDateString("en-CA");
+    return reportDate === date;
+  });
+
+  const sellingToday = selling.filter((r) => {
+    const reportDate = r.createdAt?.toDate()?.toLocaleDateString("en-CA")
+    return reportDate === date
+  }).flatMap((item) => item.price)
+
+  const sellingYesterday = selling.filter((r) => {
+    const reportDate = r.createdAt?.toDate()?.toLocaleDateString("en-CA")
+    return reportDate === yesterday
+  }).flatMap((item) => item.price).reduce((sum, item) => sum + item.amount, 0)
+
+  const percentage = sellingYesterday === 0
+  ? 0
+  : ((sellingToday.reduce((sum, item) => sum + item.amount, 0) - sellingYesterday) * 100) / sellingYesterday;
+
+  return (
     <>
-    <div style={{ width: "100%", height: 300 }}>
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Line type="monotone" dataKey="sales" />
-        </LineChart>
-      </ResponsiveContainer>
-    </div>
+      {/* <div style={{width: "100%", display: "flex", backgroundColor: "black", gap: "1rem"}}>
+        <div className={styles.itemContainer} style={{height: "300px"}}>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={data}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="sales" name="" />
+            </LineChart>
+          </ResponsiveContainer>
+          {dateFilter.flatMap((i) => i.price).reduce((sum, i) => sum + i.amount, 0)}
+        </div>
+      </div> */}
+      <div style={{display: "flex", flexDirection: "column", gap: "1rem"}}>
+        <div style={{ width: "100%", display: "flex", gap: "1rem" }}>
+          <div
+            className={styles.itemContainer}
+            style={{
+              color: "#FFF1FF",
+              backgroundColor: "#773FF9",
+              width: "100%",
+              borderRadius: "1rem",
+            }}
+          >
+            <div style={{width: "100%", display: "flex", justifyContent: "space-between"}}>
+              <div
+                style={{
+                  backgroundColor: "white",
+                  width: "3rem",
+                  height: "3rem",
+                  borderRadius: "4px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M17.25 21.75H11.25M8.75 13.25H15.25M8.75 9.75H15.25M8.75 6.25H15.25M20.25 0.75H18.75V6.25H23.25V3.75C23.25 2.95435 22.9339 2.19129 22.3713 1.62868C21.8087 1.06607 21.0456 0.75 20.25 0.75Z"
+                    stroke="#773FF9"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M13.5 17.25H3.75C2.95435 17.25 2.19129 17.5661 1.62868 18.1287C1.06607 18.6913 0.75 19.4544 0.75 20.25V23.25H11.25V19.5C11.25 18.9033 11.4871 18.331 11.909 17.909C12.331 17.4871 12.9033 17.25 13.5 17.25ZM13.5 17.25C14.0967 17.25 14.669 17.4871 15.091 17.909C15.5129 18.331 15.75 18.9033 15.75 19.5V20.25C15.75 20.6478 15.908 21.0294 16.1893 21.3107C16.4706 21.592 16.8522 21.75 17.25 21.75C17.6478 21.75 18.0294 21.592 18.3107 21.3107C18.592 21.0294 18.75 20.6478 18.75 20.25V0.75H8.25C7.45435 0.75 6.69129 1.06607 6.12868 1.62868C5.56607 2.19129 5.25 2.95435 5.25 3.75V17.25"
+                    stroke="#773FF9"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <div style={{backgroundColor: sellingToday > sellingYesterday ? "#74F57F" : "#FF413F", padding: "4px 8px", height: "max-content", fontSize: "12px", borderRadius: "1rem"}}>{percentage.toFixed(1)}%</div>
+            </div>
+            <div>
+              <p
+                style={{
+                  fontSize: "14px",
+                  fontFamily: "SFProRegular",
+                  color: "#CDA1FF",
+                }}
+              >
+                Pemasukan hari ini
+              </p>
+              <p style={{ fontSize: "2rem" }}>
+                {formatRupiah(
+                  dateFilter
+                    .flatMap((item) => item.price)
+                    .reduce((sum, item) => sum + item.amount, 0),
+                )}
+              </p>
+            </div>
+          </div>
+          <div
+            className={styles.itemContainer}
+            style={{
+              color: "#FFF1FF",
+              backgroundColor: "#773FF9",
+              width: "100%",
+              borderRadius: "1rem",
+            }}
+          >
+            <div
+              style={{
+                backgroundColor: "white",
+                width: "3rem",
+                height: "3rem",
+                borderRadius: "4px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <svg
+                width="16"
+                height="26"
+                viewBox="0 0 21 31"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M10.4209 23.168H10.579"
+                  stroke="#773FF9"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M13.667 1H7.33313L8.12505 4.16692H12.8751L13.667 1Z"
+                  stroke="#773FF9"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M18.4169 1H2.58308C1.70908 1 1 1.70908 1 2.58308V27.9169C1 28.7909 1.70908 29.5 2.58308 29.5H18.4169C19.2909 29.5 20 28.7909 20 27.9169V2.58308C20 1.70908 19.2909 1 18.4169 1Z"
+                  stroke="#773FF9"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <div>
+              <p
+                style={{
+                  fontSize: "14px",
+                  fontFamily: "SFProRegular",
+                  color: "#CDA1FF",
+                }}
+              >
+                Unit terjual hari ini
+              </p>
+              <p style={{ fontSize: "2rem" }}>{dateFilter.length} Unit</p>
+            </div>
+          </div>
+        </div>
+        <div style={{ width: "100%", display: "flex", gap: "0.5rem" }}>
+          <div
+            className={styles.itemContainer}
+            style={{
+              color: "#748FC8",
+              backgroundColor: "#E8F8FF",
+              width: "30%",
+              borderRadius: "1rem",
+            }}
+          >
+            <div>
+              <p
+                style={{
+                  fontSize: "14px",
+                  fontFamily: "SFProRegular",
+                  color: "#748FC8",
+                }}
+              >
+                Total Cash
+              </p>
+              <p style={{ fontSize: "2rem" }}>
+                {formatRupiah(sellingToday.filter((item) => item.type == "CS").reduce((sum, item) => sum + item.amount, 0))}
+              </p>
+            </div>
+          </div>
+          <div
+            className={styles.itemContainer}
+            style={{
+              color: "#2FB264",
+              backgroundColor: "#E2FBEB",
+              width: "30%",
+              borderRadius: "1rem",
+            }}
+          >
+            <div>
+              <p
+                style={{
+                  fontSize: "14px",
+                  fontFamily: "SFProRegular",
+                  color: "#2FB264",
+                }}
+              >
+                Total Transfer
+              </p>
+              <p style={{ fontSize: "2rem" }}>
+                {formatRupiah(sellingToday.filter((item) => item.type == "TF").reduce((sum, item) => sum + item.amount, 0))}
+              </p>
+            </div>
+          </div>
+          <div
+            className={styles.itemContainer}
+            style={{
+              color: "#AD5D89",
+              backgroundColor: "#FEE9FA",
+              width: "30%",
+              borderRadius: "1rem",
+            }}
+          >
+            <div>
+              <p
+                style={{
+                  fontSize: "14px",
+                  fontFamily: "SFProRegular",
+                  color: "#AD5D89",
+                }}
+              >
+                Total Debit
+              </p>
+              <p style={{ fontSize: "2rem" }}>
+                {formatRupiah(sellingToday.filter((item) => item.type == "GS").reduce((sum, item) => sum + item.amount, 0))}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <ResponsiveContainer width="100%" height="100%">
+
+          </ResponsiveContainer>
+        </div>
+      </div>
     </>
-  )
+  );
 }
 
 function Stok() {
-
-  const [loading, setLoading] = useState(true)
-  const [product, setProduct] = useState([])
-  const [search, setSearch] = useState("")
-  const [brandSearch, setBrandSearch] = useState("")
+  const [loading, setLoading] = useState(true);
+  const [product, setProduct] = useState([]);
+  const [search, setSearch] = useState("");
+  const [brandSearch, setBrandSearch] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const querySnapshot = await getDocs(
-          collection(db, "allproducts")
-        )
-        const data = querySnapshot.docs.map(doc => ({
+        const querySnapshot = await getDocs(collection(db, "allproducts"));
+        const data = querySnapshot.docs.map((doc) => ({
           id: doc.id,
-          ...doc.data()
-        }))
-        setProduct(data)
-      } catch(err) {
-        console.error(err.message)
+          ...doc.data(),
+        }));
+        setProduct(data);
+      } catch (err) {
+        console.error(err.message);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
-    fetchData()
-  })
+    };
+    fetchData();
+  });
 
-  const brand = ["samsung", "xiaomi", "vivo", "oppo", "infinix", "realme", "tecno", "iphone", "nokia"]
-  
+  const brand = [
+    "samsung",
+    "xiaomi",
+    "vivo",
+    "oppo",
+    "infinix",
+    "realme",
+    "tecno",
+    "iphone",
+    "nokia",
+  ];
+
   const sortedProduct = [...product].sort((a, b) => {
     const aIndex = brand.indexOf(a.brand?.toLowerCase());
     const bIndex = brand.indexOf(b.brand?.toLowerCase());
@@ -148,25 +444,22 @@ function Stok() {
   });
 
   const filteredProduct = sortedProduct.filter((item) => {
-    const matchProduct = item.product.toLowerCase().includes(search.toLowerCase());
-    const matchBrand = item.brand.toLowerCase().includes(brandSearch.toLowerCase());
+    const matchProduct = item.product
+      .toLowerCase()
+      .includes(search.toLowerCase());
+    const matchBrand = item.brand
+      .toLowerCase()
+      .includes(brandSearch.toLowerCase());
     return matchProduct && matchBrand;
   });
 
-  const dd = String(new Date().getDate()).padStart(2, "0")
-  const mm = String(new Date().getMonth() + 1).padStart(2, "0")
-  const yy = String(new Date().getFullYear()).slice(-2)
+  const dd = String(new Date().getDate()).padStart(2, "0");
+  const mm = String(new Date().getMonth() + 1).padStart(2, "0");
+  const yy = String(new Date().getFullYear()).slice(-2);
 
   const handleDownloadExcel = () => {
     // Header
-    const header = [
-      "No",
-      "Product",
-      "Brand",
-      "Kapasitas",
-      "Color",
-      "Stok",
-    ];
+    const header = ["No", "Product", "Brand", "Kapasitas", "Color", "Stok"];
 
     // Body
     const body = filteredProduct.map((item, index) => [
@@ -181,14 +474,10 @@ function Stok() {
     // Total row
     const totalStok = filteredProduct.reduce(
       (sum, item) => sum + (item.IMEI?.length || 0),
-      0
+      0,
     );
 
-    const data = [
-      header,
-      ...body,
-      ["", "", "", "", "Total Stok", totalStok],
-    ];
+    const data = [header, ...body, ["", "", "", "", "Total Stok", totalStok]];
 
     // Create worksheet
     const ws = XLSX.utils.aoa_to_sheet(data);
@@ -205,7 +494,7 @@ function Stok() {
 
     // Styling
     const headerStyle = {
-      font: { bold: true, color: {rgb: "FFFFFF"} },
+      font: { bold: true, color: { rgb: "FFFFFF" } },
       alignment: { horizontal: "center", vertical: "center" },
       fill: { fgColor: { rgb: "773ff9" } },
       border: {
@@ -236,12 +525,11 @@ function Stok() {
     body.forEach((_, rowIndex) => {
       filteredProduct[rowIndex] &&
         header.forEach((_, colIndex) => {
-          const cell = ws[
-            XLSX.utils.encode_cell({ r: rowIndex + 1, c: colIndex })
-          ];
+          const cell =
+            ws[XLSX.utils.encode_cell({ r: rowIndex + 1, c: colIndex })];
           if (cell) {
             const brandIndex = brand.indexOf(
-              filteredProduct[rowIndex].brand?.toLowerCase()
+              filteredProduct[rowIndex].brand?.toLowerCase(),
             );
 
             cell.s = {
@@ -259,12 +547,11 @@ function Stok() {
     // Style total row
     const totalRowIndex = data.length - 1;
     header.forEach((_, colIndex) => {
-      const cell = ws[
-        XLSX.utils.encode_cell({ r: totalRowIndex, c: colIndex })
-      ];
+      const cell =
+        ws[XLSX.utils.encode_cell({ r: totalRowIndex, c: colIndex })];
       if (cell) {
         cell.s = {
-          font: { bold: true, color: {rgb: "FFFFFF"} },
+          font: { bold: true, color: { rgb: "FFFFFF" } },
           alignment: { horizontal: "right" },
           fill: { fgColor: { rgb: "773ff9" } },
           border: {
@@ -292,113 +579,160 @@ function Stok() {
     saveAs(blob, `stok-gudang-${dd}-${mm}-${yy}.xlsx`);
   };
 
-  return(
+  const deleteProduct = async (id) => {
+    try {
+      await deleteDoc(doc(db, "allproducts", id));
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  return (
     <>
-    <div className={styles.itemContainer}>
-      <div className={styles.topStock}>
-        <div>
-          <p style={{fontSize: "1.5rem"}}>Cek Ketersediaan Stok</p>
-          <p style={{fontFamily: "SFProRegular", color: "#b3b3b3"}}>Informasi stok terkini berdasarkan data gudang</p>
+      <div className={styles.itemContainer}>
+        <div className={styles.topStock}>
+          <div>
+            <p style={{ fontSize: "1.5rem" }}>Cek Ketersediaan Stok</p>
+            <p style={{ fontFamily: "SFProRegular", color: "#b3b3b3" }}>
+              Informasi stok terkini berdasarkan data gudang
+            </p>
+          </div>
+          <button className={styles.button} onClick={handleDownloadExcel}>
+            Download Excel
+          </button>
         </div>
-        <button
-          className={styles.button}
-          onClick={handleDownloadExcel}
-        >
-          Download Excel
-        </button>
-      </div>
-      {loading ? <Loader/> :
-      <div className={styles.tableWrapper}>
-        <table className={styles.table}>
-          <thead className={styles.thead}>
-            <tr>
-              <th className={`${styles.th} ${styles.thNo}`}>No</th>
-              <th className={styles.th}>Product</th>
-              <th className={styles.th}>Brand</th>
-              <th className={styles.th}>Kapasitas</th>
-              <th className={styles.th}>Color</th>
-              <th className={styles.th}>Stok</th>
-            </tr>
-
-            <tr>
-              <th className={styles.search}>
-                <svg
-                  width="15"
-                  height="15"
-                  viewBox="0 0 21 21"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M20 20L15.514 15.506M18 9.5C18 11.7543 17.1045 13.9163 15.5104 15.5104C13.9163 17.1045 11.7543 18 9.5 18C7.24566 18 5.08365 17.1045 3.48959 15.5104C1.89553 13.9163 1 11.7543 1 9.5C1 7.24566 1.89553 5.08365 3.48959 3.48959C5.08365 1.89553 7.24566 1 9.5 1C11.7543 1 13.9163 1.89553 15.5104 3.48959C17.1045 5.08365 18 7.24566 18 9.5Z"
-                    stroke="#773FF9"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </th>
-              <th className={styles.search}>
-                <input
-                  placeholder="Cari produk"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  style={{textAlign: "left"}}
-                />
-              </th>
-               <th className={styles.search}>
-                <input
-                  placeholder="Cari brand"
-                  value={brandSearch}
-                  onChange={(e) => setBrandSearch(e.target.value)}
-                  style={{textAlign: "center"}}
-                />
-              </th>
-              <th className={styles.search} colSpan={3}></th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {filteredProduct.map((item, index) => {
-              const brandIndex = brand.indexOf(item.brand?.toLowerCase());
-              const bgColor = brandIndex % 2 === 0 ? "#ffffff" : "#f3f3f3ff";
-              return(
-                <tr key={item.id ?? index} className={styles.tr} style={{ backgroundColor: bgColor }}>
-                  <td className={`${styles.td} ${styles.tdCenter}`}>
-                    {index + 1}
-                  </td>
-                  <td className={styles.td}>{item.product}</td>
-                  <td className={styles.td}>{item.brand}</td>
-                  <td className={styles.td}>{item.capacity}</td>
-                  <td className={styles.td}>{item.color}</td>
-                  <td className={styles.td}>{item.IMEI?.length || 0}</td>
+        {loading ? (
+          <Loader />
+        ) : (
+          <div className={styles.tableWrapper}>
+            <table className={styles.table}>
+              <thead className={styles.thead}>
+                <tr>
+                  <th className={`${styles.th} ${styles.thNo}`}>No</th>
+                  <th className={styles.th}>Product</th>
+                  <th className={styles.th}>Kapasitas</th>
+                  <th className={styles.th}>Warna</th>
+                  <th className={styles.th}>Brand</th>
+                  <th className={styles.th}>Stok</th>
+                  <th className={styles.th}>Aksi</th>
                 </tr>
-            )})}
-            <tr>
-              <td className={styles.th} style={{textAlign: "right", fontFamily: "SFProBold"}} colSpan={6}>Total Stok: {filteredProduct.reduce((sum, item) => sum + (item.IMEI?.length || 0), 0)}</td>
-            </tr>
-          </tbody>
-        </table>
+
+                <tr>
+                  <th className={styles.search}>
+                    <svg
+                      width="15"
+                      height="15"
+                      viewBox="0 0 21 21"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M20 20L15.514 15.506M18 9.5C18 11.7543 17.1045 13.9163 15.5104 15.5104C13.9163 17.1045 11.7543 18 9.5 18C7.24566 18 5.08365 17.1045 3.48959 15.5104C1.89553 13.9163 1 11.7543 1 9.5C1 7.24566 1.89553 5.08365 3.48959 3.48959C5.08365 1.89553 7.24566 1 9.5 1C11.7543 1 13.9163 1.89553 15.5104 3.48959C17.1045 5.08365 18 7.24566 18 9.5Z"
+                        stroke="#773FF9"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </th>
+                  <th className={styles.search}>
+                    <input
+                      placeholder="Cari produk"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      style={{ textAlign: "left" }}
+                    />
+                  </th>
+                  <th className={styles.search}>
+                    <input
+                      placeholder="Cari brand"
+                      value={brandSearch}
+                      onChange={(e) => setBrandSearch(e.target.value)}
+                      style={{ textAlign: "center" }}
+                    />
+                  </th>
+                  <th className={styles.search} colSpan={4}></th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {filteredProduct.map((item, index) => {
+                  const brandIndex = brand.indexOf(item.brand?.toLowerCase());
+                  const bgColor =
+                    brandIndex % 2 === 0 ? "#ffffff" : "rgba(237, 237, 237, 1)";
+                  return (
+                    <tr
+                      key={item.id ?? index}
+                      className={styles.tr}
+                      style={{ backgroundColor: bgColor }}
+                    >
+                      <td className={`${styles.td} ${styles.tdCenter}`}>
+                        {index + 1}
+                      </td>
+                      <td className={styles.td}>{item.product}</td>
+                      <td className={styles.td}>{item.capacity}</td>
+                      <td className={styles.td}>{item.color}</td>
+                      <td className={styles.td}>{item.brand}</td>
+                      <td className={styles.td}>{item.IMEI?.length || 0}</td>
+                      <td className={styles.td}>
+                        <div
+                          onClick={() => deleteProduct(item.id)}
+                          className={styles.paymentType}
+                          style={{
+                            backgroundColor: "#DA0909",
+                            cursor: "pointer",
+                          }}
+                        >
+                          Hapus
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+                <tr>
+                  <td
+                    className={styles.th}
+                    style={{ textAlign: "right", fontFamily: "SFProBold" }}
+                    colSpan={7}
+                  >
+                    Total Stok:{" "}
+                    {filteredProduct.reduce(
+                      (sum, item) => sum + (item.IMEI?.length || 0),
+                      0,
+                    )}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
-      }
-    </div>
     </>
-  )
+  );
 }
 
 function History() {
-
-  const [history, setHistory] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [history, setHistory] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   //filter
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [month, setMonth] = useState("");
-  const [tempRange, setTempRange] = useState(null); 
+  const [tempRange, setTempRange] = useState(null);
 
-  const [open, setOpen] = useState(false)
-  
-  const brand = ["samsung", "xiaomi", "vivo", "oppo", "infinix", "realme", "tecno", "iphone", "nokia"]
+  const [open, setOpen] = useState(false);
+
+  const brand = [
+    "samsung",
+    "xiaomi",
+    "vivo",
+    "oppo",
+    "infinix",
+    "realme",
+    "tecno",
+    "iphone",
+    "nokia",
+  ];
 
   useEffect(() => {
     if (month) {
@@ -419,7 +753,7 @@ function History() {
       return query(
         baseRef,
         where("createdAt", ">=", Timestamp.fromDate(startOfMonth)),
-        where("createdAt", "<", Timestamp.fromDate(startOfNextMonth))
+        where("createdAt", "<", Timestamp.fromDate(startOfNextMonth)),
       );
     }
 
@@ -432,14 +766,14 @@ function History() {
       return query(
         baseRef,
         where("createdAt", ">=", start),
-        where("createdAt", "<=", end)
+        where("createdAt", "<=", end),
       );
     }
 
     // TANPA FILTER
     return query(baseRef);
   };
-  
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -447,7 +781,7 @@ function History() {
         const q = buildQuery();
         const snap = await getDocs(q);
 
-        const data = snap.docs.map(doc => ({
+        const data = snap.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
@@ -479,145 +813,558 @@ function History() {
   const months = generateMonths(new Date().getFullYear());
 
   const formatRupiah = (value) => {
-    if(typeof value !== "number") return value
+    if (typeof value !== "number") return value;
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
       currency: "IDR",
       minimumFractionDigits: 0,
-    }).format(value)
-  }
+    }).format(value);
+  };
 
-  const { active, toogleDeact, toogleActive } = userActivityLogic()
+  const handleDownloadExcel = () => {
+    // ================= HEADER =================
+    const header = [
+      "No",
+      "Produk",
+      "Kapasitas",
+      "Warna",
+      "Brand",
+      "Tipe Pembayaran",
+      "Total Harga",
+      "Tanggal",
+    ];
+
+    // ================= BODY =================
+    const body = history.map((item, index) => [
+      index + 1,
+      item.product,
+      item.capacity,
+      item.color,
+      item.brand,
+      item.price.map((p) => `${p.type} ${formatRupiah(p.amount)}`).join(", "),
+      formatRupiah(
+        item.price.reduce((sum, p) => sum + Number(p.amount || 0), 0),
+      ),
+      item.createdAt?.toDate
+        ? item.createdAt.toDate().toLocaleDateString("id-ID")
+        : new Date(item.createdAt).toLocaleDateString("id-ID"),
+    ]);
+
+    // ================= SUMMARY =================
+    const summary = [
+      [`Jumlah Unit Terjual: ${history.length}`],
+      ...brand.map((b) => [
+        `Total Brand ${b} Terjual: ${history.filter((i) => i.brand === b).length}`,
+      ]),
+      [
+        `Total CS: ${formatRupiah(
+          history
+            .flatMap((i) => i.price)
+            .filter((p) => p.type === "CS")
+            .reduce((s, p) => s + p.amount, 0),
+        )}`,
+      ],
+      [
+        `Total TF: ${formatRupiah(
+          history
+            .flatMap((i) => i.price)
+            .filter((p) => p.type === "TF")
+            .reduce((s, p) => s + p.amount, 0),
+        )}`,
+      ],
+      [
+        `Total GS: ${formatRupiah(
+          history
+            .flatMap((i) => i.price)
+            .filter((p) => p.type === "GS")
+            .reduce((s, p) => s + p.amount, 0),
+        )}`,
+      ],
+    ];
+
+    // ================= SHEET =================
+    const ws = XLSX.utils.aoa_to_sheet([header, ...body, [], ...summary]);
+
+    // ================= STYLING =================
+
+    const headerStyle = {
+      font: { bold: true, color: { rgb: "FFFFFF" } },
+      alignment: { horizontal: "center", vertical: "center" },
+      fill: { fgColor: { rgb: "773FF9" } },
+      border: {
+        top: { style: "medium" },
+        bottom: { style: "medium" },
+        left: { style: "thin" },
+        right: { style: "thin" },
+      },
+    };
+
+    const cellStyle = {
+      alignment: { vertical: "center" },
+      border: {
+        top: { style: "thin" },
+        bottom: { style: "thin" },
+        left: { style: "thin" },
+        right: { style: "thin" },
+      },
+    };
+    // Header style
+    header.forEach((_, col) => {
+      const cell = XLSX.utils.encode_cell({ r: 0, c: col });
+      ws[cell].s = headerStyle;
+    });
+
+    // Body style
+    body.forEach((_, r) => {
+      header.forEach((_, c) => {
+        const cell = XLSX.utils.encode_cell({ r: r + 1, c });
+        if (ws[cell]) ws[cell].s = cellStyle;
+      });
+    });
+
+    // Merge summary rows (colSpan = 8)
+    const startSummaryRow = body.length + 2;
+    ws["!merges"] = summary.map((_, i) => ({
+      s: { r: startSummaryRow + i, c: 0 },
+      e: { r: startSummaryRow + i, c: 7 },
+    }));
+
+    // Column width
+    ws["!cols"] = [
+      { wch: 5 },
+      { wch: 20 },
+      { wch: 12 },
+      { wch: 12 },
+      { wch: 12 },
+      { wch: 30 },
+      { wch: 15 },
+      { wch: 15 },
+    ];
+
+    // ================= WORKBOOK =================
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Laporan Penjualan");
+
+    XLSX.writeFile(wb, "laporan-penjualan.xlsx");
+  };
+
+  const { active, toogleDeact, toogleActive } = userActivityLogic();
   const { RangePicker } = DatePicker;
-  
-  return(
+
+  return (
     <>
-    {/* FILTER */}
-    {active &&
-      <div className={styles.popupContainer}>
-        <p className={styles.popupTitle}>Filter</p>
-        <div className={styles.popupItemContainer}>
+      {/* FILTER */}
+      {active && (
+        <div className={styles.popupContainer}>
+          <p className={styles.popupTitle}>Filter</p>
+          <div className={styles.popupItemContainer}>
+            <div className={styles.popupItemWrapper}>
+              <p>Range Tanggal</p>
+              <Space direction="vertical" size={12}>
+                <RangePicker
+                  placeholder={["Tanggal Mulai", "Tanggal Akhir"]}
+                  className={styles.inputDate}
+                  value={tempRange}
+                  onChange={(dates) => setTempRange(dates)}
+                  disabled={!!month}
+                />
+              </Space>
+            </div>
+          </div>
           <div className={styles.popupItemWrapper}>
-            <p>Range Tanggal</p>
-            <Space direction="vertical" size={12}>
-              <RangePicker
-                placeholder={["Tanggal Mulai", "Tanggal Akhir"]}
-                className={styles.inputDate}
-                value={tempRange}
-                onChange={(dates) => setTempRange(dates)}
-                disabled={!!month}
-              />
-            </Space>
+            {(startDate || endDate || month) && (
+              <div
+                className={styles.popupButton}
+                style={{ backgroundColor: "#DA0909" }}
+                onClick={() => {
+                  setStartDate(null);
+                  setEndDate(null);
+                  setMonth("");
+                  setTempRange(null);
+                  toogleDeact();
+                }}
+              >
+                Reset Filter
+              </div>
+            )}
+            <div
+              className={styles.popupButton}
+              onClick={() => {
+                if (!tempRange) return;
+                setStartDate(tempRange[0]);
+                setEndDate(tempRange[1]);
+                toogleDeact();
+              }}
+            >
+              Filter
+            </div>
           </div>
         </div>
-        <div className={styles.popupItemWrapper}>
-          {(startDate || endDate || month) &&(
-            <div className={styles.popupButton} style={{backgroundColor: "#DA0909"}}
-            onClick={() => {
-              setStartDate(null);
-              setEndDate(null);
-              setMonth("");
-              setTempRange(null)
-              toogleDeact()
-            }}>Reset Filter</div>
-          )}
-          <div className={styles.popupButton}
-            onClick={() => {
-              if (!tempRange) return;
-              setStartDate(tempRange[0]);
-              setEndDate(tempRange[1]);
-              toogleDeact()
-            }}
-          >Filter</div>
+      )}
+      {/* KOMPONEN */}
+      <div className={styles.itemContainer}>
+        <div className={styles.topStock}>
+          <div>
+            <p style={{ fontSize: "1.5rem" }}>Histori Penjualan</p>
+            <p style={{ fontFamily: "SFProRegular", color: "#b3b3b3" }}>
+              Rekap data transaksi penjualan berdasarkan periode waktu
+            </p>
+          </div>
+          <div style={{ display: "flex", gap: "0.5rem" }}>
+            <div onClick={handleDownloadExcel} className={styles.button}>
+              Download Excel
+            </div>
+            <div onClick={toogleActive} className={styles.button}>
+              Filter
+            </div>
+          </div>
         </div>
-      </div>
-    }
-    {/*KOMPONEN*/}
-    <div className={styles.itemContainer}>
-      <div className={styles.topStock}>
-        <div>
-          <p style={{fontSize: "1.5rem"}}>Histori Penjualan</p>
-          <p style={{fontFamily: "SFProRegular", color: "#b3b3b3"}}>Rekap data transaksi penjualan berdasarkan periode waktu</p>
-        </div>
-        <div style={{display: "flex", gap: "1rem"}}>
-          <div onClick={toogleActive} className={styles.button}>Download Excel</div>
-          <div onClick={toogleActive} className={styles.button}>Filter</div>
-        </div>
-      </div>
 
-      {/* TABLE */}
-      {loading ? (
-        <Loader />
-      ) : history.length === 0 ? (
-        <Empty />
-      ) : (
-        <div className={styles.tableWrapper}>
-          <table className={styles.table}>
-            <thead className={styles.thead}>
-              <tr>
-                {["No", "Produk", "Brand", "Kapasitas", "Tipe Pembayaran", "Total Harga", "Tanggal"].map(
-                  (head) => (
+        {/* TABLE */}
+        {loading ? (
+          <Loader />
+        ) : history.length === 0 ? (
+          <Empty />
+        ) : (
+          <div className={styles.tableWrapper}>
+            <table className={styles.table}>
+              <thead className={styles.thead}>
+                <tr>
+                  {[
+                    "No",
+                    "Produk",
+                    "Kapasitas",
+                    "Warna",
+                    "Brand",
+                    "Tipe Pembayaran",
+                    "Total Harga",
+                    "Tanggal",
+                  ].map((head) => (
                     <th key={head} className={styles.th}>
                       {head}
                     </th>
-                  )
-                )}
-              </tr>
-            </thead>
+                  ))}
+                </tr>
+              </thead>
 
-            <tbody>
-              {history.map((item, index) => (
-                <tr key={item.id} className={styles.tr}>
-                  <td className={styles.td}>{index + 1}</td>
-                  <td className={styles.td}>{item.product}</td>
-                  <td className={styles.td}>{item.brand}</td>
-                  <td className={styles.td}>{item.capacity}</td>
-                  <td className={styles.td}>
-                    <div style={{ display: "flex", gap: "4px" }}>
-                      {item.price?.map((p, i) => (
-                        <div
-                          key={i}
-                          className={styles.paymentType}
-                          style={{
-                            backgroundColor: p.type == "TF" ? "#E2FBEB" : p.type == "CS" ? "#E8F8FF" : "#FEE9FA",
-                            color: p.type == "TF" ? "#2FB264" : p.type == "CS" ? "#748FC8" : "#AD5D89",
-                          }}
-                        >
-                          {p.type} {formatRupiah(p.amount)}
-                        </div>
-                      ))}
-                    </div>
-                  </td>
-                  <td className={styles.td}>
-                    {formatRupiah(
-                      item.price?.reduce(
-                      (sum, p) => sum + Number(p.amount || 0),
-                      0
-                    )
-                    )}
-                  </td>
-                  <td className={styles.td}>
-                    {item.createdAt?.toDate
-                      ? item.createdAt.toDate().toLocaleDateString("id-ID")
-                      : new Date(item.createdAt).toLocaleDateString("id-ID")}
+              <tbody>
+                {history.map((item, index) => (
+                  <tr key={item.id} className={styles.tr}>
+                    <td className={styles.td}>{index + 1}</td>
+                    <td className={styles.td}>{item.product}</td>
+                    <td className={styles.td}>{item.capacity}</td>
+                    <td className={styles.td}>{item.color}</td>
+                    <td className={styles.td}>{item.brand}</td>
+                    <td className={styles.td}>
+                      <div style={{ display: "flex", gap: "4px" }}>
+                        {item.price?.map((p, i) => (
+                          <div
+                            key={i}
+                            className={styles.paymentType}
+                            style={{
+                              backgroundColor:
+                                p.type == "TF"
+                                  ? "#E2FBEB"
+                                  : p.type == "CS"
+                                    ? "#E8F8FF"
+                                    : "#FEE9FA",
+                              color:
+                                p.type == "TF"
+                                  ? "#2FB264"
+                                  : p.type == "CS"
+                                    ? "#748FC8"
+                                    : "#AD5D89",
+                            }}
+                          >
+                            {p.type} {formatRupiah(p.amount)}
+                          </div>
+                        ))}
+                      </div>
+                    </td>
+                    <td className={styles.td}>
+                      {formatRupiah(
+                        item.price?.reduce(
+                          (sum, p) => sum + Number(p.amount || 0),
+                          0,
+                        ),
+                      )}
+                    </td>
+                    <td className={styles.td}>
+                      {item.createdAt?.toDate
+                        ? item.createdAt.toDate().toLocaleDateString("id-ID")
+                        : new Date(item.createdAt).toLocaleDateString("id-ID")}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+
+              <tr>
+                <td colSpan="8">Jumlah Unit Terjual: {history.length}</td>
+              </tr>
+              <tr>
+                <td colSpan="8">
+                  Total Unit per Brand:{" "}
+                  {history.filter((item) => item.brand == "samsung").length}
+                </td>
+              </tr>
+              {brand.map((item) => (
+                <tr>
+                  <td colSpan="8">
+                    Total Brand{" "}
+                    <b>
+                      <i>{item}</i>
+                    </b>{" "}
+                    Terjual: {history.filter((i) => i.brand == item).length}
                   </td>
                 </tr>
               ))}
-            </tbody>
-            
-            <tr>
-              <td className={styles.td} style={{textAlign: "left"}} colSpan="5">Jumlah Unit Terjual: {history.length}</td>
-            </tr>
-            <tr>
-              <td className={styles.td} style={{textAlign: "left"}} colSpan="5">Total penjualan per brand: {history.filter((item) => item.brand == "samsung").length}</td>
-            </tr>
-            <tr>
-              <td className={styles.td} style={{textAlign: "left"}} colSpan="5">Total pemasukan per tipe pembayaran: CS = {history.flatMap(item => item.price).filter(f => f.type == "CS").reduce((sum, i) => sum + i.amount, 0)} | TF = {history.flatMap(item => item.price).filter(f => f.type == "TF").reduce((sum, i) => sum + i.amount, 0)} | GS {history.flatMap(item => item.price).filter(f => f.type == "GS").reduce((sum, i) => sum + i.amount, 0)}</td>
-            </tr>
+              <tr>
+                <td colSpan="8">
+                  <div style={{ display: "flex", gap: "0.5rem" }}>
+                    <p>Total pemasukan per tipe pembayaran:</p>
+                    <div
+                      className={styles.paymentType}
+                      style={{
+                        backgroundColor: "#E8F8FF",
+                        color: "#748FC8",
+                      }}
+                    >
+                      {" "}
+                      CS{" "}
+                      {formatRupiah(
+                        history
+                          .flatMap((item) => item.price)
+                          .filter((f) => f.type == "CS")
+                          .reduce((sum, i) => sum + i.amount, 0),
+                      )}
+                    </div>
+                    <div
+                      className={styles.paymentType}
+                      style={{
+                        backgroundColor: "#E2FBEB",
+                        color: "#2FB264",
+                      }}
+                    >
+                      {" "}
+                      TF{" "}
+                      {formatRupiah(
+                        history
+                          .flatMap((item) => item.price)
+                          .filter((f) => f.type == "TF")
+                          .reduce((sum, i) => sum + i.amount, 0),
+                      )}
+                    </div>
+                    <div
+                      className={styles.paymentType}
+                      style={{
+                        backgroundColor: "#FEE9FA",
+                        color: "#AD5D89",
+                      }}
+                    >
+                      {" "}
+                      GS{" "}
+                      {formatRupiah(
+                        history
+                          .flatMap((item) => item.price)
+                          .filter((f) => f.type == "GS")
+                          .reduce((sum, i) => sum + i.amount, 0),
+                      )}
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
 
-          </table>
+function Employee() {
+
+  const {active, toogleDeact, toogleActive} = userActivityLogic()
+  
+  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const q = collection(db, "users")
+        const snap = await getDocs(q)
+        const data = snap.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data()
+        }))
+        setUser(data)
+      } catch(err) {
+        console.error(err.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchData()
+  })
+  
+  const role = ["admin", "fl", "pmt"]
+  
+  const sorted = [...user].sort(
+    (a, b) => role.indexOf(a.role) - role.indexOf(b.role)
+  );
+  
+  const deleteUser = async (id) => {
+    try {
+      await deleteDoc(doc(db, "users", id))
+    } catch (err) {
+      console.error(err.message)
+    }
+  }
+  
+  const [uploadData, setUploadData] = useState({
+    name: "",
+    role: "",
+    brand: "",
+    unique: ""
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUploadData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const addUser = async (e) => {
+    e.preventDefault()
+    try {
+      await addDoc(collection(db, "users"), uploadData)
+      setUploadData({ name: "", role: "", brand: "", unique: "" });
+      toogleDeact()
+    } catch(err) {
+      console.error(err.message)
+    }
+  }
+
+  return(
+    <>
+    {active && (
+      <div className={styles.popupContainer}>
+        <p className={styles.popupTitle}>Tambahkan Karyawan</p>
+        <div className={styles.popupItemContainer}>
+          <div className={styles.popupItemWrapper}>
+            <div style={{display: "flex", flexDirection: "column", gap: "0.5rem"}}>
+              <label>Nama</label>
+              <input placeholder="Nama Karyawan" className={styles.popupInput} type="text" name="name" value={uploadData.name} onChange={handleChange}/>
+            </div>
+            <div style={{display: "flex", gap: "1rem", width: "100%"}}>
+              <div style={{width: "100%", display: "flex", flexDirection: "column", gap: "0.5rem"}}>
+                <label>Posisi</label>
+                <select
+                  className={styles.popupInputSelect}
+                  value={uploadData.role}
+                  name="role"
+                  onChange={handleChange}
+                >
+                  <option value="" disabled hidden>Pilih role</option>
+                  <option value="fl">FL</option>
+                  <option value="admin">Admin</option>
+                  <option value="pmt">PMT</option>
+                </select>
+              </div>
+              {uploadData.role === "pmt" &&
+              <div style={{width: "100%", display: "flex", flexDirection: "column", gap: "0.5rem"}}>
+                <label>Brand</label>
+                <select
+                  className={styles.popupInputSelect}
+                  value={uploadData.brand}
+                  name="brand"
+                  onChange={handleChange}
+                >
+                  <option value="" disabled hidden>Pilih role</option>
+                  <option value="samsung">Samsung</option>
+                  <option value="xiaomi">XIaomi</option>
+                  <option value="vivo">Vivo</option>
+                  <option value="oppo">Oppo</option>
+                  <option value="infinix">Infinix</option>
+                  <option value="Realme">Realme</option>
+                  <option value="tecno">Tecno</option>
+                </select>
+              </div>
+              }
+            </div>
+            <div style={{display: "flex", flexDirection: "column", gap: "0.5rem"}}>
+              <label>Password</label>
+              <input placeholder="Masukkan Password" className={styles.popupInput} type="text" name="unique" value={uploadData.unique} onChange={handleChange}/>
+            </div>
+          </div>
+          <div
+            className={styles.popupButton}
+            onClick={addUser}
+          >
+            Submit
+          </div>
         </div>
-      )}
+      </div>
+    )}
+    <div className={styles.itemContainer}>
+      <div className={styles.topStock}>
+        <div>
+          <p style={{ fontSize: "1.5rem" }}>Manajemen Karyawan</p>
+          <p style={{ fontFamily: "SFProRegular", color: "#b3b3b3" }}>
+            Lakukan manajemen karyawan secara realtime
+          </p>
+        </div>
+        <div style={{ display: "flex", gap: "0.5rem" }}>
+          <div onClick={toogleActive} className={styles.button}>
+            Tambah Karyawan
+          </div>
+        </div>
+      </div>
+      {loading ? (
+          <Loader />
+        ) : sorted.length === 0 ? (
+          <Empty />
+        ) : (
+          <div className={styles.tableWrapper}>
+            <table className={styles.table}>
+              <thead className={styles.thead}>
+                <tr>
+                  <th className={`${styles.th} ${styles.thNo}`}>No</th>
+                  <th className={styles.th}>Nama</th>
+                  <th className={styles.th}>Posisi/Brand</th>
+                  <th className={styles.th}>Password</th>
+                  <th className={styles.th}>Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sorted.map((item, index) => (
+                  <tr key={item.id ?? index} className={styles.tr}>
+                    <td className={`${styles.td} ${styles.tdCenter}`}>
+                      {index + 1}
+                    </td>
+                    <td className={styles.td}>{item.name}</td>
+                    {item.role == "pmt" ? <td className={styles.td}>Promotor {item.brand}</td> : <td className={styles.td}>{item.role}</td>}
+                    <td className={styles.td}>{item.unique}</td>
+                    <td className={`${styles.td} ${styles.tdCenter}`}>
+                      <div
+                        onClick={() => deleteUser(item.id)}
+                        className={styles.paymentType}
+                        style={{
+                          backgroundColor: "#DA0909",
+                          cursor: "pointer",
+                        }}
+                      >
+                        Hapus
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
     </div>
     </>
   )

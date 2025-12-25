@@ -60,7 +60,7 @@ export default function DeleteSection({
       });
 
       //delete selling
-      await deleteDoc(doc(db, "selling", id))
+      await deleteDoc(doc(db, "selling", id));
     } catch (err) {
       console.error("Gagal hapus report:", err);
     } finally {
@@ -78,7 +78,7 @@ export default function DeleteSection({
       const updatedReport = (data.report || []).filter((r) => r.id !== id);
       await updateDoc(docRef, { report: updatedReport });
       //hapus data dari admin
-      await deleteDoc(doc(db, "selling", id))
+      await deleteDoc(doc(db, "selling", id));
     } catch (err) {
       console.error("Gagal: ", err);
     } finally {

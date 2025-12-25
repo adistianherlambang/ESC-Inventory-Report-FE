@@ -14,7 +14,6 @@ export default function ActivityList({
   handleDeleteAcc,
   total,
 }) {
-  
   return (
     <div className={styles.activityContainer}>
       <div className={styles.activityTitleContainer}>

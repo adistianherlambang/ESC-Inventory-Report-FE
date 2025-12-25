@@ -76,7 +76,11 @@ export default function FLPage() {
         />
       )}
 
-      {active && <PopUp onClose={toogleDeact}><ReportPopUp /></PopUp>}
+      {active && (
+        <PopUp onClose={toogleDeact}>
+          <ReportPopUp />
+        </PopUp>
+      )}
       <Report />
       <div
         className={styles.container}

@@ -253,10 +253,10 @@ function Check({ imei }) {
       // -------------------------
       // 3b) Tambahkan ke collection "selling"
       const sellingRef = doc(collection(db, "selling"), id);
-      await setDoc(sellingRef, { 
+      await setDoc(sellingRef, {
         ...newReport,
         soldAt: new Date(),
-        name: currentUser.name
+        name: currentUser.name,
       });
       console.log("Added to selling collection");
       // -------------------------
@@ -491,9 +491,9 @@ function CheckAcc() {
       // -------------------------
       // Tambahkan ke collection "selling"
       const sellingRef = doc(collection(db, "selling"), id);
-      await setDoc(sellingRef, { 
+      await setDoc(sellingRef, {
         ...newReport,
-        name: currentUser.name
+        name: currentUser.name,
       });
       console.log("Added to selling collection");
       // -------------------------

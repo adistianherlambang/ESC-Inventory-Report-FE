@@ -8,7 +8,7 @@ import {
   updateDoc,
   addDoc,
   arrayUnion,
-  doc
+  doc,
 } from "firebase/firestore";
 import { BarcodeScanner, useTorch } from "react-barcode-scanner";
 
@@ -20,7 +20,7 @@ function AddStock({ id, data }) {
   const { stock, toogleStockActive } = pmtReport();
   const [open, setOpen] = useState("");
   const [imei, setImei] = useState([]);
-  const [submit, setSubmit] = useState(false)
+  const [submit, setSubmit] = useState(false);
 
   useEffect(() => {
     if (!stock) setOpen("");
@@ -77,7 +77,7 @@ function Manual({ open, setOpen, id, imei, setImei, data, setSubmit, submit }) {
 
   const handleSubmit = (e) => {
     setSubmit(true);
-    
+
     setImei([...imei, input]);
     e.preventDefault();
   };
@@ -88,10 +88,20 @@ function Manual({ open, setOpen, id, imei, setImei, data, setSubmit, submit }) {
 
   return (
     <>
-      {submit ? <Update id={id} data={data} imei={imei} setOpen={setOpen} setSubmit={setSubmit}/> : <></>}
+      {submit ? (
+        <Update
+          id={id}
+          data={data}
+          imei={imei}
+          setOpen={setOpen}
+          setSubmit={setSubmit}
+        />
+      ) : (
+        <></>
+      )}
       <div
         className={styles.container}
-        style={{...(submit ? { display: "none" } : {})}}
+        style={{ ...(submit ? { display: "none" } : {}) }}
       >
         <p className={styles.title}>Update Stok</p>
         <form className={styles.wrapper} onSubmit={handleSubmit}>
@@ -137,15 +147,28 @@ function Scan({ open, setOpen, id, imei, setImei, data, setSubmit, submit }) {
 
   const handleSubmit = () => {
     if (result) {
-      setSubmit(true)
+      setSubmit(true);
       setImei([...imei, result]);
     }
   };
 
   return (
     <>
-      {submit ? <Update id={id} data={data} imei={imei} setOpen={setOpen} setSubmit={setSubmit}/> : <></>}
-      <div className={styles.container} style={{...(submit ? { display: "none" } : {})}}>
+      {submit ? (
+        <Update
+          id={id}
+          data={data}
+          imei={imei}
+          setOpen={setOpen}
+          setSubmit={setSubmit}
+        />
+      ) : (
+        <></>
+      )}
+      <div
+        className={styles.container}
+        style={{ ...(submit ? { display: "none" } : {}) }}
+      >
         <p className={styles.title}>Report</p>
         <div className={styles.scannerContainer}>
           <div className={styles.scanner}>
@@ -172,22 +195,22 @@ function Update({ open, id, imei, data, setOpen, setSubmit }) {
   const { stock, toogleStockActive } = pmtReport();
 
   const handleAddImei = () => {
-    setOpen("")
-    setSubmit(false)
-  }
+    setOpen("");
+    setSubmit(false);
+  };
 
   const handleSubmit = async () => {
     try {
-      const docRef = doc(db, "allproducts", `${id}`)
+      const docRef = doc(db, "allproducts", `${id}`);
       await updateDoc(docRef, {
-        IMEI: arrayUnion(...imei)
-      })
+        IMEI: arrayUnion(...imei),
+      });
     } catch (err) {
-      console.error(err.message)
+      console.error(err.message);
     } finally {
-      window.location.reload()
+      window.location.reload();
     }
-  }
+  };
 
   return (
     <>
@@ -198,7 +221,7 @@ function Update({ open, id, imei, data, setOpen, setSubmit }) {
           <div className={styles.imeiContainer}>
             {imei.map((item) => (
               <div key={item} className={styles.imei}>
-                <p style={{color: "#B0B0B0"}}>Barcode:</p>
+                <p style={{ color: "#B0B0B0" }}>Barcode:</p>
                 <p>{item}</p>
               </div>
             ))}

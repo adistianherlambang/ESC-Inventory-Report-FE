@@ -82,18 +82,29 @@ export default function Product({ search, brand }) {
           </div>
         ))}
         {filtered.length > visibleCount && (
-        <div className={styles.moreWrapper}>
-          <button
-            className={styles.more}
-            onClick={() => setVisibleCount((prev) => prev + 5)}
-          >
-            <svg width="18" height="10" viewBox="0 0 18 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M16.8 0.799805L8.80005 8.79981L0.800047 0.799804" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
-            </svg>
-            Tampilkan lebih banyak
-          </button>
-        </div>
-      )}
+          <div className={styles.moreWrapper}>
+            <button
+              className={styles.more}
+              onClick={() => setVisibleCount((prev) => prev + 5)}
+            >
+              <svg
+                width="18"
+                height="10"
+                viewBox="0 0 18 10"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M16.8 0.799805L8.80005 8.79981L0.800047 0.799804"
+                  stroke="white"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+              Tampilkan lebih banyak
+            </button>
+          </div>
+        )}
       </>
     );
 }

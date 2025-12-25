@@ -87,14 +87,17 @@
 }
 
 .tableWrapper::-webkit-scrollbar {
-  display: none; 
+  display: none;
 }
 
 .table {
   min-width: 600px;
   width: 100%;
   border-collapse: collapse;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
 }
 
 /* .table tbody tr:nth-child(even) {
@@ -131,7 +134,6 @@
   padding: 12px;
   border-bottom: 0.5px solid #a9a9a9;
   text-align: center;
-  width: fit-content;
 }
 
 .td:nth-child(2) {
@@ -140,6 +142,9 @@
 
 .tdCenter {
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .search {
@@ -154,7 +159,6 @@
   justify-content: space-between;
 }
 
-
 .downloadBtn {
   padding: 8px 16px;
   background-color: #773ff9;
@@ -162,9 +166,15 @@
   border: none;
   border-radius: 6px;
   font-size: 14px;
-  font-family: SFProMedium, system-ui, -apple-system, sans-serif;
+  font-family:
+    SFProMedium,
+    system-ui,
+    -apple-system,
+    sans-serif;
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.1s ease;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
 }
 
 .button {
@@ -185,7 +195,7 @@
 }
 
 .paymentType {
-  color:  white;
+  color: white;
   padding: 4px 8px;
   width: max-content;
   border-radius: 6px;
@@ -264,6 +274,33 @@
   cursor: pointer;
   font-family: SFProBold;
   font-size: 1rem;
+}
+
+.popupInput {
+  background-color: #f6f6f6;
+  box-sizing: border-box;
+  border: 1px solid #000;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.popupInputSelect {
+  background-color: #f6f6f6;
+  box-sizing: border-box;
+  border: 1px solid #000;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: left;
+  font-size: 14px;
+  color: #333;
+  appearance: none;       /* hilangkan default arrow */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.popupInput::placeholder {
+  text-align: left;
 }
 
 @keyframes Overlay {

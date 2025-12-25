@@ -14,7 +14,7 @@ import {
   serverTimestamp,
   arrayUnion,
   arrayRemove,
-  setDoc
+  setDoc,
 } from "firebase/firestore";
 
 import { BarcodeScanner, useTorch } from "react-barcode-scanner";
@@ -253,9 +253,9 @@ function Check({ imei }) {
       // -------------------------
       // 3b) Tambahkan ke collection "selling"
       const sellingRef = doc(collection(db, "selling"), id);
-      await setDoc(sellingRef, { 
+      await setDoc(sellingRef, {
         ...newReport,
-        name: currentUser.name
+        name: currentUser.name,
       });
       console.log("Added to selling collection");
       // -------------------------
@@ -489,12 +489,11 @@ function CheckAcc() {
 
       // Tambahkan ke collection "selling"
       const sellingRef = doc(collection(db, "selling"), id);
-      await setDoc(sellingRef, { 
+      await setDoc(sellingRef, {
         ...newReport,
-        name: currentUser.name
+        name: currentUser.name,
       });
       console.log("Added to selling collection");
-      
     } catch (err) {
       console.error(err.message);
     } finally {

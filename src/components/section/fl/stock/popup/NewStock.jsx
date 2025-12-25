@@ -8,7 +8,7 @@ import {
   updateDoc,
   addDoc,
   arrayUnion,
-  doc
+  doc,
 } from "firebase/firestore";
 import { BarcodeScanner, useTorch } from "react-barcode-scanner";
 
@@ -20,7 +20,7 @@ function NewStock({ brand }) {
   const { stock, toogleStockActive } = pmtReport();
   const [open, setOpen] = useState("");
   const [imei, setImei] = useState([]);
-  const [submit, setSubmit] = useState(false)
+  const [submit, setSubmit] = useState(false);
 
   useEffect(() => {
     if (!stock) setOpen("");
@@ -74,7 +74,7 @@ function Manual({ open, brand, setOpen, imei, setImei, setSubmit, submit }) {
 
   const handleSubmit = (e) => {
     setSubmit(true);
-    
+
     setImei([...imei, input]);
     e.preventDefault();
   };
@@ -85,10 +85,19 @@ function Manual({ open, brand, setOpen, imei, setImei, setSubmit, submit }) {
 
   return (
     <>
-      {submit ? <Update brand={brand} imei={imei} setOpen={setOpen} setSubmit={setSubmit}/> : <></>}
+      {submit ? (
+        <Update
+          brand={brand}
+          imei={imei}
+          setOpen={setOpen}
+          setSubmit={setSubmit}
+        />
+      ) : (
+        <></>
+      )}
       <div
         className={styles.container}
-        style={{...(submit ? { display: "none" } : {})}}
+        style={{ ...(submit ? { display: "none" } : {}) }}
       >
         <p className={styles.title}>Update Stok</p>
         <form className={styles.wrapper} onSubmit={handleSubmit}>
@@ -134,15 +143,27 @@ function Scan({ open, brand, setOpen, imei, setImei, setSubmit, submit }) {
 
   const handleSubmit = () => {
     if (result) {
-      setSubmit(true)
+      setSubmit(true);
       setImei([...imei, result]);
     }
   };
 
   return (
     <>
-      {submit ? <Update brand={brand} imei={imei} setOpen={setOpen} setSubmit={setSubmit}/> : <></>}
-      <div className={styles.container} style={{...(submit ? { display: "none" } : {})}}>
+      {submit ? (
+        <Update
+          brand={brand}
+          imei={imei}
+          setOpen={setOpen}
+          setSubmit={setSubmit}
+        />
+      ) : (
+        <></>
+      )}
+      <div
+        className={styles.container}
+        style={{ ...(submit ? { display: "none" } : {}) }}
+      >
         <p className={styles.title}>Report</p>
         <div className={styles.scannerContainer}>
           <div className={styles.scanner}>
@@ -171,17 +192,17 @@ function Update({ open, brand, imei, setOpen, setSubmit }) {
     brand: brand.toLowerCase(),
     product: "",
     capacity: "",
-    color: ""
-  })
+    color: "",
+  });
 
   const handleAddImei = () => {
-    setOpen("")
-    setSubmit(false)
-  }
+    setOpen("");
+    setSubmit(false);
+  };
 
   const handleSubmit = async () => {
     try {
-      const docRef = collection(db, "allproducts")
+      const docRef = collection(db, "allproducts");
       await addDoc(docRef, {
         brand: data.brand,
         product: data.product,
@@ -190,55 +211,79 @@ function Update({ open, brand, imei, setOpen, setSubmit }) {
         IMEI: imei,
       });
     } catch (err) {
-      console.error(err.message)
-    } finally{
-      window.location.reload()
+      console.error(err.message);
+    } finally {
+      window.location.reload();
     }
-  }
+  };
 
   return (
     <>
       <div className={styles.container}>
         <p className={styles.title}>Tambahkan Stok</p>
         <div className={styles.itemContainer}>
-          <div style={{display: "flex", flexDirection: "column", gap: "1rem"}}>
-            <div style={{display: "flex", flexDirection: "column", gap: '0.5rem'}}>
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.5rem",
+              }}
+            >
               <label htmlFor="input">Nama Produk</label>
               <input
                 type="text"
                 placeholder="Masukkan Nama Produk"
                 className={styles.input}
-                style={{textAlign: "left"}}
+                style={{ textAlign: "left" }}
                 name="product"
                 value={data.product}
-                onChange={(e) => setData({...data, product: e.target.value})}
+                onChange={(e) => setData({ ...data, product: e.target.value })}
                 required
               />
             </div>
-            <div style={{display: "flex", gap: "1rem"}}>
-              <div style={{width: "100%", display: "flex", flexDirection: "column", gap: '0.5rem'}}>
+            <div style={{ display: "flex", gap: "1rem" }}>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.5rem",
+                }}
+              >
                 <label htmlFor="input">Kapasitas</label>
                 <input
                   type="text"
                   placeholder="Kapasitas"
                   className={styles.input}
-                  style={{textAlign: "left"}}
+                  style={{ textAlign: "left" }}
                   name="capacity"
                   value={data.capacity}
-                  onChange={(e) => setData({...data, capacity: e.target.value})}
+                  onChange={(e) =>
+                    setData({ ...data, capacity: e.target.value })
+                  }
                   required
                 />
               </div>
-              <div style={{width: "100%", display: "flex", flexDirection: "column", gap: '0.5rem'}}>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.5rem",
+                }}
+              >
                 <label htmlFor="input">Warna</label>
                 <input
                   type="text"
                   placeholder="Warna"
                   className={styles.input}
-                  style={{textAlign: "left"}}
+                  style={{ textAlign: "left" }}
                   name="color"
                   value={data.color}
-                  onChange={(e) => setData({...data, color: e.target.value})}
+                  onChange={(e) => setData({ ...data, color: e.target.value })}
                   required
                 />
               </div>
@@ -246,7 +291,7 @@ function Update({ open, brand, imei, setOpen, setSubmit }) {
             <div className={styles.imeiContainer}>
               {imei.map((item) => (
                 <div key={item} className={styles.imei}>
-                  <p style={{color: "#B0B0B0"}}>Barcode:</p>
+                  <p style={{ color: "#B0B0B0" }}>Barcode:</p>
                   <p>{item}</p>
                 </div>
               ))}
@@ -254,7 +299,16 @@ function Update({ open, brand, imei, setOpen, setSubmit }) {
           </div>
         </div>
         <div className={styles.itemContainer}>
-          <div className={styles.button} onClick={handleAddImei} style={{boxSizing: "border-box", border: "solid #773ff9 1px", backgroundColor: "white", color: "#773ff9"}}>
+          <div
+            className={styles.button}
+            onClick={handleAddImei}
+            style={{
+              boxSizing: "border-box",
+              border: "solid #773ff9 1px",
+              backgroundColor: "white",
+              color: "#773ff9",
+            }}
+          >
             Tambahkan Item
           </div>
           <div className={styles.button} onClick={handleSubmit}>

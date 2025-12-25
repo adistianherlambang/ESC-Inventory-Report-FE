@@ -62,9 +62,9 @@ export default function Product({ search, brand }) {
   };
 
   const handleNewStock = (brand) => {
-    toogleStockActive()
-    stock ? toogleStockDeact() : null
-  }
+    toogleStockActive();
+    stock ? toogleStockDeact() : null;
+  };
 
   if (loading)
     return (
@@ -81,11 +81,22 @@ export default function Product({ search, brand }) {
   if (filtered.length == 0)
     return (
       <>
-        <div style={{opacity: stock ? "0.3" : "1", transition: "opacity 300ms ease"}}>
+        <div
+          style={{
+            opacity: stock ? "0.3" : "1",
+            transition: "opacity 300ms ease",
+          }}
+        >
           <Empty />
-          <div onClick={handleNewStock} className={styles.addNewProduct}>Tambahkan Stok Baru</div>
+          <div onClick={handleNewStock} className={styles.addNewProduct}>
+            Tambahkan Stok Baru
+          </div>
         </div>
-        {stock && <PopUp><NewStock brand={brand}/></PopUp>}
+        {stock && (
+          <PopUp>
+            <NewStock brand={brand} />
+          </PopUp>
+        )}
       </>
     );
   if (!product) return null;
@@ -120,7 +131,11 @@ export default function Product({ search, brand }) {
             <p>Stok : {item.IMEI?.length || 0}</p>
           </div>
         ))}
-        {stock && <PopUp><AddStock id={selectedId} data={data}/></PopUp>}
+        {stock && (
+          <PopUp>
+            <AddStock id={selectedId} data={data} />
+          </PopUp>
+        )}
       </>
     );
 }

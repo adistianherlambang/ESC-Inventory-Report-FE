@@ -56,15 +56,15 @@ export default function EditSection({
 
     await updateDoc(docRef, { report: updatedReports });
 
-    const sellingRef = doc(db, "selling", id)
-    
+    const sellingRef = doc(db, "selling", id);
+
     await updateDoc(sellingRef, {
       userType: user,
       price: prices.map((p) => ({
         type: p.type,
         amount: Number(p.amount),
-      }))
-    })
+      })),
+    });
 
     setLoading(false);
     alert("Harga berhasil diperbarui!");
@@ -96,18 +96,17 @@ export default function EditSection({
 
     await updateDoc(docRef, { report: updatedReports });
 
-    
     await updateDoc(docRef, { report: updatedReports });
 
-    const sellingRef = doc(db, "selling", id)
-    
+    const sellingRef = doc(db, "selling", id);
+
     await updateDoc(sellingRef, {
       userType: user,
       price: prices.map((p) => ({
         type: p.type,
         amount: Number(p.amount),
-      }))
-    })
+      })),
+    });
 
     setLoading(false);
     alert("Harga berhasil diperbarui!");

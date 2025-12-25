@@ -8,7 +8,7 @@ export default function userActivityLogic() {
 
   const [pmtData, setPmtData] = useState([]);
   const [flData, setFLData] = useState([]);
-  const [adminData, setAdminData] = useState([])
+  const [adminData, setAdminData] = useState([]);
 
   const [loading, setLoading] = useState(true);
   const [dateFiltered, setDateFiltered] = useState([]);
@@ -153,9 +153,7 @@ export default function userActivityLogic() {
       setAllTotal(totalAmount);
     }, [flData, date]);
   } else if (currentUser?.role == "admin") {
-    useEffect(() => {
-      
-    })
+    useEffect(() => {});
   }
 
   /** HANDLERS */

@@ -10,7 +10,7 @@ import {
   updateDoc,
   where,
   arrayUnion,
-  deleteDoc
+  deleteDoc,
 } from "firebase/firestore";
 
 export default function DeleteSection({
@@ -23,7 +23,6 @@ export default function DeleteSection({
   id,
   productType,
 }) {
-
   const deleteReportByIMEI = async (docId, imei) => {
     try {
       const docRef = doc(db, "pmtdatas", docId);
@@ -61,7 +60,7 @@ export default function DeleteSection({
       });
 
       //delete selling
-      await deleteDoc(doc(db, "selling", id))
+      await deleteDoc(doc(db, "selling", id));
     } catch (err) {
       console.error("Gagal hapus report:", err);
     } finally {
@@ -78,9 +77,9 @@ export default function DeleteSection({
       const data = snap.data();
       const updatedReport = (data.report || []).filter((r) => r.id !== id);
       await updateDoc(docRef, { report: updatedReport });
-      
+
       //delete selling
-      await deleteDoc(doc(db, "selling", id))
+      await deleteDoc(doc(db, "selling", id));
     } catch (err) {
       console.error("Gagal: ", err);
     } finally {
