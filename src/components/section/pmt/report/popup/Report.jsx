@@ -57,7 +57,7 @@ export default function ReportPopUp({ pmtName }) {
             </div>
           </div>
           <div className={styles.button} onClick={() => setAcc(true)}>
-            Aksesoris
+            Aksesoris/Lainnya
           </div>
         </div>
       </div>

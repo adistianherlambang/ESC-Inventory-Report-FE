@@ -27,6 +27,8 @@ export default function FLPage() {
     flData,
     loading,
     dateFiltered,
+    outflowFiltered,
+    outflow,
     isEditing,
     isDeleting,
     editData,
@@ -156,6 +158,7 @@ export default function FLPage() {
             handleDeleteAcc={handleDeleteAcc}
             handleEditAcc={handleEditAcc}
             total={allTotal}
+            outflow={outflow}
           />
         )}
       </div>

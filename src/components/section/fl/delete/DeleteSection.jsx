@@ -86,6 +86,17 @@ export default function DeleteSection({
     }
   };
 
+  const deleteReportByDocId = async (id) => {
+    try {
+      const docRef = doc(db, "outflow", id)
+      await deleteDoc(docRef)
+    } catch (err) {
+      console.error(err.message)
+    } finally {
+      
+    }
+  }
+
   if (productType === "acc") {
     return (
       <div className={styles.container}>
@@ -105,6 +116,32 @@ export default function DeleteSection({
             <button
               className={`${styles.button} ${styles.yes}`}
               onClick={() => deleteReportById(id)}
+            >
+              Hapus
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  } else if(productType === "outflow") {
+    return (
+      <div className={styles.container}>
+        <p className={styles.title}>Batalkan laporan? {docId}</p>
+        <div className={styles.wrapper}>
+          <p className={styles.desc}>
+            Tindakan ini akan menghapus data laporan dan mengembalikan stok IMEI
+            ke daftar produk.Apakah Anda yakin ingin melanjutkan?
+          </p>
+          <div className={styles.buttonContainer}>
+            <button
+              className={`${styles.button} ${styles.cancel}`}
+              onClick={onClose}
+            >
+              Batalkan
+            </button>
+            <button
+              className={`${styles.button} ${styles.yes}`}
+              onClick={() => deleteReportByDocId(docId)}
             >
               Hapus
             </button>

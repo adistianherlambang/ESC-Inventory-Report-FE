@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, Timestamp } from "firebase/firestore";
 import { db } from "../../firebase";
 import { pmtReport, userStore } from "../state/state";
 
@@ -9,9 +9,11 @@ export default function userActivityLogic() {
   const [pmtData, setPmtData] = useState([]);
   const [flData, setFLData] = useState([]);
   const [adminData, setAdminData] = useState([]);
+  const [outflow, setOutflow] = useState([])
 
   const [loading, setLoading] = useState(true);
   const [dateFiltered, setDateFiltered] = useState([]);
+  const [outflowFiltered, setOutflowFiltered] = useState([])
 
   const [isEditing, setIsEditing] = useState("");
   const [isDeleting, setIsDeleting] = useState("");
@@ -88,6 +90,7 @@ export default function userActivityLogic() {
         .filter((item) => item.report.length > 0);
 
       setDateFiltered(filtered);
+      
       const totalAmount = (filtered || []).reduce((sumItems, item) => {
         const reports = item.report || [];
         const sumReports = reports.reduce((sumReport, report) => {
@@ -116,6 +119,18 @@ export default function userActivityLogic() {
             ...i.data(),
           }));
           setFLData(data);
+
+          //outflow(pengeluaran)
+          const outQ = query(
+            collection(db, "outflow"),
+            where("name", "==", currentUser?.name)
+          )
+          const outSnap = await getDocs(outQ)
+          const outData = outSnap.docs.map((i) => ({
+            id: i.id,
+            ...i.data()
+          }))
+          setOutflow(outData)
         } catch (err) {
           console.error(err);
         } finally {
@@ -138,6 +153,19 @@ export default function userActivityLogic() {
         }))
         .filter((item) => item.report.length > 0);
       setDateFiltered(filtered);
+
+      const outFiltered = outflow.filter((item) => {
+        if (!item.createdAt?.toDate) return false
+
+        const itemDate = item.createdAt
+          .toDate()
+          .toISOString()
+          .slice(0, 10) // YYYY-MM-DD (UTC)
+
+        return itemDate === date
+      })
+      setOutflowFiltered(outFiltered)
+
       const totalAmount = (filtered || []).reduce((sumItems, item) => {
         const reports = item.report || [];
         const sumReports = reports.reduce((sumReport, report) => {
@@ -152,6 +180,21 @@ export default function userActivityLogic() {
 
       setAllTotal(totalAmount);
     }, [flData, date]);
+
+    // useEffect(() => {
+    //   const outFiltered = outflow.filter((item) => {
+    //     if (!item.createdAt?.toDate) return false
+
+    //     const itemDate = item.createdAt
+    //       .toDate()
+    //       .toISOString()
+    //       .slice(0, 10) // YYYY-MM-DD (UTC)
+
+    //     return itemDate === date
+    //   })
+    //   setOutflowFiltered(outFiltered)
+    // }, outflow)
+    
   } else if (currentUser?.role == "admin") {
     useEffect(() => {});
   }
@@ -201,6 +244,8 @@ export default function userActivityLogic() {
     flData,
     loading,
     dateFiltered,
+    outflowFiltered,
+    outflow,
     isEditing,
     isDeleting,
     selectedId,
