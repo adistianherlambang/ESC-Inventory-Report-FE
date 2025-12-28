@@ -102,6 +102,25 @@ export default function AdminPage() {
 
 function Beranda() {
   const [selling, setSelling] = useState([]);
+  const [outflow, setOutflow] = useState([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const q = collection(db, "outflow")
+        const snap = await getDocs(q)
+
+        const data = snap.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data()
+        }))
+        setOutflow(data)
+      } catch (err) {
+        console.error(err.message)
+      }
+    }
+    fetchData()
+  }, [])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -161,25 +180,15 @@ function Beranda() {
 
   const percentage = sellingYesterday === 0
   ? 0
-  : ((sellingToday.reduce((sum, item) => sum + item.amount, 0) - sellingYesterday) * 100) / sellingYesterday;
+  : (sellingToday.reduce((sum, item) => sum + item.amount, 0) * 100) / sellingYesterday;
+
+  const outflowToday = outflow.filter((r) => {
+    const reportDate = r.createdAt?.toDate()?.toLocaleDateString("en-CA")
+    return reportDate === date
+  })
 
   return (
     <>
-      {/* <div style={{width: "100%", display: "flex", backgroundColor: "black", gap: "1rem"}}>
-        <div className={styles.itemContainer} style={{height: "300px"}}>
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={data}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="sales" name="" />
-            </LineChart>
-          </ResponsiveContainer>
-          {dateFilter.flatMap((i) => i.price).reduce((sum, i) => sum + i.amount, 0)}
-        </div>
-      </div> */}
       <div style={{display: "flex", flexDirection: "column", gap: "1rem"}}>
         <div style={{ width: "100%", display: "flex", gap: "1rem" }}>
           <div
@@ -226,19 +235,19 @@ function Beranda() {
                   />
                 </svg>
               </div>
-              <div style={{backgroundColor: sellingToday > sellingYesterday ? "#74F57F" : "#FF413F", padding: "4px 8px", height: "max-content", fontSize: "12px", borderRadius: "1rem"}}>{percentage.toFixed(1)}%</div>
+              <div style={{backgroundColor: sellingToday.reduce((sum, item) => sum + item.amount, 0) > sellingYesterday ? "#74F57F" : "#FF413F", color: sellingToday.reduce((sum, item) => sum + item.amount, 0) > sellingYesterday ? "#00950D" : "white", padding: "4px 8px", height: "max-content", fontSize: "12px", borderRadius: "1rem"}}>{percentage.toFixed(1)}%</div>
             </div>
             <div>
               <p
                 style={{
-                  fontSize: "14px",
+                  fontSize: "12px",
                   fontFamily: "SFProRegular",
                   color: "#CDA1FF",
                 }}
               >
                 Pemasukan hari ini
               </p>
-              <p style={{ fontSize: "2rem" }}>
+              <p style={{ fontSize: "1.5rem" }}>
                 {formatRupiah(
                   dateFilter
                     .flatMap((item) => item.price)
@@ -300,14 +309,14 @@ function Beranda() {
             <div>
               <p
                 style={{
-                  fontSize: "14px",
+                  fontSize: "12px",
                   fontFamily: "SFProRegular",
                   color: "#CDA1FF",
                 }}
               >
                 Unit terjual hari ini
               </p>
-              <p style={{ fontSize: "2rem" }}>{dateFilter.length} Unit</p>
+              <p style={{ fontSize: "1.5rem" }}>{dateFilter.filter((item) => !item.type).length} Unit</p>
             </div>
           </div>
         </div>
@@ -317,6 +326,7 @@ function Beranda() {
             style={{
               color: "#748FC8",
               backgroundColor: "#E8F8FF",
+              maxWidth: "30%",
               width: "30%",
               borderRadius: "1rem",
             }}
@@ -324,14 +334,14 @@ function Beranda() {
             <div>
               <p
                 style={{
-                  fontSize: "14px",
+                  fontSize: "12px",
                   fontFamily: "SFProRegular",
                   color: "#748FC8",
                 }}
               >
                 Total Cash
               </p>
-              <p style={{ fontSize: "2rem" }}>
+              <p style={{ fontSize: "1.5rem" }}>
                 {formatRupiah(sellingToday.filter((item) => item.type == "CS").reduce((sum, item) => sum + item.amount, 0))}
               </p>
             </div>
@@ -341,6 +351,7 @@ function Beranda() {
             style={{
               color: "#2FB264",
               backgroundColor: "#E2FBEB",
+              maxWidth: "30%",
               width: "30%",
               borderRadius: "1rem",
             }}
@@ -348,14 +359,14 @@ function Beranda() {
             <div>
               <p
                 style={{
-                  fontSize: "14px",
+                  fontSize: "12px",
                   fontFamily: "SFProRegular",
                   color: "#2FB264",
                 }}
               >
                 Total Transfer
               </p>
-              <p style={{ fontSize: "2rem" }}>
+              <p style={{ fontSize: "1.5rem" }}>
                 {formatRupiah(sellingToday.filter((item) => item.type == "TF").reduce((sum, item) => sum + item.amount, 0))}
               </p>
             </div>
@@ -365,6 +376,7 @@ function Beranda() {
             style={{
               color: "#AD5D89",
               backgroundColor: "#FEE9FA",
+              maxWidth: "30%",
               width: "30%",
               borderRadius: "1rem",
             }}
@@ -372,16 +384,72 @@ function Beranda() {
             <div>
               <p
                 style={{
-                  fontSize: "14px",
+                  fontSize: "12px",
                   fontFamily: "SFProRegular",
                   color: "#AD5D89",
                 }}
               >
                 Total Debit
               </p>
-              <p style={{ fontSize: "2rem" }}>
+              <p style={{ fontSize: "1.5rem" }}>
                 {formatRupiah(sellingToday.filter((item) => item.type == "GS").reduce((sum, item) => sum + item.amount, 0))}
               </p>
+            </div>
+          </div>
+        </div>
+        <div style={{ width: "100%", display: "flex", gap: "1rem" }}>
+          <div
+            className={styles.itemContainer}
+            style={{
+              color: "#ffffffff",
+              backgroundColor: "#DA0909",
+              width: "100%",
+              borderRadius: "1rem",
+            }}
+          >
+            <div
+              style={{
+                backgroundColor: "white",
+                width: "3rem",
+                height: "3rem",
+                borderRadius: "4px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14.7 6C14.501 5.43524 14.1374 4.94297 13.6563 4.58654C13.1751 4.23011 12.5983 4.02583 12 4H8M5.443 5.431C5.16402 5.88565 5.01131 6.40646 5.0006 6.93978C4.98989 7.47309 5.12158 7.99961 5.38208 8.46509C5.64258 8.93058 6.02249 9.31819 6.48265 9.58798C6.94281 9.85778 7.46658 10 8 10H10M14.564 14.558C14.2964 14.9983 13.92 15.3623 13.4709 15.6148C13.0218 15.8674 12.5152 16 12 16H8C7.40175 15.9742 6.82491 15.7699 6.34373 15.4135C5.86255 15.057 5.49905 14.5648 5.3 14M10 1V4M10 16V19M1 1L19 19" stroke="#DA0909" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <div style={{display: "flex", flexDirection: "column", gap: "1rem"}}>
+              <div>
+                <p
+                  style={{
+                    fontSize: "12px",
+                    fontFamily: "SFProRegular",
+                    color: "#f4d0d0ff",
+                  }}
+                >
+                  Pengeluaran hari ini
+                </p>
+                <p style={{ fontSize: "1.5rem" }}>{formatRupiah(outflowToday.reduce((sum, item) => sum + item.amount, 0))}</p>
+              </div>
+              <div style={{backgroundColor: "white", color: "#DA0909", padding: "0.5rem 1rem", borderRadius: "0.5rem", display: "flex", flexDirection: "column", gap: "0.5rem"}}>
+                Detail Pengeluaran :
+                {outflowToday.map((item) => (
+                  <div key={item.id} style={{border: "solid #DA0909 1px", padding: "0.5rem 1rem", borderRadius: "0.25rem", display: "flex", justifyContent: "space-between"}}>
+                    <div>
+                      <p>{item.name}</p>
+                      <p style={{fontFamily: "SFProRegular"}}>Kategori: <span style={{fontFamily: "SFProBold"}}>{item.desc}</span></p>
+                    </div>
+                    <div>
+                      <p style={{fontFamily: "SFProRegular"}}>Total:</p>
+                      <p>{formatRupiah(item.amount)}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
