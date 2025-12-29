@@ -27,7 +27,7 @@ export default function ReportPopUp({ pmtName }) {
   const [manual, setManual] = useState(false);
   const [scan, setScan] = useState(false);
   const [acc, setAcc] = useState(false);
-  const [outflow, setOutflow] = useState(false)
+  const [outflow, setOutflow] = useState(false);
 
   const { active } = pmtReport();
 
@@ -36,7 +36,7 @@ export default function ReportPopUp({ pmtName }) {
       setManual(false);
       setScan(false);
       setAcc(false);
-      setOutflow(false)
+      setOutflow(false);
     }
   };
 
@@ -68,71 +68,76 @@ export default function ReportPopUp({ pmtName }) {
           </div>
         </div>
       </div>
-      {manual && <Manual/>}
-      {scan && <Scan/>}
-      {acc && <CheckAcc/>}
-      {outflow && <Outflow/>}
+      {manual && <Manual />}
+      {scan && <Scan />}
+      {acc && <CheckAcc />}
+      {outflow && <Outflow />}
     </>
   );
 }
 
 function Outflow() {
-  
   const [desc, setDesc] = useState("");
-  const [amount, setAmount] = useState(0)
+  const [amount, setAmount] = useState(0);
   const { currentUser } = userStore();
-  
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    if (!amount || !desc) return
-    try{
-      const snap = collection(db, "outflow")
+    e.preventDefault();
+    if (!amount || !desc) return;
+    try {
+      const snap = collection(db, "outflow");
       await addDoc(snap, {
         amount: Number(amount),
         desc: desc,
         name: currentUser.name,
         createdAt: new Date(),
-      })
-    } catch(err) {
-      console.error(err.message)
+      });
+    } catch (err) {
+      console.error(err.message);
     } finally {
-      window.location.reload()
+      window.location.reload();
     }
-  }
+  };
 
-  return(
+  return (
     <>
-    <div className={styles.container}>
-      <p className={styles.title}>Outflow</p>
-      <form className={styles.wrapper} onSubmit={handleSubmit}>
-        <div className={styles.priceContainer} style={{flexDirection: "column", alignItems: "start", gap: "0.5rem"}}>
-          <label>Jenis Pengeluaran</label>
-          <input
-            type="text"
-            placeholder="Masukkan Jenis Pengeluaran"
-            className={styles.priceInput}
-            style={{boxSizing: "border-box"}}
-            onChange={(e) => setDesc(e.target.value)}
-            required
-          />
-        </div>
-        <div className={styles.priceContainer}>
-          <p>Rp</p>
-          <input
-            type="number"
-            placeholder="Jumlah"
-            className={styles.priceInput}
-            onChange={(e) => setAmount(e.target.value)}
-          />
-        </div>
-        <button type="submit" className={styles.button}>
-          Laporkan
-        </button>
-      </form>
-    </div>
+      <div className={styles.container}>
+        <p className={styles.title}>Outflow</p>
+        <form className={styles.wrapper} onSubmit={handleSubmit}>
+          <div
+            className={styles.priceContainer}
+            style={{
+              flexDirection: "column",
+              alignItems: "start",
+              gap: "0.5rem",
+            }}
+          >
+            <label>Jenis Pengeluaran</label>
+            <input
+              type="text"
+              placeholder="Masukkan Jenis Pengeluaran"
+              className={styles.priceInput}
+              style={{ boxSizing: "border-box" }}
+              onChange={(e) => setDesc(e.target.value)}
+              required
+            />
+          </div>
+          <div className={styles.priceContainer}>
+            <p>Rp</p>
+            <input
+              type="number"
+              placeholder="Jumlah"
+              className={styles.priceInput}
+              onChange={(e) => setAmount(e.target.value)}
+            />
+          </div>
+          <button type="submit" className={styles.button}>
+            Laporkan
+          </button>
+        </form>
+      </div>
     </>
-  )
+  );
 }
 
 function Manual() {

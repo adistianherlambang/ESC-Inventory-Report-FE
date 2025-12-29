@@ -102,25 +102,25 @@ export default function AdminPage() {
 
 function Beranda() {
   const [selling, setSelling] = useState([]);
-  const [outflow, setOutflow] = useState([])
+  const [outflow, setOutflow] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const q = collection(db, "outflow")
-        const snap = await getDocs(q)
+        const q = collection(db, "outflow");
+        const snap = await getDocs(q);
 
         const data = snap.docs.map((doc) => ({
           id: doc.id,
-          ...doc.data()
-        }))
-        setOutflow(data)
+          ...doc.data(),
+        }));
+        setOutflow(data);
       } catch (err) {
-        console.error(err.message)
+        console.error(err.message);
       }
-    }
-    fetchData()
-  }, [])
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -168,28 +168,35 @@ function Beranda() {
     return reportDate === date;
   });
 
-  const sellingToday = selling.filter((r) => {
-    const reportDate = r.createdAt?.toDate()?.toLocaleDateString("en-CA")
-    return reportDate === date
-  }).flatMap((item) => item.price)
+  const sellingToday = selling
+    .filter((r) => {
+      const reportDate = r.createdAt?.toDate()?.toLocaleDateString("en-CA");
+      return reportDate === date;
+    })
+    .flatMap((item) => item.price);
 
-  const sellingYesterday = selling.filter((r) => {
-    const reportDate = r.createdAt?.toDate()?.toLocaleDateString("en-CA")
-    return reportDate === yesterday
-  }).flatMap((item) => item.price).reduce((sum, item) => sum + item.amount, 0)
+  const sellingYesterday = selling
+    .filter((r) => {
+      const reportDate = r.createdAt?.toDate()?.toLocaleDateString("en-CA");
+      return reportDate === yesterday;
+    })
+    .flatMap((item) => item.price)
+    .reduce((sum, item) => sum + item.amount, 0);
 
-  const percentage = sellingYesterday === 0
-  ? 0
-  : (sellingToday.reduce((sum, item) => sum + item.amount, 0) * 100) / sellingYesterday;
+  const percentage =
+    sellingYesterday === 0
+      ? 0
+      : (sellingToday.reduce((sum, item) => sum + item.amount, 0) * 100) /
+        sellingYesterday;
 
   const outflowToday = outflow.filter((r) => {
-    const reportDate = r.createdAt?.toDate()?.toLocaleDateString("en-CA")
-    return reportDate === date
-  })
+    const reportDate = r.createdAt?.toDate()?.toLocaleDateString("en-CA");
+    return reportDate === date;
+  });
 
   return (
     <>
-      <div style={{display: "flex", flexDirection: "column", gap: "1rem"}}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
         <div style={{ width: "100%", display: "flex", gap: "1rem" }}>
           <div
             className={styles.itemContainer}
@@ -200,7 +207,13 @@ function Beranda() {
               borderRadius: "1rem",
             }}
           >
-            <div style={{width: "100%", display: "flex", justifyContent: "space-between"}}>
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
               <div
                 style={{
                   backgroundColor: "white",
@@ -235,7 +248,26 @@ function Beranda() {
                   />
                 </svg>
               </div>
-              <div style={{backgroundColor: sellingToday.reduce((sum, item) => sum + item.amount, 0) > sellingYesterday ? "#74F57F" : "#FF413F", color: sellingToday.reduce((sum, item) => sum + item.amount, 0) > sellingYesterday ? "#00950D" : "white", padding: "4px 8px", height: "max-content", fontSize: "12px", borderRadius: "1rem"}}>{percentage.toFixed(1)}%</div>
+              <div
+                style={{
+                  backgroundColor:
+                    sellingToday.reduce((sum, item) => sum + item.amount, 0) >
+                    sellingYesterday
+                      ? "#74F57F"
+                      : "#FF413F",
+                  color:
+                    sellingToday.reduce((sum, item) => sum + item.amount, 0) >
+                    sellingYesterday
+                      ? "#00950D"
+                      : "white",
+                  padding: "4px 8px",
+                  height: "max-content",
+                  fontSize: "12px",
+                  borderRadius: "1rem",
+                }}
+              >
+                {percentage.toFixed(1)}%
+              </div>
             </div>
             <div>
               <p
@@ -316,7 +348,9 @@ function Beranda() {
               >
                 Unit terjual hari ini
               </p>
-              <p style={{ fontSize: "1.5rem" }}>{dateFilter.filter((item) => !item.type).length} Unit</p>
+              <p style={{ fontSize: "1.5rem" }}>
+                {dateFilter.filter((item) => !item.type).length} Unit
+              </p>
             </div>
           </div>
         </div>
@@ -342,7 +376,11 @@ function Beranda() {
                 Total Cash
               </p>
               <p style={{ fontSize: "1.5rem" }}>
-                {formatRupiah(sellingToday.filter((item) => item.type == "CS").reduce((sum, item) => sum + item.amount, 0))}
+                {formatRupiah(
+                  sellingToday
+                    .filter((item) => item.type == "CS")
+                    .reduce((sum, item) => sum + item.amount, 0),
+                )}
               </p>
             </div>
           </div>
@@ -367,7 +405,11 @@ function Beranda() {
                 Total Transfer
               </p>
               <p style={{ fontSize: "1.5rem" }}>
-                {formatRupiah(sellingToday.filter((item) => item.type == "TF").reduce((sum, item) => sum + item.amount, 0))}
+                {formatRupiah(
+                  sellingToday
+                    .filter((item) => item.type == "TF")
+                    .reduce((sum, item) => sum + item.amount, 0),
+                )}
               </p>
             </div>
           </div>
@@ -392,7 +434,11 @@ function Beranda() {
                 Total Debit
               </p>
               <p style={{ fontSize: "1.5rem" }}>
-                {formatRupiah(sellingToday.filter((item) => item.type == "GS").reduce((sum, item) => sum + item.amount, 0))}
+                {formatRupiah(
+                  sellingToday
+                    .filter((item) => item.type == "GS")
+                    .reduce((sum, item) => sum + item.amount, 0),
+                )}
               </p>
             </div>
           </div>
@@ -418,11 +464,25 @@ function Beranda() {
                 justifyContent: "center",
               }}
             >
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M14.7 6C14.501 5.43524 14.1374 4.94297 13.6563 4.58654C13.1751 4.23011 12.5983 4.02583 12 4H8M5.443 5.431C5.16402 5.88565 5.01131 6.40646 5.0006 6.93978C4.98989 7.47309 5.12158 7.99961 5.38208 8.46509C5.64258 8.93058 6.02249 9.31819 6.48265 9.58798C6.94281 9.85778 7.46658 10 8 10H10M14.564 14.558C14.2964 14.9983 13.92 15.3623 13.4709 15.6148C13.0218 15.8674 12.5152 16 12 16H8C7.40175 15.9742 6.82491 15.7699 6.34373 15.4135C5.86255 15.057 5.49905 14.5648 5.3 14M10 1V4M10 16V19M1 1L19 19" stroke="#DA0909" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M14.7 6C14.501 5.43524 14.1374 4.94297 13.6563 4.58654C13.1751 4.23011 12.5983 4.02583 12 4H8M5.443 5.431C5.16402 5.88565 5.01131 6.40646 5.0006 6.93978C4.98989 7.47309 5.12158 7.99961 5.38208 8.46509C5.64258 8.93058 6.02249 9.31819 6.48265 9.58798C6.94281 9.85778 7.46658 10 8 10H10M14.564 14.558C14.2964 14.9983 13.92 15.3623 13.4709 15.6148C13.0218 15.8674 12.5152 16 12 16H8C7.40175 15.9742 6.82491 15.7699 6.34373 15.4135C5.86255 15.057 5.49905 14.5648 5.3 14M10 1V4M10 16V19M1 1L19 19"
+                  stroke="#DA0909"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </div>
-            <div style={{display: "flex", flexDirection: "column", gap: "1rem"}}>
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+            >
               <div>
                 <p
                   style={{
@@ -433,18 +493,46 @@ function Beranda() {
                 >
                   Pengeluaran hari ini
                 </p>
-                <p style={{ fontSize: "1.5rem" }}>{formatRupiah(outflowToday.reduce((sum, item) => sum + item.amount, 0))}</p>
+                <p style={{ fontSize: "1.5rem" }}>
+                  {formatRupiah(
+                    outflowToday.reduce((sum, item) => sum + item.amount, 0),
+                  )}
+                </p>
               </div>
-              <div style={{backgroundColor: "white", color: "#DA0909", padding: "0.5rem 1rem", borderRadius: "0.5rem", display: "flex", flexDirection: "column", gap: "0.5rem"}}>
+              <div
+                style={{
+                  backgroundColor: "white",
+                  color: "#DA0909",
+                  padding: "0.5rem 1rem",
+                  borderRadius: "0.5rem",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.5rem",
+                }}
+              >
                 Detail Pengeluaran :
                 {outflowToday.map((item) => (
-                  <div key={item.id} style={{border: "solid #DA0909 1px", padding: "0.5rem 1rem", borderRadius: "0.25rem", display: "flex", justifyContent: "space-between"}}>
+                  <div
+                    key={item.id}
+                    style={{
+                      border: "solid #DA0909 1px",
+                      padding: "0.5rem 1rem",
+                      borderRadius: "0.25rem",
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
+                  >
                     <div>
                       <p>{item.name}</p>
-                      <p style={{fontFamily: "SFProRegular"}}>Kategori: <span style={{fontFamily: "SFProBold"}}>{item.desc}</span></p>
+                      <p style={{ fontFamily: "SFProRegular" }}>
+                        Kategori:{" "}
+                        <span style={{ fontFamily: "SFProBold" }}>
+                          {item.desc}
+                        </span>
+                      </p>
                     </div>
                     <div>
-                      <p style={{fontFamily: "SFProRegular"}}>Total:</p>
+                      <p style={{ fontFamily: "SFProRegular" }}>Total:</p>
                       <p>{formatRupiah(item.amount)}</p>
                     </div>
                   </div>
@@ -454,9 +542,7 @@ function Beranda() {
           </div>
         </div>
         <div>
-          <ResponsiveContainer width="100%" height="100%">
-
-          </ResponsiveContainer>
+          <ResponsiveContainer width="100%" height="100%"></ResponsiveContainer>
         </div>
       </div>
     </>
@@ -1250,155 +1336,195 @@ function History() {
 }
 
 function Employee() {
+  const { active, toogleDeact, toogleActive } = userActivityLogic();
 
-  const {active, toogleDeact, toogleActive} = userActivityLogic()
-  
-  const [loading, setLoading] = useState(true)
-  const [user, setUser] = useState([])
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const q = collection(db, "users")
-        const snap = await getDocs(q)
+        const q = collection(db, "users");
+        const snap = await getDocs(q);
         const data = snap.docs.map((doc) => ({
           id: doc.id,
-          ...doc.data()
-        }))
-        setUser(data)
-      } catch(err) {
-        console.error(err.message)
+          ...doc.data(),
+        }));
+        setUser(data);
+      } catch (err) {
+        console.error(err.message);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
-    fetchData()
-  })
-  
-  const role = ["admin", "fl", "pmt"]
-  
+    };
+    fetchData();
+  });
+
+  const role = ["admin", "fl", "pmt"];
+
   const sorted = [...user].sort(
-    (a, b) => role.indexOf(a.role) - role.indexOf(b.role)
+    (a, b) => role.indexOf(a.role) - role.indexOf(b.role),
   );
-  
+
   const deleteUser = async (id) => {
     try {
-      await deleteDoc(doc(db, "users", id))
+      await deleteDoc(doc(db, "users", id));
     } catch (err) {
-      console.error(err.message)
+      console.error(err.message);
     }
-  }
-  
+  };
+
   const [uploadData, setUploadData] = useState({
     name: "",
     role: "",
     brand: "",
-    unique: ""
+    unique: "",
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUploadData(prev => ({
+    setUploadData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const addUser = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      await addDoc(collection(db, "users"), uploadData)
+      await addDoc(collection(db, "users"), uploadData);
       if (uploadData.brand) {
         const data = {
           brand: uploadData.brand,
           name: uploadData.name,
-          report: []
-        }
-        await addDoc(collection(db, "pmtdatas"), data)
+          report: [],
+        };
+        await addDoc(collection(db, "pmtdatas"), data);
       }
       setUploadData({ name: "", role: "", brand: "", unique: "" });
-      toogleDeact()
-    } catch(err) {
-      console.error(err.message)
+      toogleDeact();
+    } catch (err) {
+      console.error(err.message);
     }
-  }
+  };
 
-  return(
+  return (
     <>
-    {active && (
-      <div className={styles.popupContainer}>
-        <p className={styles.popupTitle}>Tambahkan Karyawan</p>
-        <div className={styles.popupItemContainer}>
-          <div className={styles.popupItemWrapper}>
-            <div style={{display: "flex", flexDirection: "column", gap: "0.5rem"}}>
-              <label>Nama</label>
-              <input placeholder="Nama Karyawan" className={styles.popupInput} type="text" name="name" value={uploadData.name} onChange={handleChange}/>
-            </div>
-            <div style={{display: "flex", gap: "1rem", width: "100%"}}>
-              <div style={{width: "100%", display: "flex", flexDirection: "column", gap: "0.5rem"}}>
-                <label>Posisi</label>
-                <select
-                  className={styles.popupInputSelect}
-                  value={uploadData.role}
-                  name="role"
+      {active && (
+        <div className={styles.popupContainer}>
+          <p className={styles.popupTitle}>Tambahkan Karyawan</p>
+          <div className={styles.popupItemContainer}>
+            <div className={styles.popupItemWrapper}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.5rem",
+                }}
+              >
+                <label>Nama</label>
+                <input
+                  placeholder="Nama Karyawan"
+                  className={styles.popupInput}
+                  type="text"
+                  name="name"
+                  value={uploadData.name}
                   onChange={handleChange}
-                >
-                  <option value="" disabled hidden>Pilih role</option>
-                  <option value="fl">FL</option>
-                  <option value="admin">Admin</option>
-                  <option value="pmt">PMT</option>
-                </select>
+                />
               </div>
-              {uploadData.role === "pmt" &&
-              <div style={{width: "100%", display: "flex", flexDirection: "column", gap: "0.5rem"}}>
-                <label>Brand</label>
-                <select
-                  className={styles.popupInputSelect}
-                  value={uploadData.brand}
-                  name="brand"
+              <div style={{ display: "flex", gap: "1rem", width: "100%" }}>
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "0.5rem",
+                  }}
+                >
+                  <label>Posisi</label>
+                  <select
+                    className={styles.popupInputSelect}
+                    value={uploadData.role}
+                    name="role"
+                    onChange={handleChange}
+                  >
+                    <option value="" disabled hidden>
+                      Pilih role
+                    </option>
+                    <option value="fl">FL</option>
+                    <option value="admin">Admin</option>
+                    <option value="pmt">PMT</option>
+                  </select>
+                </div>
+                {uploadData.role === "pmt" && (
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "0.5rem",
+                    }}
+                  >
+                    <label>Brand</label>
+                    <select
+                      className={styles.popupInputSelect}
+                      value={uploadData.brand}
+                      name="brand"
+                      onChange={handleChange}
+                    >
+                      <option value="" disabled hidden>
+                        Pilih role
+                      </option>
+                      <option value="samsung">Samsung</option>
+                      <option value="xiaomi">XIaomi</option>
+                      <option value="vivo">Vivo</option>
+                      <option value="oppo">Oppo</option>
+                      <option value="infinix">Infinix</option>
+                      <option value="Realme">Realme</option>
+                      <option value="tecno">Tecno</option>
+                    </select>
+                  </div>
+                )}
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.5rem",
+                }}
+              >
+                <label>Password</label>
+                <input
+                  placeholder="Masukkan Password"
+                  className={styles.popupInput}
+                  type="text"
+                  name="unique"
+                  value={uploadData.unique}
                   onChange={handleChange}
-                >
-                  <option value="" disabled hidden>Pilih role</option>
-                  <option value="samsung">Samsung</option>
-                  <option value="xiaomi">XIaomi</option>
-                  <option value="vivo">Vivo</option>
-                  <option value="oppo">Oppo</option>
-                  <option value="infinix">Infinix</option>
-                  <option value="Realme">Realme</option>
-                  <option value="tecno">Tecno</option>
-                </select>
+                />
               </div>
-              }
             </div>
-            <div style={{display: "flex", flexDirection: "column", gap: "0.5rem"}}>
-              <label>Password</label>
-              <input placeholder="Masukkan Password" className={styles.popupInput} type="text" name="unique" value={uploadData.unique} onChange={handleChange}/>
+            <div className={styles.popupButton} onClick={addUser}>
+              Submit
             </div>
           </div>
-          <div
-            className={styles.popupButton}
-            onClick={addUser}
-          >
-            Submit
+        </div>
+      )}
+      <div className={styles.itemContainer}>
+        <div className={styles.topStock}>
+          <div>
+            <p style={{ fontSize: "1.5rem" }}>Manajemen Karyawan</p>
+            <p style={{ fontFamily: "SFProRegular", color: "#b3b3b3" }}>
+              Lakukan manajemen karyawan secara realtime
+            </p>
+          </div>
+          <div style={{ display: "flex", gap: "0.5rem" }}>
+            <div onClick={toogleActive} className={styles.button}>
+              Tambah Karyawan
+            </div>
           </div>
         </div>
-      </div>
-    )}
-    <div className={styles.itemContainer}>
-      <div className={styles.topStock}>
-        <div>
-          <p style={{ fontSize: "1.5rem" }}>Manajemen Karyawan</p>
-          <p style={{ fontFamily: "SFProRegular", color: "#b3b3b3" }}>
-            Lakukan manajemen karyawan secara realtime
-          </p>
-        </div>
-        <div style={{ display: "flex", gap: "0.5rem" }}>
-          <div onClick={toogleActive} className={styles.button}>
-            Tambah Karyawan
-          </div>
-        </div>
-      </div>
-      {loading ? (
+        {loading ? (
           <Loader />
         ) : sorted.length === 0 ? (
           <Empty />
@@ -1421,7 +1547,11 @@ function Employee() {
                       {index + 1}
                     </td>
                     <td className={styles.td}>{item.name}</td>
-                    {item.role == "pmt" ? <td className={styles.td}>Promotor {item.brand}</td> : <td className={styles.td}>{item.role}</td>}
+                    {item.role == "pmt" ? (
+                      <td className={styles.td}>Promotor {item.brand}</td>
+                    ) : (
+                      <td className={styles.td}>{item.role}</td>
+                    )}
                     <td className={styles.td}>{item.unique}</td>
                     <td className={`${styles.td} ${styles.tdCenter}`}>
                       <div
@@ -1441,7 +1571,7 @@ function Employee() {
             </table>
           </div>
         )}
-    </div>
+      </div>
     </>
-  )
+  );
 }

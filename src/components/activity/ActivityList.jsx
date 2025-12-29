@@ -18,38 +18,37 @@ export default function ActivityList({
   handleDeleteAcc,
   total,
 }) {
-
-  const [outflowFiltered, setOutflowFiltered] = useState([])
-  const {currentUser} = userStore()
+  const [outflowFiltered, setOutflowFiltered] = useState([]);
+  const { currentUser } = userStore();
 
   if (currentUser.role == "fl") {
     useEffect(() => {
-      if (!outflow.length) return
+      if (!outflow.length) return;
 
-      const now = new Date()
+      const now = new Date();
       const today =
         now.getFullYear() +
         "-" +
         String(now.getMonth() + 1).padStart(2, "0") +
         "-" +
-        String(now.getDate()).padStart(2, "0")
+        String(now.getDate()).padStart(2, "0");
 
       const filtered = outflow.filter((item) => {
-        if (!item.createdAt?.toDate) return false
+        if (!item.createdAt?.toDate) return false;
 
-        const d = item.createdAt.toDate()
+        const d = item.createdAt.toDate();
         const ymd =
           d.getFullYear() +
           "-" +
           String(d.getMonth() + 1).padStart(2, "0") +
           "-" +
-          String(d.getDate()).padStart(2, "0")
+          String(d.getDate()).padStart(2, "0");
 
-        return ymd === today
-      })
+        return ymd === today;
+      });
 
-      setOutflowFiltered(filtered)
-    }, [outflow]) 
+      setOutflowFiltered(filtered);
+    }, [outflow]);
   }
 
   return (
@@ -80,29 +79,47 @@ export default function ActivityList({
           </div>
         ))}
         {outflowFiltered.map((item) => (
-          <div key={item.id} className={styles.activity} style={{backgroundColor: "#d9d9d9ff"}}>
-            <div style={{display: "flex", justifyContent: "space-between"}}>
+          <div
+            key={item.id}
+            className={styles.activity}
+            style={{ backgroundColor: "#d9d9d9ff" }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
               <p>{item.desc}</p>
-              <div style={{backgroundColor: "#DA0909", color: "white", padding: "4px 12px", borderRadius: "1rem"}}>Pengeluaran</div>
+              <div
+                style={{
+                  backgroundColor: "#DA0909",
+                  color: "white",
+                  padding: "4px 12px",
+                  borderRadius: "1rem",
+                }}
+              >
+                Pengeluaran
+              </div>
             </div>
-  
+
             <div className={styles.totalPriceContainer}>
               <p>Total :</p>
               <p>{formatRupiah(item.amount)}</p>
             </div>
 
             <div className={styles.buttonContainer}>
-              <div className={styles.deleteButton}
-              onClick={() => handleDeleteAcc({
-                id: item.id,
-                type: "outflow"
-              })}
-              >Hapus</div>
+              <div
+                className={styles.deleteButton}
+                onClick={() =>
+                  handleDeleteAcc({
+                    id: item.id,
+                    type: "outflow",
+                  })
+                }
+              >
+                Hapus
+              </div>
             </div>
           </div>
         ))}
       </div>
-      
+
       <p className={styles.activityTitle}>
         <span style={{ color: "#B0B0B0" }}>Total: </span>
         {total}

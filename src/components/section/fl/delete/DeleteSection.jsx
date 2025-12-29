@@ -88,14 +88,13 @@ export default function DeleteSection({
 
   const deleteReportByDocId = async (id) => {
     try {
-      const docRef = doc(db, "outflow", id)
-      await deleteDoc(docRef)
+      const docRef = doc(db, "outflow", id);
+      await deleteDoc(docRef);
     } catch (err) {
-      console.error(err.message)
+      console.error(err.message);
     } finally {
-      
     }
-  }
+  };
 
   if (productType === "acc") {
     return (
@@ -123,7 +122,7 @@ export default function DeleteSection({
         </div>
       </div>
     );
-  } else if(productType === "outflow") {
+  } else if (productType === "outflow") {
     return (
       <div className={styles.container}>
         <p className={styles.title}>Batalkan laporan? {docId}</p>

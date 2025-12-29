@@ -44,7 +44,6 @@
   display: flex;
   overflow-x: auto;
   gap: 1rem;
-
 }
 
 .sliderContainer::-webkit-scrollbar {
@@ -296,7 +295,7 @@
   text-align: left;
   font-size: 14px;
   color: #333;
-  appearance: none;       /* hilangkan default arrow */
+  appearance: none; /* hilangkan default arrow */
   -webkit-appearance: none;
   -moz-appearance: none;
 }
