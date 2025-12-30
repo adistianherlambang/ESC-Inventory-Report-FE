@@ -304,6 +304,40 @@
   text-align: left;
 }
 
+.dataTextContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dataText {
+  font-size: 1.5rem;
+}
+
+.dataTextType {
+  font-size: 10px;
+  font-family: SFProRegular;
+}
+
+/* Mobile default */
+
+@media (max-width: 768px) {
+  .dataText {
+    font-size: 1rem;
+  }
+  .itemTypeContainer {
+    flex-direction: column;
+  }
+  .itemType {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 1024px) {
+  /* desktop */
+}
+
 @keyframes Overlay {
   0% {
     opacity: 0;

@@ -18,6 +18,8 @@ import { Row, Col, Card } from "antd";
 import * as XLSX from "xlsx-js-style";
 import { saveAs } from "file-saver";
 import {
+  AreaChart,
+  Area,
   LineChart,
   CartesianGrid,
   XAxis,
@@ -194,6 +196,44 @@ function Beranda() {
     return reportDate === date;
   });
 
+  const getMonthlySelling = () => {
+    const now = new Date();
+    const month = now.getMonth();
+    const year = now.getFullYear();
+
+    const grouped = {};
+
+    selling.forEach(doc => {
+      if (!doc.createdAt || !doc.price) return;
+
+      const date = doc.createdAt.toDate();
+      if (date.getMonth() !== month || date.getFullYear() !== year) return;
+
+      const key = `${String(date.getDate()).padStart(2, "0")}/${String(
+        date.getMonth() + 1
+      ).padStart(2, "0")}`;
+
+      const total = doc.price.reduce(
+        (sum, item) => sum + item.amount,
+        0
+      );
+
+      if (!grouped[key]) {
+        grouped[key] = {
+          createdAt: key,
+          dateObj: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+          total: 0,
+        };
+      }
+
+      grouped[key].total += total;
+    });
+
+    return Object.values(grouped)
+      .sort((a, b) => a.dateObj - b.dateObj)
+      .map(({ dateObj, ...rest }) => rest);
+  };
+
   return (
     <>
       <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
@@ -269,23 +309,51 @@ function Beranda() {
                 {percentage.toFixed(1)}%
               </div>
             </div>
-            <div>
-              <p
-                style={{
-                  fontSize: "12px",
-                  fontFamily: "SFProRegular",
-                  color: "#CDA1FF",
-                }}
-              >
-                Pemasukan hari ini
-              </p>
-              <p style={{ fontSize: "1.5rem" }}>
-                {formatRupiah(
-                  dateFilter
-                    .flatMap((item) => item.price)
-                    .reduce((sum, item) => sum + item.amount, 0),
-                )}
-              </p>
+            <div className={styles.dataTextContainer}>
+              <div>
+                <p
+                  style={{
+                    fontSize: "12px",
+                    fontFamily: "SFProRegular",
+                    color: "#CDA1FF",
+                  }}
+                >
+                  Pemasukan hari ini
+                </p>
+                <p className={styles.dataText}>
+                  {formatRupiah(
+                    dateFilter
+                      .flatMap((item) => item.price)
+                      .reduce((sum, item) => sum + item.amount, 0),
+                  )}
+                </p>
+              </div>
+              <div className={styles.dataTextTypeContainer}>
+                <p className={styles.dataTextType}>
+                  Cash
+                  {(" ") + formatRupiah(
+                    sellingToday
+                      .filter((item) => item.type == "CS")
+                      .reduce((sum, item) => sum + item.amount, 0)
+                    )}
+                </p>
+                <p className={styles.dataTextType}>
+                  Transfer
+                  {(" ") + formatRupiah(
+                    sellingToday
+                      .filter((item) => item.type == "TF")
+                      .reduce((sum, item) => sum + item.amount, 0)
+                    )}
+                </p>
+                <p className={styles.dataTextType}>
+                  Debit
+                  {(" ") + formatRupiah(
+                    sellingToday
+                      .filter((item) => item.type == "GS")
+                      .reduce((sum, item) => sum + item.amount, 0)
+                    )}
+                </p>
+              </div>
             </div>
           </div>
           <div
@@ -348,97 +416,8 @@ function Beranda() {
               >
                 Unit terjual hari ini
               </p>
-              <p style={{ fontSize: "1.5rem" }}>
+              <p className={styles.dataText}>
                 {dateFilter.filter((item) => !item.type).length} Unit
-              </p>
-            </div>
-          </div>
-        </div>
-        <div style={{ width: "100%", display: "flex", gap: "0.5rem" }}>
-          <div
-            className={styles.itemContainer}
-            style={{
-              color: "#748FC8",
-              backgroundColor: "#E8F8FF",
-              maxWidth: "30%",
-              width: "30%",
-              borderRadius: "1rem",
-            }}
-          >
-            <div>
-              <p
-                style={{
-                  fontSize: "12px",
-                  fontFamily: "SFProRegular",
-                  color: "#748FC8",
-                }}
-              >
-                Total Cash
-              </p>
-              <p style={{ fontSize: "1.5rem" }}>
-                {formatRupiah(
-                  sellingToday
-                    .filter((item) => item.type == "CS")
-                    .reduce((sum, item) => sum + item.amount, 0),
-                )}
-              </p>
-            </div>
-          </div>
-          <div
-            className={styles.itemContainer}
-            style={{
-              color: "#2FB264",
-              backgroundColor: "#E2FBEB",
-              maxWidth: "30%",
-              width: "30%",
-              borderRadius: "1rem",
-            }}
-          >
-            <div>
-              <p
-                style={{
-                  fontSize: "12px",
-                  fontFamily: "SFProRegular",
-                  color: "#2FB264",
-                }}
-              >
-                Total Transfer
-              </p>
-              <p style={{ fontSize: "1.5rem" }}>
-                {formatRupiah(
-                  sellingToday
-                    .filter((item) => item.type == "TF")
-                    .reduce((sum, item) => sum + item.amount, 0),
-                )}
-              </p>
-            </div>
-          </div>
-          <div
-            className={styles.itemContainer}
-            style={{
-              color: "#AD5D89",
-              backgroundColor: "#FEE9FA",
-              maxWidth: "30%",
-              width: "30%",
-              borderRadius: "1rem",
-            }}
-          >
-            <div>
-              <p
-                style={{
-                  fontSize: "12px",
-                  fontFamily: "SFProRegular",
-                  color: "#AD5D89",
-                }}
-              >
-                Total Debit
-              </p>
-              <p style={{ fontSize: "1.5rem" }}>
-                {formatRupiah(
-                  sellingToday
-                    .filter((item) => item.type == "GS")
-                    .reduce((sum, item) => sum + item.amount, 0),
-                )}
               </p>
             </div>
           </div>
@@ -493,7 +472,7 @@ function Beranda() {
                 >
                   Pengeluaran hari ini
                 </p>
-                <p style={{ fontSize: "1.5rem" }}>
+                <p className={styles.dataText}>
                   {formatRupiah(
                     outflowToday.reduce((sum, item) => sum + item.amount, 0),
                   )}
@@ -541,8 +520,46 @@ function Beranda() {
             </div>
           </div>
         </div>
-        <div>
-          <ResponsiveContainer width="100%" height="100%"></ResponsiveContainer>
+        <div style={{ width: "100%", display: "flex", gap: "1rem" }}>
+          <div className={styles.itemContainer}
+          style={{width: "100%"}}>
+            <p className={styles.dataText} style={{textAlign: "center"}}>Data penjualan dalam sebulan</p>
+            <ResponsiveContainer width="100%" height={300}>
+              <AreaChart
+                data={getMonthlySelling()}
+                style={{ fontSize: 10 }}
+                margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+              >
+                <defs>
+                  <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#22c55e" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#22c55e" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="createdAt" tick={{ fontSize: 10 }} />
+                <YAxis
+                  width={30}
+                  tick={{ fontSize: 10 }}
+                  tickFormatter={(v) => v / 1000000 + "jt"}
+                />
+                <Tooltip
+                  formatter={(v) => "Rp " + v.toLocaleString("id-ID")}
+                  labelStyle={{ fontSize: 10 }}
+                  itemStyle={{ fontSize: 10 }}
+                />
+
+                <Area
+                  type="monotone"
+                  dataKey="total"
+                  stroke="#22c55e"
+                  fillOpacity={1}
+                  fill="url(#colorTotal)"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
     </>
@@ -764,9 +781,9 @@ function Stok() {
                 <tr>
                   <th className={`${styles.th} ${styles.thNo}`}>No</th>
                   <th className={styles.th}>Product</th>
+                  <th className={styles.th}>Brand</th>
                   <th className={styles.th}>Kapasitas</th>
                   <th className={styles.th}>Warna</th>
-                  <th className={styles.th}>Brand</th>
                   <th className={styles.th}>Stok</th>
                   <th className={styles.th}>Aksi</th>
                 </tr>
@@ -823,9 +840,9 @@ function Stok() {
                         {index + 1}
                       </td>
                       <td className={styles.td}>{item.product}</td>
+                      <td className={styles.td}>{item.brand}</td>
                       <td className={styles.td}>{item.capacity}</td>
                       <td className={styles.td}>{item.color}</td>
-                      <td className={styles.td}>{item.brand}</td>
                       <td className={styles.td}>{item.IMEI?.length || 0}</td>
                       <td className={styles.td}>
                         <div
