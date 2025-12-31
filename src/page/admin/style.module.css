@@ -109,13 +109,16 @@
   background-color: #ffffff;
 } */
 
+.tr {
+  border-bottom: 2px solid #e5e7eb;
+}
+
 .thead {
   background-color: #f3f4f6;
 }
 
 .th {
   padding: 12px;
-  border-bottom: 2px solid #e5e7eb;
   background-color: #773ff9;
   color: white;
   text-align: center;
@@ -157,7 +160,9 @@
 
 .topStock {
   display: flex;
+  gap: 0;
   justify-content: space-between;
+  flex-direction: row;
 }
 
 .downloadBtn {
@@ -189,6 +194,7 @@
   color: white;
   border-radius: 8px;
   cursor: pointer;
+  width: fit-content;
 }
 
 .button:hover {
@@ -331,6 +337,16 @@
   .itemType {
     width: 100%;
     max-width: 100%;
+  }
+  .topStock {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .button {
+    width: 100%;
+  }
+  .itemContainer {
+    padding: 1rem 1.5rem;
   }
 }
 
