@@ -37,7 +37,7 @@ import Empty from "../../components/item/Empty/Empty";
 import Loader from "../../components/item/loader/Loader";
 
 import userActivityLogic from "../../hooks/userActivityLogic";
-import PopUp from "../../components/popUp/popUp";
+import PopUp from "../../components/popUp/PopUp";
 
 export default function AdminPage() {
   const { active, toogleDeact } = userActivityLogic();

@@ -10,7 +10,7 @@ import AddStock from "../../stock/popup/AddStock";
 
 import { pmtReport } from "../../../../../state/state";
 import NewStock from "../../stock/popup/NewStock";
-import PopUp from "../../../../popUp/popUp";
+import PopUp from "../../../../popUp/PopUp";
 
 export default function Product({ search, brand }) {
   const [product, setProduct] = useState([]);
