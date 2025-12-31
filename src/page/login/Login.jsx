@@ -6,9 +6,6 @@ import styles from "./style.module.css";
 import { collection, query, where, getDocs, limit } from "firebase/firestore";
 import { db } from "../../../firebase";
 
-import FirestoreExport from "./File";
-import Add from "./Add";
-
 import Logo from "../../../public/Logo";
 
 export default function Login() {
