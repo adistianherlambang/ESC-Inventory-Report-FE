@@ -1,12 +1,13 @@
 .container {
+  box-sizing: border-box;
+  position: fixed;
+  bottom: 16px;
+  left: 0;
   width: 100%;
+  display: flex;
   justify-content: center;
   align-items: center;
-  display: flex;
   z-index: 2;
-  position: fixed;
-  bottom: 0;
-  margin-bottom: 16px;
 }
 
 .wrapper {
@@ -14,13 +15,13 @@
   width: 80px;
   height: 80px;
   border-radius: 100px;
+  display: flex;
   justify-content: center;
   align-items: center;
-  display: flex;
   transition: 300ms ease;
+  cursor: pointer;
 }
 
 .wrapper:hover {
   background-color: #7746ff;
-  cursor: pointer;
 }

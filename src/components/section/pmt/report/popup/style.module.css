@@ -219,6 +219,11 @@
   justify-content: center;
 }
 
+.scannerInner {
+  transform: scale(2);
+  transform-origin: center;
+}
+
 .scanResult {
   color: #b0b0b0;
   text-align: center;

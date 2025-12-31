@@ -139,11 +139,13 @@ function Scan() {
         <p className={styles.title}>Report</p>
         <div className={styles.scannerContainer}>
           <div className={styles.scanner}>
-            <BarcodeScanner
-              options={{ delay: 500, formats: ["code_128"] }}
-              onCapture={handleCapture}
-              trackConstraints={constraints}
-            />
+            <div className={styles.scannerInner}>
+              <BarcodeScanner
+                options={{ delay: 500, formats: ["code_128"] }}
+                onCapture={handleCapture}
+                trackConstraints={constraints}
+              />
+            </div>
           </div>
           <p className={styles.scanResult}>IMEI : {result}</p>
         </div>

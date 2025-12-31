@@ -57,13 +57,11 @@ export default function Login() {
     <div className={styles.container}>
       <div className={styles.top}>
         <Logo />
-        {/* <FirestoreExport />
-        <Add /> */}
       </div>
       <div className={styles.bottom}>
         <p className={styles.title}>
-          Selamat <span className={styles.span}>Datang</span>👋 di SuperApp TES
-          123
+          Selamat <span className={styles.span}>Datang</span>👋
+          di <span className={styles.span}>ESC Stock Management</span>
         </p>
         <form onSubmit={handleLogin} className={styles.form}>
           <input
