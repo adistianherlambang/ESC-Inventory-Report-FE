@@ -136,6 +136,22 @@ export default function Product({ search, brand }) {
             <AddStock id={selectedId} data={data} />
           </PopUp>
         )}
+        <div
+          style={{
+            opacity: stock ? "0.3" : "1",
+            transition: "opacity 300ms ease",
+          }}
+        >
+          <Empty />
+          <div onClick={handleNewStock} className={styles.addNewProduct}>
+            Tambahkan Stok Baru
+          </div>
+        </div>
+        {stock && (
+          <PopUp>
+            <NewStock brand={brand} />
+          </PopUp>
+        )}
       </>
     );
 }
