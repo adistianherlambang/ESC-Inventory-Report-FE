@@ -18,6 +18,7 @@ export default function Product({ search, brand }) {
   const [error, setError] = useState("");
   const [selectedId, setSelectedId] = useState("");
   const [data, setData] = useState([]);
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -58,7 +59,7 @@ export default function Product({ search, brand }) {
     console.log(stock);
     setSelectedId(id);
     setData(item);
-    stock ? toogleStockDeact() : null;
+    setOpen(true)
   };
 
   const handleNewStock = (brand) => {
@@ -131,7 +132,7 @@ export default function Product({ search, brand }) {
             <p>Stok : {item.IMEI?.length || 0}</p>
           </div>
         ))}
-        {stock && (
+        {open && (
           <PopUp>
             <AddStock id={selectedId} data={data} />
           </PopUp>
@@ -142,7 +143,6 @@ export default function Product({ search, brand }) {
             transition: "opacity 300ms ease",
           }}
         >
-          <Empty />
           <div onClick={handleNewStock} className={styles.addNewProduct}>
             Tambahkan Stok Baru
           </div>
