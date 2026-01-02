@@ -195,6 +195,8 @@ function Update({ open, brand, imei, setOpen, setSubmit }) {
     color: "",
   });
 
+  const isValid = Object.values(data).every(v => v !== "")
+
   const handleAddImei = () => {
     setOpen("");
     setSubmit(false);
@@ -311,9 +313,9 @@ function Update({ open, brand, imei, setOpen, setSubmit }) {
           >
             Tambahkan Item
           </div>
-          <div className={styles.button} onClick={handleSubmit}>
+          <button disabled={data} style={{opacity: isValid ? 1 : 0.5}} className={styles.button} onClick={handleSubmit}>
             Submit
-          </div>
+          </button>
         </div>
       </div>
       {/* <div className={styles.container}>

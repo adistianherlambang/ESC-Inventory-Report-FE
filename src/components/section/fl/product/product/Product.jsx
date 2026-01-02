@@ -18,7 +18,8 @@ export default function Product({ search, brand }) {
   const [error, setError] = useState("");
   const [selectedId, setSelectedId] = useState("");
   const [data, setData] = useState([]);
-  const [open, setOpen] = useState(false)
+  const [openAdd, setOpenAdd] = useState(false)
+  const [openNew, setOpenNew] = useState(false)
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -52,19 +53,32 @@ export default function Product({ search, brand }) {
   const filtered = product.filter((item) =>
     item.product.toLowerCase().includes((search || "").toLowerCase()),
   );
-
+  
+  
   const { stock, toogleStockActive, toogleStockDeact } = pmtReport();
+  
+  useEffect(() => {
+    if (!stock) {
+      setOpenAdd(false)
+      setOpenNew(false)
+    }
+  }, [stock])
+
   const handleAddStock = (id, item) => {
     toogleStockActive();
+    stock ? toogleStockDeact() : null;
+    setOpenAdd(true)
     console.log(stock);
     setSelectedId(id);
     setData(item);
-    setOpen(true)
+    openAdd ? setOpenAdd(false) : null
   };
 
   const handleNewStock = (brand) => {
+    setOpenNew(true)
     toogleStockActive();
     stock ? toogleStockDeact() : null;
+    openNew ? setOpenNew(false) : null
   };
 
   if (loading)
@@ -132,9 +146,10 @@ export default function Product({ search, brand }) {
             <p>Stok : {item.IMEI?.length || 0}</p>
           </div>
         ))}
-        {open && (
+        {openAdd && (
           <PopUp>
             <AddStock id={selectedId} data={data} />
+            <p>{stock ? "ya" : "ga"}</p>
           </PopUp>
         )}
         <div
@@ -147,7 +162,7 @@ export default function Product({ search, brand }) {
             Tambahkan Stok Baru
           </div>
         </div>
-        {stock && (
+        {openNew && (
           <PopUp>
             <NewStock brand={brand} />
           </PopUp>

@@ -34,7 +34,6 @@ export default function Login() {
       if (!querySnapshot.empty) {
         const doc = querySnapshot.docs[0];
         const data = { id: doc.id, ...doc.data() };
-        alert(`login Sukses: ${JSON.stringify(data)}`);
         setCurrentUser(data);
 
         if (data?.role) {

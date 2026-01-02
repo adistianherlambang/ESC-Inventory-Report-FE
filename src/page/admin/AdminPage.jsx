@@ -1417,6 +1417,12 @@ function Employee() {
           report: [],
         };
         await addDoc(collection(db, "pmtdatas"), data);
+      } else {
+        const data = {
+          name: uploadData.name,
+          report: [],
+        };
+        await addDoc(collection(db, "fldatas"), data)
       }
       setUploadData({ name: "", role: "", brand: "", unique: "" });
       toogleDeact();
