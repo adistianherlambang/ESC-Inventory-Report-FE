@@ -315,7 +315,7 @@ function Update({ open, brand, imei, setOpen, setSubmit }) {
             Tambahkan Item
           </div>
           <button disabled={!isValid} style={{opacity: isValid ? 1 : 0.5}} className={styles.button} onClick={handleSubmit}>
-            Submittt
+            Submit
           </button>
         </div>
       </div>
