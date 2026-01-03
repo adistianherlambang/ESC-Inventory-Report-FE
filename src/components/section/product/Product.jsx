@@ -46,9 +46,45 @@ export default function Product({ search, brand }) {
     setVisibleCount(3);
   }, [search, brand]);
 
+  const capacityOrder = [
+    "4/64",
+    "4/128",
+    "4/256",
+    "6/128",
+    "6/256",
+    "8/128",
+    "8/256",
+    "12/256",
+    "12/512",
+  ];
+
+  function normalizeString(value) {
+    return (value || "")
+      .toString()
+      .replace(/\s+/g, "")
+      .toLowerCase();
+  }
+
   const filtered = product.filter((item) =>
     item.product.toLowerCase().includes((search || "").toLowerCase()),
-  );
+  ).sort((a,b) => {
+    const productCompare = normalizeString(a.product).localeCompare(
+        normalizeString(b.product),
+        "id",
+        { sensitivity: "base" }
+      );
+      if (productCompare !== 0) return productCompare;
+
+      const aCapIndex = capacityOrder.indexOf(normalizeString(a.capacity));
+      const bCapIndex = capacityOrder.indexOf(normalizeString(b.capacity));
+
+      if (aCapIndex === -1 && bCapIndex === -1) return 0;
+      if (aCapIndex === -1) return 1;
+      if (bCapIndex === -1) return -1;
+
+      return aCapIndex - bCapIndex;
+      
+  });
 
   if (loading)
     return (

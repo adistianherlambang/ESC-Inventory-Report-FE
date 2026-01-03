@@ -626,10 +626,36 @@ function Stok() {
   const bBrand = normalizeString(b.brand);
 
   const aBrandIndex = brand.indexOf(aBrand);
-  const bBrandIndex = brand.indexOf(bBrand);
+    const bBrandIndex = brand.indexOf(bBrand);
 
-  // 1️⃣ brand tidak ada di list → taruh di bawah
-  if (aBrandIndex === -1 && bBrandIndex === -1) {
+    // 1️⃣ brand tidak ada di list → taruh di bawah
+    if (aBrandIndex === -1 && bBrandIndex === -1) {
+      const productCompare = normalizeString(a.product).localeCompare(
+        normalizeString(b.product),
+        "id",
+        { sensitivity: "base" }
+      );
+      if (productCompare !== 0) return productCompare;
+
+      const aCapIndex = capacityOrder.indexOf(normalizeString(a.capacity));
+      const bCapIndex = capacityOrder.indexOf(normalizeString(b.capacity));
+
+      if (aCapIndex === -1 && bCapIndex === -1) return 0;
+      if (aCapIndex === -1) return 1;
+      if (bCapIndex === -1) return -1;
+
+      return aCapIndex - bCapIndex;
+    }
+
+    if (aBrandIndex === -1) return 1;
+    if (bBrandIndex === -1) return -1;
+
+    // 2️⃣ urutan brand
+    if (aBrandIndex !== bBrandIndex) {
+      return aBrandIndex - bBrandIndex;
+    }
+
+    // 3️⃣ brand sama → sort product (STRING)
     const productCompare = normalizeString(a.product).localeCompare(
       normalizeString(b.product),
       "id",
@@ -637,6 +663,7 @@ function Stok() {
     );
     if (productCompare !== 0) return productCompare;
 
+    // 4️⃣ product sama → sort kapasitas (PAKAI URUTAN MANUAL)
     const aCapIndex = capacityOrder.indexOf(normalizeString(a.capacity));
     const bCapIndex = capacityOrder.indexOf(normalizeString(b.capacity));
 
@@ -645,46 +672,19 @@ function Stok() {
     if (bCapIndex === -1) return -1;
 
     return aCapIndex - bCapIndex;
-  }
+  });
 
-  if (aBrandIndex === -1) return 1;
-  if (bBrandIndex === -1) return -1;
+  const filteredProduct = sortedProduct.filter((item) => {
+    const matchProduct = normalizeString(item.product).includes(
+      normalizeString(search)
+    );
 
-  // 2️⃣ urutan brand
-  if (aBrandIndex !== bBrandIndex) {
-    return aBrandIndex - bBrandIndex;
-  }
+    const matchBrand = normalizeString(item.brand).includes(
+      normalizeString(brandSearch)
+    );
 
-  // 3️⃣ brand sama → sort product (STRING)
-  const productCompare = normalizeString(a.product).localeCompare(
-    normalizeString(b.product),
-    "id",
-    { sensitivity: "base" }
-  );
-  if (productCompare !== 0) return productCompare;
-
-  // 4️⃣ product sama → sort kapasitas (PAKAI URUTAN MANUAL)
-  const aCapIndex = capacityOrder.indexOf(normalizeString(a.capacity));
-  const bCapIndex = capacityOrder.indexOf(normalizeString(b.capacity));
-
-  if (aCapIndex === -1 && bCapIndex === -1) return 0;
-  if (aCapIndex === -1) return 1;
-  if (bCapIndex === -1) return -1;
-
-  return aCapIndex - bCapIndex;
-});
-
-const filteredProduct = sortedProduct.filter((item) => {
-  const matchProduct = normalizeString(item.product).includes(
-    normalizeString(search)
-  );
-
-  const matchBrand = normalizeString(item.brand).includes(
-    normalizeString(brandSearch)
-  );
-
-  return matchProduct && matchBrand;
-});
+    return matchProduct && matchBrand;
+  });
 
   const dd = String(new Date().getDate()).padStart(2, "0");
   const mm = String(new Date().getMonth() + 1).padStart(2, "0");
@@ -1271,6 +1271,7 @@ function History() {
                     "Kapasitas",
                     "Warna",
                     "Brand",
+                    "Pelapor",
                     "Tipe Pembayaran",
                     "Total Harga",
                     "Tanggal",
@@ -1284,6 +1285,7 @@ function History() {
 
               <tbody>
                 {history.sort((a, b) => {
+                  
                   // 1️⃣ type tertentu ke paling bawah
                   const aBottom = bottomTypes.includes(a.type);
                   const bBottom = bottomTypes.includes(b.type);
@@ -1324,6 +1326,7 @@ function History() {
                     <td className={styles.td}>{item.capacity}</td>
                     <td className={styles.td}>{item.color}</td>
                     <td className={styles.td}>{item.brand}</td>
+                    <td className={styles.td}>{item.name}</td>
                     <td className={styles.td}>
                       <div style={{ display: "flex", gap: "4px" }}>
                         {item.price?.map((p, i) => (

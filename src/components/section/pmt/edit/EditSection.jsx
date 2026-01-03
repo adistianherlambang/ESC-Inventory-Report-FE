@@ -156,9 +156,9 @@ export default function EditSection({
                       <input
                         type="radio"
                         name={`type-${index}`}
-                        value="cash"
-                        checked={price.type === "cash"}
-                        onChange={() => handleChange(index, "type", "cash")}
+                        value="CS"
+                        checked={price.type === "CS"}
+                        onChange={() => handleChange(index, "type", "CS")}
                       />
                       CS
                     </label>
@@ -176,9 +176,9 @@ export default function EditSection({
                       <input
                         type="radio"
                         name={`type-${index}`}
-                        value="debit"
-                        checked={price.type === "debit"}
-                        onChange={() => handleChange(index, "type", "debit")}
+                        value="GS"
+                        checked={price.type === "GS"}
+                        onChange={() => handleChange(index, "type", "GS")}
                       />
                       GS
                     </label>
@@ -277,9 +277,9 @@ export default function EditSection({
                       <input
                         type="radio"
                         name={`type-${index}`}
-                        value="cash"
-                        checked={price.type === "cash"}
-                        onChange={() => handleChange(index, "type", "cash")}
+                        value="CS"
+                        checked={price.type === "CS"}
+                        onChange={() => handleChange(index, "type", "CS")}
                       />
                       CS
                     </label>
@@ -297,9 +297,9 @@ export default function EditSection({
                       <input
                         type="radio"
                         name={`type-${index}`}
-                        value="debit"
-                        checked={price.type === "debit"}
-                        onChange={() => handleChange(index, "type", "debit")}
+                        value="GS"
+                        checked={price.type === "GS"}
+                        onChange={() => handleChange(index, "type", "GS")}
                       />
                       GS
                     </label>
