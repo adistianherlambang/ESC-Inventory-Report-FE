@@ -212,6 +212,7 @@ function Update({ open, brand, imei, setOpen, setSubmit }) {
         color: data.color,
         IMEI: imei,
       });
+      console.log("sukses")
     } catch (err) {
       console.error(err.message);
     } finally {
@@ -313,41 +314,11 @@ function Update({ open, brand, imei, setOpen, setSubmit }) {
           >
             Tambahkan Item
           </div>
-          <button disabled={data} style={{opacity: isValid ? 1 : 0.5}} className={styles.button} onClick={handleSubmit}>
-            Submit
+          <button disabled={!isValid} style={{opacity: isValid ? 1 : 0.5}} className={styles.button} onClick={handleSubmit}>
+            Submittt
           </button>
         </div>
       </div>
-      {/* <div className={styles.container}>
-        <p className={styles.title}>Update Stok</p>
-        <div className={styles.itemContainer}>
-          <p className={styles.subtitle}>{data.product}</p>
-          <div className={styles.imeiContainer}>
-            {imei.map((item) => (
-              <div key={item} className={styles.imei}>
-                <p style={{color: "#B0B0B0"}}>Barcode:</p>
-                <p>{item}</p>
-              </div>
-            ))}
-          </div>
-          <div className={styles.type}>
-            <p>
-              Warna : <span className={styles.span}>{data.color}</span>
-            </p>
-            <p>
-              Ukuran : <span className={styles.span}>{data.capacity}</span>
-            </p>
-          </div>
-        </div>
-        <div className={styles.itemContainer}>
-          <div className={styles.button} onClick={handleAddImei}>
-            Tambahkan Item
-          </div>
-          <div className={styles.button} onClick={handleSubmit}>
-            Submit
-          </div>
-        </div>
-      </div> */}
     </>
   );
 }

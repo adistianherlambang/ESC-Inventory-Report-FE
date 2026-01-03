@@ -298,10 +298,10 @@ function Check({ imei }) {
         capacity: item.capacity || "",
         color: item.color || "",
         IMEI: String(imei),
-        userType: userType || "CN",
+        userType: userType || "user",
         desc: desc || "",
         price: addPrices.map((p) => ({
-          type: p.type || "cash",
+          type: p.type || "CS",
           amount: Number(p.amount) || 0,
         })),
         createdAt: new Date(),

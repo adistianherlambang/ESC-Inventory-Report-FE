@@ -602,27 +602,89 @@ function Stok() {
     "nokia",
   ];
 
+  const capacityOrder = [
+    "4/64",
+    "4/128",
+    "4/256",
+    "6/128",
+    "6/256",
+    "8/128",
+    "8/256",
+    "12/256",
+    "12/512",
+  ];
+
+  function normalizeString(value) {
+    return (value || "")
+      .toString()
+      .replace(/\s+/g, "")
+      .toLowerCase();
+  }
+
   const sortedProduct = [...product].sort((a, b) => {
-    const aIndex = brand.indexOf(a.brand?.toLowerCase());
-    const bIndex = brand.indexOf(b.brand?.toLowerCase());
+  const aBrand = normalizeString(a.brand);
+  const bBrand = normalizeString(b.brand);
 
-    // jika brand tidak ada di array → taruh di bawah
-    if (aIndex === -1 && bIndex === -1) return 0;
-    if (aIndex === -1) return 1;
-    if (bIndex === -1) return -1;
+  const aBrandIndex = brand.indexOf(aBrand);
+  const bBrandIndex = brand.indexOf(bBrand);
 
-    return aIndex - bIndex;
-  });
+  // 1️⃣ brand tidak ada di list → taruh di bawah
+  if (aBrandIndex === -1 && bBrandIndex === -1) {
+    const productCompare = normalizeString(a.product).localeCompare(
+      normalizeString(b.product),
+      "id",
+      { sensitivity: "base" }
+    );
+    if (productCompare !== 0) return productCompare;
 
-  const filteredProduct = sortedProduct.filter((item) => {
-    const matchProduct = item.product
-      .toLowerCase()
-      .includes(search.toLowerCase());
-    const matchBrand = item.brand
-      .toLowerCase()
-      .includes(brandSearch.toLowerCase());
-    return matchProduct && matchBrand;
-  });
+    const aCapIndex = capacityOrder.indexOf(normalizeString(a.capacity));
+    const bCapIndex = capacityOrder.indexOf(normalizeString(b.capacity));
+
+    if (aCapIndex === -1 && bCapIndex === -1) return 0;
+    if (aCapIndex === -1) return 1;
+    if (bCapIndex === -1) return -1;
+
+    return aCapIndex - bCapIndex;
+  }
+
+  if (aBrandIndex === -1) return 1;
+  if (bBrandIndex === -1) return -1;
+
+  // 2️⃣ urutan brand
+  if (aBrandIndex !== bBrandIndex) {
+    return aBrandIndex - bBrandIndex;
+  }
+
+  // 3️⃣ brand sama → sort product (STRING)
+  const productCompare = normalizeString(a.product).localeCompare(
+    normalizeString(b.product),
+    "id",
+    { sensitivity: "base" }
+  );
+  if (productCompare !== 0) return productCompare;
+
+  // 4️⃣ product sama → sort kapasitas (PAKAI URUTAN MANUAL)
+  const aCapIndex = capacityOrder.indexOf(normalizeString(a.capacity));
+  const bCapIndex = capacityOrder.indexOf(normalizeString(b.capacity));
+
+  if (aCapIndex === -1 && bCapIndex === -1) return 0;
+  if (aCapIndex === -1) return 1;
+  if (bCapIndex === -1) return -1;
+
+  return aCapIndex - bCapIndex;
+});
+
+const filteredProduct = sortedProduct.filter((item) => {
+  const matchProduct = normalizeString(item.product).includes(
+    normalizeString(search)
+  );
+
+  const matchBrand = normalizeString(item.brand).includes(
+    normalizeString(brandSearch)
+  );
+
+  return matchProduct && matchBrand;
+});
 
   const dd = String(new Date().getDate()).padStart(2, "0");
   const mm = String(new Date().getMonth() + 1).padStart(2, "0");
@@ -904,6 +966,8 @@ function History() {
     "iphone",
     "nokia",
   ];
+
+  const bottomTypes = ["service", "free"];
 
   useEffect(() => {
     if (month) {
@@ -1219,7 +1283,41 @@ function History() {
               </thead>
 
               <tbody>
-                {history.map((item, index) => (
+                {history.sort((a, b) => {
+                  // 1️⃣ type tertentu ke paling bawah
+                  const aBottom = bottomTypes.includes(a.type);
+                  const bBottom = bottomTypes.includes(b.type);
+
+                  if (aBottom && !bBottom) return 1;
+                  if (!aBottom && bBottom) return -1;
+
+                  // 2️⃣ sort brand sesuai array `brand`
+                  const aBrandIndex = brand.indexOf((a.brand || "").toLowerCase());
+                  const bBrandIndex = brand.indexOf((b.brand || "").toLowerCase());
+
+                  if (aBrandIndex === -1 && bBrandIndex !== -1) return 1;
+                  if (aBrandIndex !== -1 && bBrandIndex === -1) return -1;
+
+                  if (aBrandIndex !== bBrandIndex) {
+                    return aBrandIndex - bBrandIndex;
+                  }
+
+                  // 3️⃣ sort product (STRING)
+                  const productCompare = (a.product || "").localeCompare(
+                    b.product || "",
+                    "id",
+                    { sensitivity: "base" }
+                  );
+                  if (productCompare !== 0) return productCompare;
+
+                  // 4️⃣ fallback: sort name (STRING)
+                  return (a.name || "").localeCompare(
+                    b.name || "",
+                    "id",
+                    { sensitivity: "base" }
+                  );
+                })
+                .map((item, index) => (
                   <tr key={item.id} className={styles.tr}>
                     <td className={styles.td}>{index + 1}</td>
                     <td className={styles.td}>{item.product}</td>
@@ -1272,12 +1370,6 @@ function History() {
               <tr>
                 <td colSpan="8">Jumlah Unit Terjual: {history.length}</td>
               </tr>
-              <tr>
-                <td colSpan="8">
-                  Total Unit per Brand:{" "}
-                  {history.filter((item) => item.brand == "samsung").length}
-                </td>
-              </tr>
               {brand.map((item) => (
                 <tr>
                   <td colSpan="8">
@@ -1289,6 +1381,14 @@ function History() {
                   </td>
                 </tr>
               ))}
+              <tr>
+                <td colSpan="8">
+                  <div style={{ display: "flex", gap: "0.5rem" }}>
+                    <p>Total pemasukan:</p>
+                    {formatRupiah(history.flatMap((item) => item.price).reduce((sum, item) => sum + item.amount, 0))}
+                  </div>
+                </td>
+              </tr>
               <tr>
                 <td colSpan="8">
                   <div style={{ display: "flex", gap: "0.5rem" }}>
