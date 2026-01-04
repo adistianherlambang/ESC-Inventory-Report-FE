@@ -512,6 +512,147 @@ function Check({ imei }) {
 }
 
 function CheckAcc() {
+  const [data, setData] = useState(null)
+  const [addAcc, setAddAcc] = useState([{inputs: ""}])
+  const [customize, setCustomize] = useState(false)
+
+  const { currentUser } = userStore();
+
+  const addAccField = () => {
+    setAddAcc([...addAcc, {inputs: ""}])
+  }
+
+  function parseItem(input) {
+    // input contoh: "tg 25*5" atau "Y04S 1000/u/cs"
+    const regex = /^([\w\s]+)\s+(\d+)(?:\*?(\d+))?(?:\/([a-z]+))?(?:\/([a-z]+))?/i;
+    const match = input.match(regex);
+
+    if (!match) return null;
+
+    const qty = parseInt(match[3], 10) || 1;
+    const amount = parseInt(match[2], 10) * 1000 * qty || 0;
+    const product = match[1].trim() + (" * ") + qty; 
+
+    // type default 'CS' jika tidak disebutkan
+    const type = match[5] || match[4] || "CS";
+
+    return {
+      product,
+      price: {
+        amount,
+        type: type.toLowerCase(),
+      },
+      qty,
+    };
+  }
+
+  const handleChange = (index, value) => {
+    const updated = [...addAcc]
+    updated[index].inputs = value
+    setAddAcc(updated)
+  }
+
+  const handleSubmit = async () => {
+    try {
+      // 1️⃣ cari doc fldatas berdasarkan user
+      const q = query(
+        collection(db, "fldatas"),
+        where("name", "==", currentUser.name)
+      );
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
+        throw new Error("target tidak ada");
+      }
+
+      const targetDocId = querySnapshot.docs[0].id;
+      const pmtRef = doc(db, "fldatas", targetDocId);
+
+      // 2️⃣ parse semua input
+      const parsedItems = addAcc
+        .map(item => parseItem(item.inputs))
+        .filter(Boolean);
+
+      if (parsedItems.length === 0) {
+        throw new Error("Item kosong / format salah");
+      }
+
+      // 3️⃣ loop setiap item → 1 item = 1 report
+      for (const item of parsedItems) {
+        const now = new Date();
+        const day = String(now.getDate()).padStart(2, "0");
+        const month = String(now.getMonth() + 1).padStart(2, "0");
+        const year = String(now.getFullYear()).slice(-2);
+
+        const random = Math.floor(Math.random() * 1e5)
+          .toString()
+          .padStart(5, "0");
+
+        const id = day + month + year + random;
+
+        const newReport = {
+          id,
+          type: "acc",
+          name: currentUser.name,
+          product: item.product,
+          qty: item.qty,
+          // ✅ PRICE JADI ARRAY (KONSISTEN)
+          price: [
+            {
+              amount: item.price.amount,
+              type: item.price.type,
+            },
+          ],
+          createdAt: new Date(),
+        };
+
+        // ➜ simpan ke fldatas
+        await updateDoc(pmtRef, {
+          report: arrayUnion(newReport),
+        });
+
+        // ➜ simpan ke selling
+        await setDoc(doc(collection(db, "selling"), id), newReport);
+      }
+
+      console.log("Semua item ACC berhasil disimpan");
+    } catch (err) {
+      console.error(err.message);
+    } finally {
+      window.location.reload()
+    }
+  };
+
+  return(
+    <>
+    {customize && <CheckAccCustomize/>}
+    <div className={styles.container}>
+      <p className={styles.title}>Report</p>
+      <div className={styles.accProduct}>
+        {addAcc.map((item, index) => (
+          <div key={index}>
+            <p>Nama Produk</p>
+            <input
+              type="text"
+              placeholder="contoh: TG 25*5"
+              className={styles.accInput}
+              value={item.inputs}
+              onChange={(e) => handleChange(index, e.target.value)}
+            />
+          </div>
+        ))}
+      </div>
+      <div style={{display: "flex", flexDirection: "column", gap: "0.5rem"}}>
+        <div className={styles.button} onClick={addAccField}>Tambah Item</div>
+        <button className={styles.button} onClick={handleSubmit}>Submit</button>
+        <div className={styles.button} onClick={() => setCustomize(true)}>Kustomisasi</div>
+      </div>
+    </div>
+    </>
+  )
+}
+
+function CheckAccCustomize() {
   const [data, setData] = useState(null);
   const [addPrices, setAddPrices] = useState([{ type: "", amount: "" }]);
   const [userType, setUserType] = useState("");
@@ -584,7 +725,7 @@ function CheckAcc() {
 
   return (
     <>
-      <div className={styles.container}>
+      <div className={styles.container} style={{zIndex: 100}}>
         <p className={styles.title}>Report</p>
         <div className={styles.accProduct}>
           <p>Nama Produk</p>
