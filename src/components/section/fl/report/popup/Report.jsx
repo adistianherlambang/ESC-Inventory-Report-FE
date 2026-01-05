@@ -531,7 +531,7 @@ function CheckAcc() {
 
     const qty = parseInt(match[3], 10) || 1;
     const amount = parseInt(match[2], 10) * 1000 * qty || 0;
-    const product = match[1].trim() + (" * ") + qty; 
+    const product = input
 
     // type default 'CS' jika tidak disebutkan
     const type = match[5] || match[4] || "CS";
