@@ -231,7 +231,7 @@ function Check({ imei }) {
         userType: userType || "CN",
         desc: desc || "",
         price: addPrices.map((p) => ({
-          type: p.type || "cash",
+          type: p.type || "CS",
           amount: Number(p.amount) || 0,
         })),
         createdAt: new Date(),
@@ -480,7 +480,7 @@ function CheckAcc() {
         type: "acc",
         userType: userType || "",
         price: addPrices.map((p) => ({
-          type: p.type || "cash",
+          type: p.type || "CS",
           amount: Number(p.amount) || 0,
         })),
         createdAt: new Date(),

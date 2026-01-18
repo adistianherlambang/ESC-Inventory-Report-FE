@@ -13,6 +13,7 @@ import {
   Timestamp,
   deleteDoc,
   addDoc,
+  orderBy
 } from "firebase/firestore";
 import { Row, Col, Card } from "antd";
 import * as XLSX from "xlsx-js-style";
@@ -989,6 +990,7 @@ function History() {
         baseRef,
         where("createdAt", ">=", Timestamp.fromDate(startOfMonth)),
         where("createdAt", "<", Timestamp.fromDate(startOfNextMonth)),
+        orderBy("createdAt", "asc")
       );
     }
 
@@ -1002,6 +1004,7 @@ function History() {
         baseRef,
         where("createdAt", ">=", start),
         where("createdAt", "<=", end),
+        orderBy("createdAt", "asc")
       );
     }
 
