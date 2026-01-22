@@ -981,6 +981,48 @@ function Aksesoris() {
     "nokia",
   ];
 
+  function normalizeString(value) {
+    return (value || "")
+      .toString()
+      .replace(/\s+/g, "")
+      .toLowerCase();
+  }
+
+  const sortedProduct = [...data].sort((a, b) => {
+    const aBrand = normalizeString(a.brand);
+    const bBrand = normalizeString(b.brand);
+
+    const aBrandIndex = brand.indexOf(aBrand);
+      const bBrandIndex = brand.indexOf(bBrand);
+
+      // 1️⃣ brand tidak ada di list → taruh di bawah
+      if (aBrandIndex === -1 && bBrandIndex === -1) {
+        const productCompare = normalizeString(a.product).localeCompare(
+          normalizeString(b.product),
+          "id",
+          { sensitivity: "base" }
+        );
+        if (productCompare !== 0) return productCompare;
+      }
+
+      if (aBrandIndex === -1) return 1;
+      if (bBrandIndex === -1) return -1;
+
+      // 2️⃣ urutan brand
+      if (aBrandIndex !== bBrandIndex) {
+        return aBrandIndex - bBrandIndex;
+      }
+
+      // 3️⃣ brand sama → sort product (STRING)
+      const productCompare = normalizeString(a.product).localeCompare(
+        normalizeString(b.product),
+        "id",
+        { sensitivity: "base" }
+      );
+      if (productCompare !== 0) return productCompare;
+      return 0
+  });
+
   return(
     <div className={styles.itemContainer}>
       <div className={styles.topStock}>
@@ -1009,7 +1051,7 @@ function Aksesoris() {
               </tr>
             </thead>
             <tbody>
-              {data.map((item, index) => {
+              {sortedProduct.map((item, index) => {
                 const brandIndex = brand.indexOf(item.brand?.toLowerCase());
                 const bgColor =
                   brandIndex % 2 === 0 ? "#ffffff" : "rgba(237, 237, 237, 1)";
