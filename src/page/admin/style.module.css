@@ -137,6 +137,7 @@
 .td {
   padding: 12px;
   text-align: center;
+  min-height: 2.3rem;
 }
 
 .td:nth-child(2) {
