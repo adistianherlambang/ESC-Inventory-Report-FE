@@ -1005,17 +1005,46 @@ function Aksesoris() {
                 <th className={styles.th}>Product</th>
                 <th className={styles.th}>Brand</th>
                 <th className={styles.th}>Stok</th>
+                <th className={styles.th}>Aksi</th>
               </tr>
             </thead>
             <tbody>
-              {data.map((item, index) => (
-                <tr key={item.id}>
-                  <td className={`${styles.td} ${styles.tdCenter}`}>{index + 1}</td>
-                  <td className={styles.td}>{item.product}</td>
-                  <td className={styles.td}>{item.brand}</td>
-                  <td className={`${styles.td} ${styles.tdCenter}`}>{item.stock}</td>
-                </tr>
-              ))}
+              {data.map((item, index) => {
+                const brandIndex = brand.indexOf(item.brand?.toLowerCase());
+                const bgColor =
+                  brandIndex % 2 === 0 ? "#ffffff" : "rgba(237, 237, 237, 1)";
+                return(
+                  <tr
+                    key={item.id ?? index}
+                    className={styles.tr}
+                    style={{ backgroundColor: bgColor }}
+                  >
+                    <td className={`${styles.td} ${styles.tdCenter}`}>{index + 1}</td>
+                    <td className={styles.td}>{item.product}</td>
+                    <td className={styles.td}>{item.brand}</td>
+                    <td className={`${styles.td} ${styles.tdCenter}`}>{item.stock}</td>
+                    <td className={styles.td}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center"
+                        }}
+                      >
+                        <div
+                          className={styles.paymentType}
+                          style={{
+                            backgroundColor: "#DA0909",
+                            cursor: "pointer"
+                          }}
+                        >
+                          Hapus
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                )
+              })}
             </tbody>
           </table>
         </div>
