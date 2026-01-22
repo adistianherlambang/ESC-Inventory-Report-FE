@@ -946,6 +946,12 @@ function Stok() {
   );
 }
 
+function Aksesoris() {
+  return(
+    <div></div>
+  )
+}
+
 function History() {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
