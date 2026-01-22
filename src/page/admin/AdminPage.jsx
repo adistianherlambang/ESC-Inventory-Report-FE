@@ -96,7 +96,7 @@ export default function AdminPage() {
         <div>
           {selectedNav == "Beranda" ? <Beranda /> : <></>}
           {selectedNav == "Cek Stok" ? <Stok /> : <></>}
-          {selectedNav == "Aksesoris Khusus" ? <Beranda /> : <></>}
+          {selectedNav == "Aksesoris Khusus" ? <Aksesoris /> : <></>}
           {selectedNav == "Histori Penjualan" ? <History /> : <></>}
           {selectedNav == "Manajemen Karyawan" ? <Employee /> : <></>}
         </div>
@@ -948,7 +948,20 @@ function Stok() {
 
 function Aksesoris() {
   return(
-    <div></div>
+    <div className={styles.itemContainer}>
+      <div className={styles.topStock}>
+        <div>
+          <p style={{ fontSize: "1.5rem" }}>Cek Aksesoris Khusus</p>
+          <p style={{ fontFamily: "SFProRegular", color: "#b3b3b3" }}>
+            Informasi ketersediaan aksesoris khusus setiap brand
+          </p>
+        </div>
+        <button className={styles.button}>
+          Download Excel
+        </button>
+      </div>
+      '
+    </div>
   )
 }
 
