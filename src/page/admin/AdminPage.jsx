@@ -51,6 +51,7 @@ export default function AdminPage() {
   const nav = [
     "Beranda",
     "Cek Stok",
+    "Aksesoris Khusus",
     "Histori Penjualan",
     "Manajemen Karyawan",
   ];
@@ -95,6 +96,7 @@ export default function AdminPage() {
         <div>
           {selectedNav == "Beranda" ? <Beranda /> : <></>}
           {selectedNav == "Cek Stok" ? <Stok /> : <></>}
+          {selectedNav == "Aksesoris Khusus" ? <Beranda /> : <></>}
           {selectedNav == "Histori Penjualan" ? <History /> : <></>}
           {selectedNav == "Manajemen Karyawan" ? <Employee /> : <></>}
         </div>
@@ -907,7 +909,7 @@ function Stok() {
                       <td className={styles.td}>{item.capacity}</td>
                       <td className={styles.td}>{item.color}</td>
                       <td className={styles.td}>{item.IMEI?.length || 0}</td>
-                      <td className={styles.td}>
+                      <td className={styles.td} style={{justifyContent: "center", alignItems: "center", display: "flex"}}>
                         <div
                           onClick={() => deleteProduct(item.id)}
                           className={styles.paymentType}
