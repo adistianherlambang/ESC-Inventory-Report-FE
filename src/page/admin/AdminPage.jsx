@@ -625,14 +625,40 @@ function Stok() {
   }
 
   const sortedProduct = [...product].sort((a, b) => {
-  const aBrand = normalizeString(a.brand);
-  const bBrand = normalizeString(b.brand);
+    const aBrand = normalizeString(a.brand);
+    const bBrand = normalizeString(b.brand);
 
-  const aBrandIndex = brand.indexOf(aBrand);
-    const bBrandIndex = brand.indexOf(bBrand);
+    const aBrandIndex = brand.indexOf(aBrand);
+      const bBrandIndex = brand.indexOf(bBrand);
 
-    // 1️⃣ brand tidak ada di list → taruh di bawah
-    if (aBrandIndex === -1 && bBrandIndex === -1) {
+      // 1️⃣ brand tidak ada di list → taruh di bawah
+      if (aBrandIndex === -1 && bBrandIndex === -1) {
+        const productCompare = normalizeString(a.product).localeCompare(
+          normalizeString(b.product),
+          "id",
+          { sensitivity: "base" }
+        );
+        if (productCompare !== 0) return productCompare;
+
+        const aCapIndex = capacityOrder.indexOf(normalizeString(a.capacity));
+        const bCapIndex = capacityOrder.indexOf(normalizeString(b.capacity));
+
+        if (aCapIndex === -1 && bCapIndex === -1) return 0;
+        if (aCapIndex === -1) return 1;
+        if (bCapIndex === -1) return -1;
+
+        return aCapIndex - bCapIndex;
+      }
+
+      if (aBrandIndex === -1) return 1;
+      if (bBrandIndex === -1) return -1;
+
+      // 2️⃣ urutan brand
+      if (aBrandIndex !== bBrandIndex) {
+        return aBrandIndex - bBrandIndex;
+      }
+
+      // 3️⃣ brand sama → sort product (STRING)
       const productCompare = normalizeString(a.product).localeCompare(
         normalizeString(b.product),
         "id",
@@ -640,6 +666,7 @@ function Stok() {
       );
       if (productCompare !== 0) return productCompare;
 
+      // 4️⃣ product sama → sort kapasitas (PAKAI URUTAN MANUAL)
       const aCapIndex = capacityOrder.indexOf(normalizeString(a.capacity));
       const bCapIndex = capacityOrder.indexOf(normalizeString(b.capacity));
 
@@ -648,33 +675,6 @@ function Stok() {
       if (bCapIndex === -1) return -1;
 
       return aCapIndex - bCapIndex;
-    }
-
-    if (aBrandIndex === -1) return 1;
-    if (bBrandIndex === -1) return -1;
-
-    // 2️⃣ urutan brand
-    if (aBrandIndex !== bBrandIndex) {
-      return aBrandIndex - bBrandIndex;
-    }
-
-    // 3️⃣ brand sama → sort product (STRING)
-    const productCompare = normalizeString(a.product).localeCompare(
-      normalizeString(b.product),
-      "id",
-      { sensitivity: "base" }
-    );
-    if (productCompare !== 0) return productCompare;
-
-    // 4️⃣ product sama → sort kapasitas (PAKAI URUTAN MANUAL)
-    const aCapIndex = capacityOrder.indexOf(normalizeString(a.capacity));
-    const bCapIndex = capacityOrder.indexOf(normalizeString(b.capacity));
-
-    if (aCapIndex === -1 && bCapIndex === -1) return 0;
-    if (aCapIndex === -1) return 1;
-    if (bCapIndex === -1) return -1;
-
-    return aCapIndex - bCapIndex;
   });
 
   const filteredProduct = sortedProduct.filter((item) => {
@@ -947,6 +947,40 @@ function Stok() {
 }
 
 function Aksesoris() {
+  const [loading, setLoading] = useState(true)
+  const [data, setData] = useState([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const snap = await getDocs(collection(db, "accessories"));
+        const rows = snap.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setData(rows);
+      } catch (err) {
+        console.error(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const brand = [
+    "samsung",
+    "xiaomi",
+    "vivo",
+    "oppo",
+    "infinix",
+    "realme",
+    "tecno",
+    "iphone",
+    "nokia",
+  ];
+
   return(
     <div className={styles.itemContainer}>
       <div className={styles.topStock}>
@@ -960,7 +994,32 @@ function Aksesoris() {
           Download Excel
         </button>
       </div>
-      '
+      {loading ? (
+        <Loader/>
+      ) : (
+        <div className={styles.tableWrapper}>
+          <table className={styles.table}>
+            <thead className={styles.thead}>
+              <tr>
+                <th className={`${styles.th} ${styles.thNo}`}>No</th>
+                <th className={styles.th}>Product</th>
+                <th className={styles.th}>Brand</th>
+                <th className={styles.th}>Stok</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((item, index) => (
+                <tr key={item.id}>
+                  <td className={`${styles.td} ${styles.tdCenter}`}>{index + 1}</td>
+                  <td className={styles.td}>{item.product}</td>
+                  <td className={styles.td}>{item.brand}</td>
+                  <td className={`${styles.td} ${styles.tdCenter}`}>{item.stock}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   )
 }
