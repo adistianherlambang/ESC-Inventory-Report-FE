@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./style.module.css";
 import { db } from "../../../../../firebase";
 import {
@@ -11,7 +11,9 @@ import {
   where,
   arrayUnion,
   deleteDoc,
+  increment
 } from "firebase/firestore";
+import { useScanning } from "react-barcode-scanner";
 
 export default function DeleteSection({
   docId,
@@ -23,6 +25,9 @@ export default function DeleteSection({
   id,
   productType,
 }) {
+
+  const [accData, setAccData] = useState([])
+
   const deleteReportByIMEI = async (docId, imei) => {
     try {
       const docRef = doc(db, "pmtdatas", docId);
@@ -80,10 +85,32 @@ export default function DeleteSection({
 
       //delete selling
       await deleteDoc(doc(db, "selling", id));
+
+      const accRef = doc(db, "selling", id);
+      const accSnap = await getDoc(accRef);
+
+      if (accSnap.exists()) {
+        const accData = {
+          id: accSnap.id,
+          ...accSnap.data()
+        };
+
+        setAccData(accData);
+
+        // increment stock +1 di accessories
+        if (accData.brandAccId) {
+          const accRef = doc(db, "accessories", accData.brandAccId);
+          await updateDoc(accRef, {
+            stock: increment(1)
+          });
+          console.log("brandAccId:", accData.brandAccId);
+        }
+      }
+
     } catch (err) {
       console.error("Gagal: ", err);
     } finally {
-      window.location.reload();
+      window.location.reload()
     }
   };
 
