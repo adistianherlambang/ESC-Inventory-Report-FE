@@ -15,6 +15,7 @@ import {
   arrayUnion,
   arrayRemove,
   setDoc,
+  increment
 } from "firebase/firestore";
 
 import { BarcodeScanner, useTorch } from "react-barcode-scanner";
@@ -446,7 +447,32 @@ function CheckAcc() {
   const [userType, setUserType] = useState("");
   const [productName, setProductName] = useState("");
   const { currentUser } = userStore();
+  const [brandAcc, setBrandAcc] = useState([])
+  const [selectedAcc, setSelectedAcc] = useState([])
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const q = query(
+          collection(db, "accessories"),
+          where("brand", "==", currentUser.brand)
+        );
+
+        const snap = await getDocs(q);
+        const data = snap.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+
+        setBrandAcc(data);
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+
+    fetchData();
+  }, []);
+  
   const addPriceField = () => {
     setAddPrices([...addPrices, { type: "", amount: "" }]);
   };
@@ -476,7 +502,7 @@ function CheckAcc() {
 
       const newReport = {
         id: id,
-        product: productName || "",
+        product: selectedAcc ? selectedAcc.product : productName || "", 
         type: "acc",
         userType: userType || "",
         price: addPrices.map((p) => ({
@@ -484,6 +510,9 @@ function CheckAcc() {
           amount: Number(p.amount) || 0,
         })),
         createdAt: new Date(),
+        ...(selectedAcc?.id && {
+          brandAccId: selectedAcc.id
+        })
       };
       await updateDoc(pmtRef, {
         report: arrayUnion(newReport),
@@ -496,6 +525,14 @@ function CheckAcc() {
         name: currentUser.name,
       });
       console.log("Added to selling collection");
+
+      //kurangi stok dari brand acc (acc khusus)
+      if(selectedAcc) {
+        const brandAccRef = doc(db, "accessories", selectedAcc.id)
+        await updateDoc(brandAccRef, {
+          stock: increment(-1)
+        })
+      }
     } catch (err) {
       console.error(err.message);
     } finally {
@@ -518,9 +555,19 @@ function CheckAcc() {
           <input
             type="text"
             placeholder="Nama Produk"
+            value={selectedAcc ? selectedAcc.product : null}
             className={styles.accInput}
             onChange={(e) => setProductName(e.target.value)}
-          />
+            />
+            {selectedAcc == [] ? null : 
+              <div style={{display: "flex", gap: "0.5rem"}}>
+                {brandAcc.map((item) => (
+                  <div key={item.id} onClick={() => setSelectedAcc(item)} className={styles.brandAcc}>
+                    {item.product}
+                  </div>
+                ))}
+              </div>
+            }
         </div>
         <div className={styles.radioContainer}>
           <p className={styles.method}>Jenis User :</p>
