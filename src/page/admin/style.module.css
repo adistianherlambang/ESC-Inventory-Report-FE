@@ -93,14 +93,21 @@
 
 .table {
   min-width: 600px;
-  width: fit-content;
-  table-layout: fixed;
+  width: 100%;
   border-collapse: collapse;
   font-family:
     system-ui,
     -apple-system,
     sans-serif;
 }
+
+/* .table tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+.table tbody tr:nth-child(odd) {
+  background-color: #ffffff;
+} */
 
 .tr {
   border-bottom: 2px solid #e5e7eb;
@@ -111,14 +118,17 @@
 }
 
 .th {
-  padding: 12px;
+  padding: 12px 4px;
   background-color: #773ff9;
   color: white;
   text-align: center;
+  width: fit-content;
+  height: fit-content;
 }
 
 .th:nth-child(2) {
   text-align: start;
+  width: fit-content;
 }
 
 .thNo {
@@ -127,9 +137,10 @@
 }
 
 .td {
-  padding: 12px 0rem;
+  padding: 12px 4px;
   text-align: center;
-  min-height: 2.3rem;
+  width: fit-content;
+  height: fit-content;
 }
 
 .td:nth-child(2) {
@@ -186,6 +197,7 @@
   color: white;
   border-radius: 8px;
   cursor: pointer;
+  width: fit-content;
 }
 
 .button:hover {
