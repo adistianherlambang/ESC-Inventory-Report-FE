@@ -223,7 +223,8 @@ export default function Product({ search, brand }) {
                 justifyContent: "space-between",
                 alignItems: brandAcc.length < 2 ? "center" : index !== 0 && (index + 1) % 2 === 1 ? "center" : "flex-start",
                 flexDirection: "row",
-                gap: "1rem"
+                gap: "1rem",
+                boxSizing: "border-box"
               }}
               key={item.id}
               className={styles.container}
