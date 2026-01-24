@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./style.module.css";
 
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, updateDoc, doc } from "firebase/firestore";
 import { db } from "../../../../../../firebase";
 
 import Loader from "../../../../item/loader/Loader";
@@ -21,6 +21,8 @@ export default function Product({ search, brand }) {
   const [openAdd, setOpenAdd] = useState(false)
   const [openNew, setOpenNew] = useState(false)
 
+  const [brandAcc, setBrandAcc] = useState([])
+
   useEffect(() => {
     const fetchProduct = async () => {
       setLoading(true);
@@ -37,6 +39,17 @@ export default function Product({ search, brand }) {
         }));
         setProduct(data);
         console.log("Data dari Firestore:", data);
+        
+        const accQuery = query(
+          collection(db, "accessories"),
+          where("brand", "==", brand)
+        )
+        const accSnapshot = await getDocs(accQuery)
+        const accData = accSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+        setBrandAcc(accData)
       } catch (err) {
         console.error("Error fetch product:", err);
         setError(err.message);
@@ -117,6 +130,42 @@ export default function Product({ search, brand }) {
     openNew ? setOpenNew(false) : null
   };
 
+  const handleIncrement = (label) => {
+  }
+
+  let debounceTimer = {};
+
+  const debounceUpdateStock = (id, stock) => {
+    if (debounceTimer[id]) {
+      clearTimeout(debounceTimer[id]);
+    }
+
+    debounceTimer[id] = setTimeout(async () => {
+      try {
+        const ref = doc(db, "accessories", id);
+        await updateDoc(ref, { stock });
+      } catch (err) {
+        console.error("Gagal update stok:", err);
+      }
+    }, 600);
+  };
+
+  const handleStockChange = (id, value) => {
+    const newStock = Number(value);
+
+    if (Number.isNaN(newStock) || newStock < 0) return;
+
+    setBrandAcc((prev) =>
+      prev.map((item) =>
+        item.id === id
+          ? { ...item, stock: newStock }
+          : item
+      )
+    );
+
+    debounceUpdateStock(id, newStock);
+  };
+
   if (loading)
     return (
       <div className={styles.loading}>
@@ -160,6 +209,50 @@ export default function Product({ search, brand }) {
             opacity: stock ? 0.2 : 1,
           }}
         ></div>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(0, 1fr))",
+          gap: "1rem",
+          transition: "ease-in 300ms",
+          opacity: stock ? 0.2 : 1,
+        }}>
+          {brandAcc.map((item, index) => (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: brandAcc.length < 2 ? "center" : index !== 0 && (index + 1) % 2 === 1 ? "center" : "flex-start",
+                flexDirection: "row",
+                gap: "1rem"
+              }}
+              key={item.id}
+              className={styles.container}
+            >
+              <p>{item.product}</p>
+              <div style={{
+                display: "flex",
+                gap: "1rem",
+                alignItems: brandAcc.length < 2 ? "center" : index !== 0 && (index + 1) % 2 === 1 ? "center" : "flex-start",
+              }}>
+                <p>Stok:</p>
+                <div style={{
+                  display: "flex",
+                  gap: "0.5rem"
+                }}>
+                  
+                  <input
+                    type="number"
+                    className={styles.stockInput}
+                    value={item.stock}
+                    onChange={(e) =>
+                      handleStockChange(item.id, e.target.value)
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
         {filtered.map((item) => (
           <div
             style={{

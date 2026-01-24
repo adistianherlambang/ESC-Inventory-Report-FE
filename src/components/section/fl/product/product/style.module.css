@@ -28,3 +28,18 @@
   font-size: 14px;
   text-align: center;
 }
+
+.stockInput {
+  color: black;
+  background-color: white;
+  height: 2rem;
+  width: 2rem;
+  text-align: center;
+  border-radius: 2px;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
