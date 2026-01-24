@@ -559,15 +559,31 @@ function CheckAcc() {
             className={styles.accInput}
             onChange={(e) => setProductName(e.target.value)}
             />
-            {selectedAcc == [] ? null : 
-              <div style={{display: "flex", gap: "0.5rem"}}>
-                {brandAcc.map((item) => (
-                  <div key={item.id} onClick={() => setSelectedAcc(item)} className={styles.brandAcc}>
+            <div
+              style={{
+                overflowX: "auto",
+                maxWidth: "100%",
+                scrollbarWidth: "none"
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  gap: "0.5rem"
+                }}
+              >
+                {brandAcc.sort((a, b) => a.product.localeCompare(b.product)).map((item) => (
+                  <div
+                    key={item.id}
+                    onClick={() => setSelectedAcc(item)}
+                    className={styles.brandAcc}
+                    style={{ flexShrink: 0 }}
+                  >
                     {item.product}
                   </div>
                 ))}
               </div>
-            }
+            </div>
         </div>
         <div className={styles.radioContainer}>
           <p className={styles.method}>Jenis User :</p>
