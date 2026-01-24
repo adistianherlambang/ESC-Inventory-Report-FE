@@ -1,4 +1,25 @@
+.containerWrapper {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.containerWrapper > *:last-child {
+  grid-column: 1 / -1;
+}
+
 .container {
+  background-color: #773ff9;
+  color: white;
+  padding: 16px 24px;
+  border-radius: 16px;
+  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.accContainer {
   background-color: #773ff9;
   color: white;
   padding: 16px 24px;
@@ -8,6 +29,12 @@
   flex-direction: column;
   font-size: 14px;
   cursor: pointer;
+  box-sizing: border-box;
+  justify-content: space-between;
+}
+
+.accContainer:last-child {
+  flex-direction: row;
 }
 
 .type {

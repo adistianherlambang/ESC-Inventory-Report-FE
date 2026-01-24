@@ -211,22 +211,17 @@ export default function Product({ search, brand }) {
         ></div>
         <div style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(0, 1fr))",
+          gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+          justifyItems: "stretch",
           gap: "1rem",
           transition: "ease-in 300ms",
           opacity: stock ? 0.2 : 1,
-        }}>
+        }}
+        className={styles.containerWrapper}>
           {brandAcc.map((item, index) => (
             <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                flexDirection: brandAcc.length < 2 ? "row" : index !== 0 && (index + 1) % 2 === 1 ? "row" : "column",
-                gap: "1rem",
-                boxSizing: "border-box"
-              }}
               key={item.id}
-              className={styles.container}
+              className={styles.accContainer}
             >
               <p>{item.product}</p>
               <div style={{
