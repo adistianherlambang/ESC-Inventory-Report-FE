@@ -30,12 +30,13 @@
 }
 
 .stockInput {
-  color: black;
-  background-color: white;
-  height: 2rem;
-  width: 2rem;
-  text-align: center;
-  border-radius: 2px;
+  color: rgb(255, 255, 255);
+  text-align: right;
+  width: auto;
+  max-width: 2.5rem;
+  align-self: flex-start;
+  flex: 0 0 auto;
+  flex-shrink: 0
 }
 
 input[type="number"]::-webkit-inner-spin-button,

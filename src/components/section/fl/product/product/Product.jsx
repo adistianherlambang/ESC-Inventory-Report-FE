@@ -221,8 +221,7 @@ export default function Product({ search, brand }) {
               style={{
                 display: "flex",
                 justifyContent: "space-between",
-                alignItems: brandAcc.length < 2 ? "center" : index !== 0 && (index + 1) % 2 === 1 ? "center" : "flex-start",
-                flexDirection: "row",
+                flexDirection: brandAcc.length < 2 ? "row" : index !== 0 && (index + 1) % 2 === 1 ? "row" : "column",
                 gap: "1rem",
                 boxSizing: "border-box"
               }}
@@ -232,24 +231,18 @@ export default function Product({ search, brand }) {
               <p>{item.product}</p>
               <div style={{
                 display: "flex",
-                gap: "1rem",
-                alignItems: brandAcc.length < 2 ? "center" : index !== 0 && (index + 1) % 2 === 1 ? "center" : "flex-start",
+                gap: "0.5rem",
+                boxSizing: "border-box"
               }}>
                 <p>Stok:</p>
-                <div style={{
-                  display: "flex",
-                  gap: "0.5rem"
-                }}>
-                  
-                  <input
-                    type="number"
-                    className={styles.stockInput}
-                    value={item.stock}
-                    onChange={(e) =>
-                      handleStockChange(item.id, e.target.value)
-                    }
-                  />
-                </div>
+                <input
+                  type="number"
+                  className={styles.stockInput}
+                  value={item.stock}
+                  onChange={(e) =>
+                    handleStockChange(item.id, e.target.value)
+                  }
+                />
               </div>
             </div>
           ))}
