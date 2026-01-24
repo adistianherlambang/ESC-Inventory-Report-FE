@@ -122,7 +122,7 @@ export default function ActivityList({
 
       <p className={styles.activityTitle}>
         <span style={{ color: "#B0B0B0" }}>Total: </span>
-        {total}
+        {formatRupiah(total)}
       </p>
     </div>
   );
