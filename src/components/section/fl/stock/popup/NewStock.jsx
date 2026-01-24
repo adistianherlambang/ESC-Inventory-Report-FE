@@ -48,13 +48,16 @@ function NewStock({ brand }) {
           setSubmit={setSubmit}
           submit={submit}
         />
-      ) : null}
+      ) : open === "acc" ? (
+          <Acc brand={brand}/>
+      )
+        : null}
       <div
         className={styles.container}
         style={open ? { display: "none" } : {}}
         onClick={open ? () => setOpen("") : null}
       >
-        <p className={styles.title}>Tambahkan Stokk</p>
+        <p className={styles.title}>Tambahkan Stok</p>
         <div className={styles.itemContainer}>
           <div className={styles.button} onClick={() => setOpen("manual")}>
             Manual
@@ -62,10 +65,101 @@ function NewStock({ brand }) {
           <div className={styles.button} onClick={() => setOpen("scan")}>
             Scan
           </div>
+          <div className={styles.button} onClick={() => setOpen("acc")} style={{
+            backgroundColor: "white",
+            border: "solid #773ff9 2px",
+            color: "#773ff9"
+          }}>
+            Aksesoris Khusus
+          </div>
         </div>
       </div>
     </>
   );
+}
+
+function Acc({brand}) {
+  const [data, setData] = useState({
+    brand: brand.toLowerCase(),
+    product: "",
+    stock: 0
+  })
+
+  const isValid = Object.values(data).every(v => v !== "")
+
+  const handleSubmit = async () => {
+    try {
+      await addDoc(collection(db, "accessories"), {
+        ...data,
+        stock: Number(data.stock)
+      })
+    }
+    catch(err){
+      console.error(err.message)
+    }
+    finally{
+      window.location.reload()
+    }
+  }
+
+  return(
+    <>
+    <div className={styles.container}>
+      <p className={styles.title}>Tambahkan Aksesoris</p>
+      <div className={styles.itemContainer}>
+        <div 
+          style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+        >
+          <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.5rem",
+              }}
+            >
+              <label htmlFor="input">Nama Produk</label>
+              <input
+                type="text"
+                placeholder="Masukkan Nama Produk"
+                className={styles.input}
+                style={{ textAlign: "left" }}
+                name="product"
+                value={data.product}
+                onChange={(e) => setData({ ...data, product: e.target.value })}
+                required
+              />
+            </div>
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "0.5rem",
+              }}
+            >
+              <label htmlFor="input">Jumlah</label>
+              <input
+                type="number"
+                placeholder="Jumlah Barang"
+                className={styles.input}
+                style={{ textAlign: "left" }}
+                name="capacity"
+                value={data.capacity}
+                onChange={(e) =>
+                  setData({ ...data, stock: e.target.value })
+                }
+                required
+              />
+            </div>
+        </div>
+      </div>
+      <button disabled={!isValid} style={{opacity: isValid ? 1 : 0.5}} className={styles.button} onClick={handleSubmit}>
+        Submit
+      </button>
+    </div>
+    </>
+  )
 }
 
 function Manual({ open, brand, setOpen, imei, setImei, setSubmit, submit }) {
