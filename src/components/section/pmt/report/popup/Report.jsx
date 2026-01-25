@@ -448,7 +448,7 @@ function CheckAcc() {
   const [productName, setProductName] = useState("");
   const { currentUser } = userStore();
   const [brandAcc, setBrandAcc] = useState([])
-  const [selectedAcc, setSelectedAcc] = useState([])
+  const [selectedAcc, setSelectedAcc] = useState(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -502,7 +502,7 @@ function CheckAcc() {
 
       const newReport = {
         id: id,
-        product: selectedAcc ? selectedAcc.product : productName || "", 
+        product: productName,
         type: "acc",
         userType: userType || "",
         price: addPrices.map((p) => ({
@@ -536,7 +536,7 @@ function CheckAcc() {
     } catch (err) {
       console.error(err.message);
     } finally {
-      window.location.reload();
+      window.location.reload()
     }
   };
 
@@ -555,10 +555,12 @@ function CheckAcc() {
           <input
             type="text"
             placeholder="Nama Produk"
-            value={selectedAcc ? selectedAcc.product : null}
+            value={selectedAcc?.product ?? productName}
             className={styles.accInput}
             onChange={(e) => setProductName(e.target.value)}
-            />
+          />
+
+          {brandAcc.length == 0 ? null :
             <div
               style={{
                 overflowX: "auto",
@@ -584,6 +586,7 @@ function CheckAcc() {
                 ))}
               </div>
             </div>
+          }
         </div>
         <div className={styles.radioContainer}>
           <p className={styles.method}>Jenis User :</p>
