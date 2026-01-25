@@ -272,6 +272,24 @@
   box-sizing: border-box;
 }
 
+.brandAcc {
+  border: solid #773ff9 1px;
+  background-color: white;
+  font-size: 10px;
+  padding: 4px 8px;
+  width: fit-content;
+  box-sizing: border-box;
+  border-radius: 100px;
+  transition: 300ms ease;
+  color: black;
+  cursor: pointer;
+}
+
+.brandAcc:hover {
+  background-color: #773ff9;
+  color: white;
+}
+
 @keyframes popUp {
   from {
     transform: translateY(100%);

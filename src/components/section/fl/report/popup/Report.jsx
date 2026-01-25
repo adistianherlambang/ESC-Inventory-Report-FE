@@ -15,6 +15,7 @@ import {
   serverTimestamp,
   arrayUnion,
   arrayRemove,
+  increment
 } from "firebase/firestore";
 
 import { BarcodeScanner, useTorch } from "react-barcode-scanner";
@@ -518,6 +519,26 @@ function CheckAcc() {
 
   const { currentUser } = userStore();
 
+  const [brandAcc, setBrandAcc] = useState([])
+  const [selectedAcc, setSelectedAcc] = useState([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const q = collection(db, "accessories")
+        const snap = await getDocs(q)
+        const data = snap.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data()
+        }))
+        setBrandAcc(data)
+      } catch(err){
+        console.error(err.message)
+      }
+    }
+    fetchData()
+  })
+
   const addAccField = () => {
     setAddAcc([...addAcc, {inputs: ""}])
   }
@@ -613,8 +634,21 @@ function CheckAcc() {
 
         // ➜ simpan ke selling
         await setDoc(doc(collection(db, "selling"), id), newReport);
-      }
 
+        // ➜ update stok acc
+        // BsJzk9vvDB5uZexzM1oP & 6YRAosYX82BAtrC4Sl2S
+      }
+      if (selectedAcc.length > 0) {
+        for (const acc of selectedAcc) {
+          if (!acc.id) continue
+
+          const accRef = doc(db, "accessories", acc.id)
+          await updateDoc(accRef, {
+            stock: increment(-1)
+          })
+        }
+      }
+      
       console.log("Semua item ACC berhasil disimpan");
     } catch (err) {
       console.error(err.message);
@@ -639,6 +673,35 @@ function CheckAcc() {
               value={item.inputs}
               onChange={(e) => handleChange(index, e.target.value)}
             />
+            <div
+              style={{
+                overflowX: "auto",
+                maxWidth: "100%",
+                scrollbarWidth: "none",
+                marginTop: "1rem"
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  gap: "0.5rem"
+                }}
+              >
+                {brandAcc.sort((a, b) => a.product.localeCompare(b.product)).map((item) => (
+                  <div
+                    key={item.id}
+                    onClick={() => {
+                      setSelectedAcc(prev => [...prev, item])
+                      handleChange(index, item.product)
+                    }}
+                    className={styles.brandAcc}
+                    style={{ flexShrink: 0 }}
+                  >
+                    {item.product}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         ))}
       </div>

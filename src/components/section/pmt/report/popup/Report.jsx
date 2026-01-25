@@ -548,7 +548,7 @@ function CheckAcc() {
 
   return (
     <>
-      <div className={styles.container}>
+      <div className={styles.container} style={{scrollbarWidth: "none"}}>
         <p className={styles.title}>Report</p>
         <div className={styles.accProduct}>
           <p>Nama Produk</p>
