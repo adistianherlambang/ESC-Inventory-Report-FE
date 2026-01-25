@@ -166,9 +166,9 @@ export default function EditSection({
                       <input
                         type="radio"
                         name={`type-${index}`}
-                        value="transfer"
-                        checked={price.type === "transfer"}
-                        onChange={() => handleChange(index, "type", "transfer")}
+                        value="TF"
+                        checked={price.type === "TF"}
+                        onChange={() => handleChange(index, "type", "TF")}
                       />
                       TF
                     </label>
@@ -287,9 +287,9 @@ export default function EditSection({
                       <input
                         type="radio"
                         name={`type-${index}`}
-                        value="transfer"
-                        checked={price.type === "transfer"}
-                        onChange={() => handleChange(index, "type", "transfer")}
+                        value="TF"
+                        checked={price.type === "TF"}
+                        onChange={() => handleChange(index, "type", "TF")}
                       />
                       TF
                     </label>
