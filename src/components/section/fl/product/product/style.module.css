@@ -3,7 +3,7 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.containerWrapper > *:last-child {
+.containerWrapper > :last-child:nth-child(odd) {
   grid-column: 1 / -1;
 }
 
@@ -31,10 +31,6 @@
   cursor: pointer;
   box-sizing: border-box;
   justify-content: space-between;
-}
-
-.accContainer:last-child {
-  flex-direction: row;
 }
 
 .type {
