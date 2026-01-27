@@ -42,6 +42,7 @@
 
 .button {
   background-color: #773ff9;
+  border: solid #773ff9 2px;
   display: flex;
   align-items: center;
   justify-content: center;

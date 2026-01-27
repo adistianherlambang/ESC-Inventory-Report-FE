@@ -687,19 +687,26 @@ function CheckAcc() {
                   gap: "0.5rem"
                 }}
               >
-                {brandAcc.sort((a, b) => a.product.localeCompare(b.product)).map((item) => (
-                  <div
-                    key={item.id}
-                    onClick={() => {
-                      setSelectedAcc(prev => [...prev, item])
-                      handleChange(index, item.product)
-                    }}
-                    className={styles.brandAcc}
-                    style={{ flexShrink: 0 }}
-                  >
-                    {item.product}
-                  </div>
-                ))}
+                {brandAcc
+                  .filter(acc =>
+                    acc.product &&
+                    acc.product.toLowerCase().includes(item.inputs.toLowerCase())
+                  )
+                  .sort((a, b) => a.product.localeCompare(b.product))
+                  .map((acc) => (
+                    <div
+                      key={acc.id}
+                      onClick={() => {
+                        setSelectedAcc(prev => [...prev, acc])
+                        handleChange(index, acc.product)
+                      }}
+                      className={styles.brandAcc}
+                      style={{ flexShrink: 0 }}
+                    >
+                      {acc.product} <span style={{color: "#aeaeae"}}>{acc.brand.toUpperCase().slice(0, 3)}</span>
+                    </div>
+                  ))
+                }
               </div>
             </div>
           </div>
@@ -708,7 +715,7 @@ function CheckAcc() {
       <div style={{display: "flex", flexDirection: "column", gap: "0.5rem"}}>
         <div className={styles.button} onClick={addAccField}>Tambah Item</div>
         <button className={styles.button} onClick={handleSubmit}>Submit</button>
-        <div className={styles.button} onClick={() => setCustomize(true)}>Kustomisasi</div>
+        <div className={styles.button} style={{backgroundColor: "white", color: "#773ff9"}} onClick={() => setCustomize(true)}>Kustomisasi</div>
       </div>
     </div>
     </>

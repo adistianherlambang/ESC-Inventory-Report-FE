@@ -574,7 +574,9 @@ function CheckAcc() {
                   gap: "0.5rem"
                 }}
               >
-                {brandAcc.sort((a, b) => a.product.localeCompare(b.product)).map((item) => (
+                {brandAcc
+                .filter(acc => acc.product && acc.product.toLowerCase().includes(productName.toLowerCase()))
+                .sort((a, b) => a.product.localeCompare(b.product)).map((item) => (
                   <div
                     key={item.id}
                     onClick={() => setSelectedAcc(item)}
