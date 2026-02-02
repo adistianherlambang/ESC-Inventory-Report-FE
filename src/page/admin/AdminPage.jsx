@@ -1141,7 +1141,7 @@ function History() {
         baseRef,
         where("createdAt", ">=", Timestamp.fromDate(startOfMonth)),
         where("createdAt", "<", Timestamp.fromDate(startOfNextMonth)),
-        orderBy("createdAt", "asc")
+        orderBy("createdAt", "asc"),
       );
     }
 
@@ -1473,7 +1473,8 @@ function History() {
                     { sensitivity: "base" }
                   );
                 })
-                .map((item, index) => (
+                // .filter((f) => f.brand == "tecno")
+                .map((item, index)=> (
                   <tr key={item.id} className={styles.tr}>
                     <td className={styles.td}>{index + 1}</td>
                     <td className={styles.td}>{item.product}</td>

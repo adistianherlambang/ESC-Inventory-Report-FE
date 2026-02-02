@@ -66,6 +66,7 @@ export default function ActivityItem({
             <div className={styles.productDetail}>
               <p>Warna : {i.color}</p>
               <p>Ukuran: {i.capacity}</p>
+              {i.isYesterday ? <p>Status: Kemarin</p> : ""}
             </div>
           </div>
 

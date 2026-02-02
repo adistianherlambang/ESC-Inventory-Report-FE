@@ -23,6 +23,7 @@ import "react-barcode-scanner/polyfill";
 
 import { pmtReport } from "../../../../../state/state";
 import { userStore } from "../../../../../state/state";
+import { isYesterday } from "date-fns";
 
 export default function ReportPopUp({ pmtName }) {
   const [manual, setManual] = useState(false);
@@ -169,6 +170,9 @@ function Check({ imei }) {
   const [submitting, setSubmitting] = useState(false);
   const [addPrices, setAddPrices] = useState([{ type: "", amount: "" }]);
 
+  const [checked, setChecked] = useState(false)
+  
+
   const { currentUser } = userStore();
 
   useEffect(() => {
@@ -221,6 +225,9 @@ function Check({ imei }) {
         .padStart(5, "0");
       const id = day + month + year + random;
 
+      const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+
       // 1) build newReport
       const newReport = {
         id: id,
@@ -236,6 +243,29 @@ function Check({ imei }) {
           amount: Number(p.amount) || 0,
         })),
         createdAt: new Date(),
+        isYesterday: checked ? "yesterday" : "none"
+      };
+
+      const sellingReport = {
+        id: id,
+        product: item.product || "",
+        brand: item.brand || "",
+        capacity: item.capacity || "",
+        color: item.color || "",
+        IMEI: String(imei),
+        userType: userType || "CN",
+        desc: desc || "",
+        price: addPrices.map((p) => ({
+          type: p.type || "CS",
+          amount: Number(p.amount) || 0,
+        })),
+        createdAt: checked
+        ? (() => {
+            const d = new Date();
+            d.setDate(d.getDate() - 1);
+            return d;
+          })()
+        : new Date(),
       };
 
       console.log("New report object:", newReport);
@@ -257,7 +287,7 @@ function Check({ imei }) {
       // 3b) Tambahkan ke collection "selling"
       const sellingRef = doc(collection(db, "selling"), id);
       await setDoc(sellingRef, {
-        ...newReport,
+        ...sellingReport,
         name: currentUser.name,
       });
       console.log("Added to selling collection");
@@ -421,6 +451,10 @@ function Check({ imei }) {
                   </div>
                 </div>
               ))}
+              <div style={{display: "flex", flexDirection: "row", gap: "0.5rem"}} onClick={() => setChecked(!checked)}>
+                <div style={{backgroundColor: checked ? "#773ff9" : "white", border: `solid ${checked ? "#b99bff" : "#773ff9"} 2px`, height: "1rem", width: "1rem", borderRadius: "4px"}}></div>
+                <div>Item Kemarin</div>
+              </div>
               <div className={styles.priceButton}>
                 <button onClick={addPriceField} className={styles.addPrice}>
                   + Tambah Harga
